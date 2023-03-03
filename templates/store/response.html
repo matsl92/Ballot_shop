@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Felicidades{% endblock title %}
+
+{% block content %}
+<h2>Felicidades {{ client.nombre }}, Has adquirido las siguientes balotas</h2>
+
+{% for ballot in ballots %}
+    <div>{{ ballot }}</div>
+{% endfor %}
+
+
+{% endblock content %}

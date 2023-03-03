@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Formulario{% endblock title %}
+
+{% block content %}
+
+<h1>Datos personales</h1>
+
+<form action={% url 'store:cuenta' %} method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <label for="discount_code">Código de descuento</label>
+    <input type="text" id="discount_code" name="discount_code" value="">
+    {% for balota_id in balota_ids %}
+        <input type="hidden" name="balota_id" value={{ balota_id }}>
+    {% endfor %}
+    <input type="submit" value="Enviar">
+</form>
+
+{% endblock content %}
+

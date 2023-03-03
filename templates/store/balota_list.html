@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Balotas{% endblock %}
+
+
+{% block content %}
+
+<h2>Balotas</h2>
+    <form action={% url 'store:datos_personales' %} method="post">
+
+        {% csrf_token %}
+        {% for balota in object_list %}
+            <input class="balota-input" type="checkbox" name='id' id="{{ balota.id }}" value="{{ balota.id }}">
+            <label class="balota-label" for={{ balota.id }}>{{ balota.numero }}</label>
+        {% endfor %}
+
+        <input type="submit" value="Enviar">
+    </form>
+
+{% endblock content %}

@@ -1,0 +1,23 @@
+PRIMARY
+
+Find out how to do fake transactions for testing
+
+define views for success and responses
+
+Deploy application to taste epayco links for responses
+
+
+
+SECONDARY
+
+usar .env
+
+Create Range model to create Balotas easily
+
+
+OMG this is awesome
+
+calle 75 b sur # 54-156
+mateoslb70@gmail.com
+4575623182290326
+Mateo Salazar
