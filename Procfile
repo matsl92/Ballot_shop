@@ -1,0 +1,1 @@
+web: gunicorn ballot_store.wsgi --log-file -

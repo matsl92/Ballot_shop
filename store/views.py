@@ -121,9 +121,9 @@ def confirmacion(request, *args, **kwargs):
               "base": "0",
               "description": ", ".join([str(ballot.id) for ballot in ballots]),
               "title": "Link de cobro",
-              "typeSell": "1",
+              "typeSell": "2",
             #   "tax": "0", # try with integers instead of strings, 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
-            "typeSell": 2, 
+            # "typeSell": 2, 
               "email": client.correo,
               
               "urlConfirmation": "http://127.0.0.1:8000/epayco_confirmation/",
@@ -155,7 +155,7 @@ def epayco_confirmation(request):   # For us
 
 def epayco_response(request):   # For the client
     print(request.method)
-    print(request)
+    print(request.GET)
     # client = Cliente.objects.get(id=dict(request.POST).get('client_id')[0])
     # ballots = [Balota.objects.get(id=id) for id in dict(request.POST).get('ballot_id')] 
     # context = {'ballots': ballots, 'client': client}
