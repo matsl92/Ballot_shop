@@ -143,7 +143,7 @@ def confirmacion(request, *args, **kwargs):
             transaccion.save()
             return redirect(link)
 
-@ensure_csrf_cookie
+@csrf_exempt
 def epayco_confirmation(request):   # For us
     
     if request.method == 'GET':
