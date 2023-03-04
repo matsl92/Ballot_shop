@@ -144,3 +144,7 @@ PUBLIC_KEY = 'NzgyMTkz'
 PHONENUMBER_DB_FORMAT = 'NATIONAL'
 
 PHONENUMBER_DEFAULT_REGION = 'CO'
+
+# CSRF trusted origins
+
+CSRF_TRUSTED_ORIGINS = ['https://web-production-aea2.up.railway.app']
