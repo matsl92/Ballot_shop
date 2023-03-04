@@ -126,9 +126,9 @@ def confirmacion(request, *args, **kwargs):
             # "typeSell": 2, 
               "email": client.correo,
               
-              "urlConfirmation": "http://127.0.0.1:8000/epayco_confirmation/",
+              "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation/",
               "methodConfirmation": "POST",
-              "urlResponse": "http://127.0.0.1:8000/epayco_response/"
+              "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/"
             #   "expirationDate":Format Date Time UTC payment link expiration date
               
             })
