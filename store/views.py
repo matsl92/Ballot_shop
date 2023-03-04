@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from django.views.generic import ListView
 from .forms import ClienteForm
 from .models import Cliente, Balota, Transaccion, Descuento, EpaycoConfirmation
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 class BalotaListView(ListView):
     model = Balota
@@ -143,7 +143,7 @@ def confirmacion(request, *args, **kwargs):
             transaccion.save()
             return redirect(link)
 
-csrf_exempt
+@ensure_csrf_cookie
 def epayco_confirmation(request):   # For us
     
     if request.method == 'GET':
