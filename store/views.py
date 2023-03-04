@@ -127,7 +127,7 @@ def confirmacion(request, *args, **kwargs):
               "email": client.correo,
               
               "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation/",
-              "methodConfirmation": "POST",
+              "methodConfirmation": "GET",
               "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/"
             #   "expirationDate":Format Date Time UTC payment link expiration date
               
@@ -146,9 +146,9 @@ def confirmacion(request, *args, **kwargs):
 csrf_exempt
 def epayco_confirmation(request):   # For us
     
-    if request.method == 'POST':
+    if request.method == 'GET':
         ballot_ids = []
-        epayco_conf = EpaycoConfirmation(post=str(request.POST))
+        epayco_conf = EpaycoConfirmation(post=str(request.GET))
         epayco_conf.save()
         context = {'ballots': [], 'client': None}
         return render(request, 'store/response.html', context)
