@@ -1,10 +1,11 @@
+DONE
+
+Define function to unbind ballots from expired transactions  and set transaction status to expired whenever ballots view is called
+
+Pass expiring date for the link
+
+
 PRIMARY
-
-Find out how to do fake transactions for testing
-
-define views for success and responses
-
-Deploy application to taste epayco links for responses
 
 
 
@@ -21,3 +22,39 @@ calle 75 b sur # 54-156
 mateoslb70@gmail.com
 4575623182290326
 Mateo Salazar
+
+now:          2023-03-05 02:48:42.662419+00:00
+created at:   2023-03-05 02:48:21.787312+00:00
+valid until:  2023-03-05 02:48:51.787312+00:00
+
+
+now:          2023-03-05 03:      25:34       .736476+00:00
+now-epayco:   2023-03-05 03:      25:24       .736476+00:00
+created at:   2023-03-05 03:      24:54       .567039+00:00
+valid until:  2023-03-05 03:      25:24       .567039+00:00
+
+04/03/2023 10:56
+
+
+
+07/03/2023 04:10
+07/04/2023 04:10
+04-03-2023 11:35
+
+
+
+
+Format from response.text
+2023-07-05 00:00:00
+
+año-mes-día  unexpected
+
+
+
+
+COOKIES
+Variable	Value
+csrftoken	
+'ZAu6OCnddkMwe7nGBhYRHOHk2IlXV3Sj'
+sessionid	
+'os6xpfn3zp4o8pro67x1oz3l3do322wg'

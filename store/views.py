@@ -1,5 +1,7 @@
-import requests
 import json
+import requests
+from datetime import timedelta
+from django.utils import timezone
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -10,10 +12,23 @@ from .forms import ClienteForm
 from .models import Cliente, Balota, Transaccion, Descuento, EpaycoConfirmation
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
+ePayco_time = timedelta(seconds=10)  # 120 segundos o más
+
+def unbind_ballots():
+    hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_time)
+    for transaction in hopeless_transactions:
+        for ballot in transaction.balota_set.all():
+            ballot.transaccion = None
+            ballot.save()
+            
+        transaction.estado = 2
+        transaction.save()
+        
 class BalotaListView(ListView):
     model = Balota
     
 def balotas(request):
+    unbind_ballots()
     # hacer login en ePayco
     context = {'object_list': Balota.objects.filter(transaccion=None)}
     return render(request, 'store/balota_list.html', context)
@@ -88,6 +103,9 @@ def confirmacion(request, *args, **kwargs):
         
         for ballot in ballots:
             transaccion.balota_set.add(ballot)
+            # if transaccion.valid_until == None or transaccion.created_at + ballot.time_period > transaccion.valid_until:
+            #     transaccion.valid_until = transaccion.created_at + ballot.time_period
+            transaccion.valid_until = transaccion.created_at + ballot.time_period
         
         if value_2 == 0:
             context = {'ballots': ballots, 'client': client}
@@ -112,12 +130,15 @@ def confirmacion(request, *args, **kwargs):
 
             # Second request
             url = "https://apify.epayco.co/collection/link/create"
+            dt = timezone.now() + timedelta(minutes=1)
+            # print(dt)
+            # print('The Date:_____________', dt.strftime('%Y-%m-%d %H:%M:%S'))
             payload = json.dumps({
               "quantity": 1,
               "onePayment": True,
               "amount": str(value_2),
               "currency": "COP",
-              "id": 0,  # Debe ser único, si se envia cero epayco genera uno automaticamente
+              "id": 0,  # Debe ser único, si se envia cero, epayco genera uno automaticamente
               "base": "0",
               "description": ", ".join([str(ballot.id) for ballot in ballots]),
               "title": "Link de cobro",
@@ -128,8 +149,9 @@ def confirmacion(request, *args, **kwargs):
               
               "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation/",
               "methodConfirmation": "POST",
-              "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/"
-            #   "expirationDate":Format Date Time UTC payment link expiration date
+              "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/", 
+            #   "expirationDate": "2023-03-04 23:35:00"
+              "expirationDate": timezone.localtime(transaccion.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date
               
             })
             headers = {
@@ -138,6 +160,7 @@ def confirmacion(request, *args, **kwargs):
             }
 
             response = requests.request("POST", url, headers=headers, data=payload)
+            print(response.text)
             link = response.json()['data']['routeLink']
             transaccion.link_de_pago = link
             transaccion.save()
