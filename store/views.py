@@ -88,6 +88,7 @@ def confirmacion(request, *args, **kwargs):
         value_2 = int(dict(request.POST).get('value_2')[0]) 
         client = Cliente.objects.get(id=dict(request.POST).get('client_id')[0])
         ballots = [Balota.objects.get(id=id) for id in dict(request.POST).get('ballot_id')]
+        
         try:
             discount = Descuento.objects.get(id=dict(request.POST).get('discount_id')[0])
         except:
@@ -103,8 +104,6 @@ def confirmacion(request, *args, **kwargs):
         
         for ballot in ballots:
             transaccion.balota_set.add(ballot)
-            # if transaccion.valid_until == None or transaccion.created_at + ballot.time_period > transaccion.valid_until:
-            #     transaccion.valid_until = transaccion.created_at + ballot.time_period
             transaccion.valid_until = transaccion.created_at + ballot.time_period
         
         if value_2 == 0:
@@ -125,14 +124,9 @@ def confirmacion(request, *args, **kwargs):
             }
             response = requests.request("POST", url, headers=headers, data=payload)
             token = response.json()['token']
-            
-            # return HttpResponse('When a man lies he murders some part of the world')
 
             # Second request
             url = "https://apify.epayco.co/collection/link/create"
-            dt = timezone.now() + timedelta(minutes=1)
-            # print(dt)
-            # print('The Date:_____________', dt.strftime('%Y-%m-%d %H:%M:%S'))
             payload = json.dumps({
               "quantity": 1,
               "onePayment": True,
@@ -142,17 +136,13 @@ def confirmacion(request, *args, **kwargs):
               "base": "0",
               "description": ", ".join([str(ballot.id) for ballot in ballots]),
               "title": "Link de cobro",
-              "typeSell": "2",
-            #   "tax": "0", # try with integers instead of strings, 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
-            # "typeSell": 2, 
+              "typeSell": "2", # try with integers instead of strings, 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
+              "tax": "0", 
               "email": client.correo,
-              
               "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation/",
               "methodConfirmation": "POST",
               "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/", 
-            #   "expirationDate": "2023-03-04 23:35:00"
-              "expirationDate": timezone.localtime(transaccion.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date
-              
+              "expirationDate": timezone.localtime(transaccion.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date 
             })
             headers = {
                 'Content-Type': 'application/json', 

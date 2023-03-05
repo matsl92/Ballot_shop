@@ -39,7 +39,7 @@ class Transaccion(models.Model):
     
 class Balota(models.Model):
     numero = models.IntegerField(unique=True)
-    precio = models.IntegerField(default=10000)
+    precio = models.IntegerField(validators=[MinValueValidator(0)], default=10000)
     seleccionada = models.BooleanField(default=False)
     transaccion = models.ForeignKey(Transaccion, on_delete=models.SET_DEFAULT, default=None, null=True)
     time_period = models.DurationField(default=(timedelta(seconds=30)))
@@ -49,3 +49,27 @@ class Balota(models.Model):
     
 class EpaycoConfirmation(models.Model):
     post = models.TextField()
+
+class Rango(models.Model):
+    valor_minimo = models.IntegerField(validators=[MinValueValidator(0)])
+    valor_maximo = models.IntegerField(validators=[MinValueValidator(0)])
+    paso = models.IntegerField(validators=[MinValueValidator(0)])
+    tiempo_de_reserva = models.DurationField()
+    precio = models.IntegerField(validators=[MinValueValidator(0)], default=10000)
+    
+    def save(self):
+        if self.valor_minimo < self.valor_maximo and self.paso > 0:
+            super().save()
+            for i in range((self.valor_maximo-self.valor_minimo)//self.paso):
+                ballot = Balota(
+                    numero=self.valor_minimo+self.paso*i, 
+                    precio = self.precio, 
+                    time_period = self.tiempo_de_reserva
+                )
+                try:
+                    ballot.save()
+                except:
+                    pass
+                    
+                    
+                    
