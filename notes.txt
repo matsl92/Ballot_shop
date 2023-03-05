@@ -4,6 +4,8 @@ Define function to unbind ballots from expired transactions  and set transaction
 
 Pass expiring date for the link
 
+Create Range model to create Balotas easily
+
 
 PRIMARY
 
@@ -13,7 +15,6 @@ SECONDARY
 
 usar .env
 
-Create Range model to create Balotas easily
 
 
 OMG this is awesome

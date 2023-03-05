@@ -158,8 +158,10 @@ def confirmacion(request, *args, **kwargs):
 
 @csrf_exempt
 def epayco_confirmation(request):   # For us
-    
+    print('request', request)
+    print('__dict__', request.__dict__)
     if request.method == 'POST':
+        
         ballot_ids = []
         epayco_conf = EpaycoConfirmation(post=str(request.POST))
         epayco_conf.save()
