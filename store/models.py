@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
         
 class Cliente(models.Model):
     nombre = models.CharField(max_length=100)
@@ -23,7 +24,7 @@ class Descuento(models.Model):
         return ''.join([str(self.porcentaje), '%'])
     
 class Transaccion(models.Model):
-    opciones_de_estado = [(True, 'Efectuada'), (False, 'Pendiente')]
+    opciones_de_estado = [(0, 'Pendiente'), (1, 'Efectuada'), (2, 'Vencida')]
     
     estado = models.BooleanField(choices=opciones_de_estado, default=False)
     cliente = models.OneToOneField(Cliente, on_delete=models.DO_NOTHING, default=None, null=True)
