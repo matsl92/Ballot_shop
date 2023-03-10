@@ -4,7 +4,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic import ListView
@@ -12,10 +12,10 @@ from .forms import ClienteForm
 from .models import Cliente, Balota, Transaccion, Descuento, EpaycoConfirmation
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
-ePayco_time = timedelta(seconds=10)  # 120 segundos o más
+ePayco_confirmation_time = timedelta(seconds=10)  # 120 segundos o más
 
 def unbind_ballots():
-    hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_time)
+    hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_confirmation_time)
     for transaction in hopeless_transactions:
         for ballot in transaction.balota_set.all():
             ballot.transaccion = None
@@ -35,23 +35,17 @@ def balotas(request):
 
 def datos_personales(request):
     if request.method == 'POST':
-        # print(request.POST)
         print(str(request.POST))
-        # d = dict(request.POST)
-        # a = request.POST.copy()
-        # a['name'] = 'Mateo'
-        # print(a)
-        # print(d)
-        # for key, value in dict(request.POST).items():
-        #     print(key, value)
         balota_ids = dict(request.POST).get('id')
-        # print(type(balota_ids))
-        # print(balota_ids)
         form = ClienteForm()
         context = {'form': form, 'balota_ids': balota_ids}
         return render(request, 'store/personal_data.html', context)
 
 def cuenta(request):
+    
+    if request.method == 'GET':
+        data = {'name': 'Mateo', 'edad': 25}
+        return JsonResponse(data)
 
     if request.method=='POST':
         form = ClienteForm(request.POST)
@@ -59,7 +53,7 @@ def cuenta(request):
             client = form.save()
         else:
             messages.error(request, form.errors)
-            return redirect('store:balotas')
+            return redirect('store:balotas') # wrong page
         
         value_1 = 0
         ballots = [Balota.objects.get(id=id) for id in dict(request.POST).get('balota_id')]
@@ -136,7 +130,7 @@ def confirmacion(request, *args, **kwargs):
               "base": "0",
               "description": ", ".join([str(ballot.id) for ballot in ballots]),
               "title": "Link de cobro",
-              "typeSell": "2", # try with integers instead of strings, 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
+              "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
               "tax": "0", 
               "email": client.correo,
               "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation/",
@@ -150,7 +144,6 @@ def confirmacion(request, *args, **kwargs):
             }
 
             response = requests.request("POST", url, headers=headers, data=payload)
-            print(response.text)
             link = response.json()['data']['routeLink']
             transaccion.link_de_pago = link
             transaccion.save()
@@ -158,6 +151,7 @@ def confirmacion(request, *args, **kwargs):
 
 @csrf_exempt
 def epayco_confirmation(request):   # For us
+    print('hola')
     print('request', request)
     print('__dict__', request.__dict__)
     if request.method == 'POST':
@@ -168,10 +162,60 @@ def epayco_confirmation(request):   # For us
         context = {'ballots': [], 'client': None}
         return render(request, 'store/response.html', context)
 
-def epayco_response(request):   # For the client
+def epayco_response(request):   # For the client  
     print(request.method)
     print(request.GET)
     # client = Cliente.objects.get(id=dict(request.POST).get('client_id')[0])
     # ballots = [Balota.objects.get(id=id) for id in dict(request.POST).get('ballot_id')] 
     # context = {'ballots': ballots, 'client': client}
     return render(request, 'store/response.html', {})
+
+def fetch_try(request):
+    if request.method == 'GET':
+        data = {'name': 'Mateo', 'edad': 25}
+        return JsonResponse(data)
+
+    if request.method=='POST':
+        message_list = []
+        body = json.loads(request.body)
+        form = ClienteForm(body)
+        if form.is_valid():
+            client = form.save()
+            print('it would have been saved')
+        else:
+            print('en efecto')
+            print(form.errors.as_json())
+            for key, value in json.loads(form.errors.as_json()).items():
+                print(key, value[0]['message'])
+            # messages.error(request, form.errors)
+            print('1')
+            return JsonResponse({
+                'errors': [(key, value[0]['message']) for key, value in json.loads(form.errors.as_json()).items()]
+            })
+        
+        value_1 = 0
+        ballots = [Balota.objects.get(id=int(id)) for id in body['ballot_ids']]
+        for ballot in ballots:
+            value_1 += ballot.precio
+            
+        value_2 = value_1
+        discount_code = body['discount_code']
+        discount = None
+        if discount_code != '':
+            if discount_code in [discount.codigo for discount in Descuento.objects.filter(estado=True)]:
+                discount = Descuento.objects.get(codigo=discount_code)
+                value_2 = int(value_1 * (1 - discount.porcentaje/100))
+                messages.success(request, f'El código es válido, se aplicó un descuento del {discount.porcentaje}%.')
+            else:
+                messages.warning(request, 'El código de descuento no es válido, por favor inténtalo nuevamente o continua con el valor original de la compra.')
+        
+        # context = {'value_1': value_1, 'value_2': value_2, 'ballots': ballots, 'client': client, 'discount': discount}
+        return JsonResponse({
+            'value_1': value_1, 
+            'value_2': value_2, 
+            'client': {
+                'client_id': client.id
+            }, 
+            'ballot_ids': [ballot.id for ballot in ballots]
+        })
+        return render(request, 'store/bill.html', context)

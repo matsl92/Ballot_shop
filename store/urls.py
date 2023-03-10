@@ -8,7 +8,8 @@ urlpatterns = [
     path('cuenta/', views.cuenta, name="cuenta"), 
     path('checkout/', views.confirmacion, name='confirmacion'), 
     path('epayco_confirmation/', views.EpaycoConfirmation, name="epayco_confirmation"), 
-    path('epayco_response/', views.epayco_response, name="epayco_response")
+    path('epayco_response/', views.epayco_response, name="epayco_response"), 
+    path('test/', views.fetch_try, name='fetch')
     
     
     

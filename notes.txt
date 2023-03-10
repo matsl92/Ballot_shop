@@ -1,13 +1,22 @@
-DONE
-
-Define function to unbind ballots from expired transactions  and set transaction status to expired whenever ballots view is called
-
-Pass expiring date for the link
-
-Create Range model to create Balotas easily
-
-
 PRIMARY
+
+Use javascript to insert the data that fetch ruturned back; i.e: value_1, value_2, client_id, 
+ballot_ids and descount in the templete.
+
+forEach ballot_id create a div and also an input inside the form
+
+also add an input type hidden inside the form for value_1, value_2, client_id and discount_id
+
+
+
+AJAX will be used when the submit button is clicked
+
+
+
+
+
+Change button type so that we don't go to another page, but keep the user from hitting the button 
+before filling in all the required fields.
 
 
 
@@ -17,30 +26,16 @@ usar .env
 
 
 
-OMG this is awesome
 
-calle 75 b sur # 54-156
-mateoslb70@gmail.com
-4575623182290326
-Mateo Salazar
+DONE
 
-now:          2023-03-05 02:48:42.662419+00:00
-created at:   2023-03-05 02:48:21.787312+00:00
-valid until:  2023-03-05 02:48:51.787312+00:00
+Define function to unbind ballots from expired transactions  and set transaction status to expired 
+whenever ballots view is called
 
+Pass expiring date for the link
 
-now:          2023-03-05 03:      25:34       .736476+00:00
-now-epayco:   2023-03-05 03:      25:24       .736476+00:00
-created at:   2023-03-05 03:      24:54       .567039+00:00
-valid until:  2023-03-05 03:      25:24       .567039+00:00
+Create Range model to create Balotas easily
 
-04/03/2023 10:56
-
-
-
-07/03/2023 04:10
-07/04/2023 04:10
-04-03-2023 11:35
 
 
 
