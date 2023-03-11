@@ -6,7 +6,7 @@
 
 <h1>Datos personales</h1>
 
-<form action={% url 'store:confirmacion' %} method="post" id="personal-data-form">
+<form action={% url 'store:confirmacion' %} method="post" id="bill-form">
     {% csrf_token %}
     {{ form.as_p }}
     <label for="discount_code">Código de descuento</label>
@@ -14,7 +14,7 @@
     {% for balota_id in balota_ids %}
         <input type="hidden" class="ballot_ids" name="balota_id" value={{ balota_id }}>
     {% endfor %}
-    <input type="submit" value="Enviar">
+    {% comment %} <input type="submit" value="Enviar"> {% endcomment %}
 </form>
 <button id="bill-generator">Generar factura</button>
 

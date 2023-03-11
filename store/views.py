@@ -11,8 +11,9 @@ from django.views.generic import ListView
 from .forms import ClienteForm
 from .models import Cliente, Balota, Transaccion, Descuento, EpaycoConfirmation
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.forms.models import model_to_dict
 
-ePayco_confirmation_time = timedelta(seconds=10)  # 120 segundos o más
+ePayco_confirmation_time = timedelta(seconds=120)  # 120 segundos o más
 
 def unbind_ballots():
     hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_confirmation_time)
@@ -81,7 +82,8 @@ def confirmacion(request, *args, **kwargs):
         value_1 = int(dict(request.POST).get('value_1')[0])
         value_2 = int(dict(request.POST).get('value_2')[0]) 
         client = Cliente.objects.get(id=dict(request.POST).get('client_id')[0])
-        ballots = [Balota.objects.get(id=id) for id in dict(request.POST).get('ballot_id')]
+        ballots = [Balota.objects.get(id=id) for id in dict(request.POST).get('ballot_id')[0].split(',')]
+        # ballots = [Balota.objects.get(id=id) for id in dict(request.POST).get('ballot_id')]
         
         try:
             discount = Descuento.objects.get(id=dict(request.POST).get('discount_id')[0])
@@ -135,7 +137,8 @@ def confirmacion(request, *args, **kwargs):
               "email": client.correo,
               "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation/",
               "methodConfirmation": "POST",
-              "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/", 
+            #   "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/", 
+              "urlResponse": "http://127.0.0.1:8000/epayco_response/",
               "expirationDate": timezone.localtime(transaccion.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date 
             })
             headers = {
@@ -162,7 +165,37 @@ def epayco_confirmation(request):   # For us
         context = {'ballots': [], 'client': None}
         return render(request, 'store/response.html', context)
 
-def epayco_response(request):   # For the client  
+def epayco_response(request):   # For the client
+    print(request.method)
+    # First request
+    url = "https://apify.epayco.co/login/mail"
+    token = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
+    payload = ""
+    headers = {
+        'Authorization': 'Basic ' + token,
+        'Content-Type': 'application/json'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    token = response.json()['token']
+
+    # Second request
+    ref_payco = dict(request.GET).get('ref_payco')[0]
+    url = "https://apify.epayco.co/transaction/detail"
+
+    payload = json.dumps({
+    "filter": {
+        "referencePayco": 'c79da12fc7d4ea014cc99b72'
+    }
+    })
+    headers = {
+    'Content-Type': 'application/json', 
+    'Authorization': 'Bearer '+ token
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    print(response.text)
+  
     print(request.method)
     print(request.GET)
     # client = Cliente.objects.get(id=dict(request.POST).get('client_id')[0])
@@ -170,11 +203,7 @@ def epayco_response(request):   # For the client
     # context = {'ballots': ballots, 'client': client}
     return render(request, 'store/response.html', {})
 
-def fetch_try(request):
-    if request.method == 'GET':
-        data = {'name': 'Mateo', 'edad': 25}
-        return JsonResponse(data)
-
+def fetch_api(request):
     if request.method=='POST':
         message_list = []
         body = json.loads(request.body)
@@ -209,13 +238,22 @@ def fetch_try(request):
             else:
                 messages.warning(request, 'El código de descuento no es válido, por favor inténtalo nuevamente o continua con el valor original de la compra.')
         
-        # context = {'value_1': value_1, 'value_2': value_2, 'ballots': ballots, 'client': client, 'discount': discount}
+        if discount != None:
+            discount_id = discount.id
+        else:
+            discount_id = None
+        
         return JsonResponse({
             'value_1': value_1, 
             'value_2': value_2, 
             'client': {
-                'client_id': client.id
+                'name': client.nombre, 
+                'lastname': client.apellido, 
+                'email': client.correo,
+                # 'phone': client.celular,  
+                'id': client.id
             }, 
-            'ballot_ids': [ballot.id for ballot in ballots]
+            'ballot_ids': [ballot.id for ballot in ballots], 
+            'discount_id': discount_id
         })
-        return render(request, 'store/bill.html', context)
+        # return render(request, 'store/bill.html', context)

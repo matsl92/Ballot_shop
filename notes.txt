@@ -1,24 +1,21 @@
 PRIMARY
 
-Use javascript to insert the data that fetch ruturned back; i.e: value_1, value_2, client_id, 
-ballot_ids and descount in the templete.
+Add personal data to bill
 
-forEach ballot_id create a div and also an input inside the form
+keep the user from hitting the button before filling in all the required fields
+or display errors gotten from the fetch function
 
-also add an input type hidden inside the form for value_1, value_2, client_id and discount_id
+Make another request to epayco using the ref_payco value to define the template elements 
+to be shown in epayco_response view
 
-
-
-AJAX will be used when the submit button is clicked
-
-
-
+It seems that another login request is required to get that token, nonetheless, 
+after sending the second request to get the transaction details this message is received: 
+"referencePayco invalid"
 
 
-Change button type so that we don't go to another page, but keep the user from hitting the button 
-before filling in all the required fields.
 
 
+JavaScript only in personal data template template
 
 SECONDARY
 
@@ -29,12 +26,7 @@ usar .env
 
 DONE
 
-Define function to unbind ballots from expired transactions  and set transaction status to expired 
-whenever ballots view is called
 
-Pass expiring date for the link
-
-Create Range model to create Balotas easily
 
 
 
