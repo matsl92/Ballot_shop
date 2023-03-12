@@ -155,7 +155,13 @@ def confirmacion(request, *args, **kwargs):
 
 @csrf_exempt
 def epayco_confirmation(request):   # For us
-    print(request.GET.items())
+    print('list((request.GET.items()))', list(request.GET.items()))
+    print('_'*20)
+    print('request.GET.values()', request.GET.values())
+    print('_'*20)
+    print('request.GET.dict()', request.GET.dict())
+    print('_'*20)
+    print('request.GET.get()', request.GET.get())
     # print('hola')
     # print('request', request)
     # print('__dict__', request.__dict__)
