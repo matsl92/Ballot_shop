@@ -30,11 +30,28 @@ function ajaxRequest() {
         }
     )
 
-    
+    // .then((response) => {
+    //     if (!response.ok) {
+    //         console.log('There was an error');
+    //         // console.log(response.json());
+    //         // response.json().er
+    //     } else {
+    //         console.log('The request went well');
+    //         console.log(response.json());
+    //     }
+    // }, (error) => {
+    //     console.log(error);
+    //     console.log(error.json());
+    // })
     request.then(response => response.json())
     .then(data => {
 
-        // console.log(data)
+        if (data.errors) {
+            console.log('There are some errors');
+            console.log(data.errors)
+        } else {
+            console.log('There are no errors');
+        }
 
         if (document.querySelector('#ajax-div')) {
             document.querySelector('#ajax-div').remove();
@@ -47,7 +64,6 @@ function ajaxRequest() {
         bill.setAttribute('id', 'bill');
 
         // create ballots
-        console.log(data.ballot_ids)
         data.ballot_ids.forEach(function(id) {
             const div = document.createElement("div");
             const num = document.createElement("u");
