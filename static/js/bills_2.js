@@ -11,7 +11,7 @@ function ajaxRequest() {
     let ballot_id_list = []
     ballot_ids.forEach(element => ballot_id_list.push(element.defaultValue))
     const request = fetch(
-        'http://127.0.0.1:8000/bill/', 
+        'https://web-production-aea2.up.railway.app/bill/', 
         {
             method: 'POST', 
             headers: {
