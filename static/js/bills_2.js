@@ -51,107 +51,106 @@ function ajaxRequest() {
             console.log(data.errors)
         } else {
             console.log('There are no errors');
-        }
-
-        if (document.querySelector('#ajax-div')) {
-            document.querySelector('#ajax-div').remove();
-        };
+            if (document.querySelector('#ajax-div')) {
+                document.querySelector('#ajax-div').remove();
+            };
+                
+            // First time           __________________________
+    
+            // create bill
+            let bill = document.createElement('div');
+            bill.setAttribute('id', 'bill');
+    
+            // create ballots
+            data.ballot_ids.forEach(function(id) {
+                const div = document.createElement("div");
+                const num = document.createElement("u");
+                num.innerText = id;
+                div.append(num);
+                bill.append(div);
+            });
+    
+            // create personal data
+    
+            // create value 1
+            let value1 = document.createElement('div');
+            let price1 = document.createElement('u');
+            price1.innerText = data.value_1;
+            value1.append(price1);
+            bill.append(value1);
+    
+            // create value 2
+            let value2 = document.createElement('div');
+            let price2 = document.createElement('u');
+            price2.innerText = data.value_2;
+            value2.append(price2);
+            bill.append(value2);
+    
+            // add values to bill
             
-        // First time           __________________________
-
-        // create bill
-        let bill = document.createElement('div');
-        bill.setAttribute('id', 'bill');
-
-        // create ballots
-        data.ballot_ids.forEach(function(id) {
-            const div = document.createElement("div");
-            const num = document.createElement("u");
-            num.innerText = id;
-            div.append(num);
-            bill.append(div);
-        });
-
-        // create personal data
-
-        // create value 1
-        let value1 = document.createElement('div');
-        let price1 = document.createElement('u');
-        price1.innerText = data.value_1;
-        value1.append(price1);
-        bill.append(value1);
-
-        // create value 2
-        let value2 = document.createElement('div');
-        let price2 = document.createElement('u');
-        price2.innerText = data.value_2;
-        value2.append(price2);
-        bill.append(value2);
-
-        // add values to bill
-        
-        // create ajax-div 
-        let ajaxDiv = document.createElement('div');
-        ajaxDiv.setAttribute('id', 'ajax-div');
-
-        // add bill to ajaxDiv
-        ajaxDiv.append(bill);
-
-        // create hidden input value1
-        let input1 = document.createElement('input');
-        input1.type = 'hidden';
-        input1.setAttribute('id', "value-1");
-        input1.value = data.value_1
-        input1.name = "value_1";
-        ajaxDiv.append(input1);
-        
-        // create hidden input value2
-        let input2 = document.createElement('input');
-        input2.type = 'hidden';
-        input2.setAttribute('id', "value-2");
-        input2.value = data.value_2
-        input2.name = "value_2";
-        ajaxDiv.append(input2);
-        
-        // create hidden input clientId
-        let clientId = document.createElement('input');
-        clientId.type = 'hidden';
-        clientId.setAttribute('id', "client-id");
-        clientId.value = data.client.id
-        clientId.name = "client_id";
-        ajaxDiv.append(clientId);
-
-        // create hidden input discountId
-        let discountId = document.createElement('input');
-        discountId.type = 'hidden';
-        discountId.setAttribute('id', "discount-id");
-        discountId.value = data.discount_id
-        discountId.name = "discount_id";
-        ajaxDiv.append(discountId);
-        
-        // create hidden input ballotId
-        let ballotId = document.createElement('input');
-        ballotId.type = 'hidden';
-        ballotId.setAttribute('id', "ballot-id");
-        ballotId.value = data.ballot_ids
-        ballotId.name = "ballot_id";
-        ajaxDiv.append(ballotId);
-
-        // create submit input
-        let input = document.createElement('input');
-        input.type = 'submit';
-        input.setAttribute('id', 'epayco-button');
-        input.value = 'ePayco';
-        ajaxDiv.append(input);
-        
-        // add values and bill to ajax-div
-        
-        
-        // select bill-form
-        form = document.querySelector('#bill-form');
-        
-        // add ajax-div to bill-form
-        form.append(ajaxDiv);
+            // create ajax-div 
+            let ajaxDiv = document.createElement('div');
+            ajaxDiv.setAttribute('id', 'ajax-div');
+    
+            // add bill to ajaxDiv
+            ajaxDiv.append(bill);
+    
+            // create hidden input value1
+            let input1 = document.createElement('input');
+            input1.type = 'hidden';
+            input1.setAttribute('id', "value-1");
+            input1.value = data.value_1
+            input1.name = "value_1";
+            ajaxDiv.append(input1);
+            
+            // create hidden input value2
+            let input2 = document.createElement('input');
+            input2.type = 'hidden';
+            input2.setAttribute('id', "value-2");
+            input2.value = data.value_2
+            input2.name = "value_2";
+            ajaxDiv.append(input2);
+            
+            // create hidden input clientId
+            let clientId = document.createElement('input');
+            clientId.type = 'hidden';
+            clientId.setAttribute('id', "client-id");
+            clientId.value = data.client.id
+            clientId.name = "client_id";
+            ajaxDiv.append(clientId);
+    
+            // create hidden input discountId
+            let discountId = document.createElement('input');
+            discountId.type = 'hidden';
+            discountId.setAttribute('id', "discount-id");
+            discountId.value = data.discount_id
+            discountId.name = "discount_id";
+            ajaxDiv.append(discountId);
+            
+            // create hidden input ballotId
+            let ballotId = document.createElement('input');
+            ballotId.type = 'hidden';
+            ballotId.setAttribute('id', "ballot-id");
+            ballotId.value = data.ballot_ids
+            ballotId.name = "ballot_id";
+            ajaxDiv.append(ballotId);
+    
+            // create submit input
+            let input = document.createElement('input');
+            input.type = 'submit';
+            input.setAttribute('id', 'epayco-button');
+            input.value = 'ePayco';
+            ajaxDiv.append(input);
+            
+            // add values and bill to ajax-div
+            
+            
+            // select bill-form
+            form = document.querySelector('#bill-form');
+            
+            // add ajax-div to bill-form
+            form.append(ajaxDiv);
+        }
 
         }
     )

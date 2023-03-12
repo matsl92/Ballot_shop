@@ -136,9 +136,10 @@ def confirmacion(request, *args, **kwargs):
               "tax": "0", 
               "email": client.correo,
               "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation/",
-              "methodConfirmation": "POST",
-            #   "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/", 
-              "urlResponse": "http://127.0.0.1:8000/epayco_response/",
+            #   "urlConfirmation": "http://127.0.0.1:8000/epayco_confirmation/",
+              "methodConfirmation": "GET",
+              "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/", 
+            #   "urlResponse": "http://127.0.0.1:8000/epayco_response/",
               "expirationDate": timezone.localtime(transaccion.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date 
             })
             headers = {
@@ -154,16 +155,20 @@ def confirmacion(request, *args, **kwargs):
 
 @csrf_exempt
 def epayco_confirmation(request):   # For us
-    print('hola')
-    print('request', request)
-    print('__dict__', request.__dict__)
+    print(request.GET.__dict__)
+    # print('hola')
+    # print('request', request)
+    # print('__dict__', request.__dict__)
     if request.method == 'POST':
-        
+        print('ESTO ES POST')
         ballot_ids = []
         epayco_conf = EpaycoConfirmation(post=str(request.POST))
         epayco_conf.save()
         context = {'ballots': [], 'client': None}
         return render(request, 'store/response.html', context)
+    if request.method == 'GET':
+        print('Esto es get')
+    return HttpResponse('confirmación epayco')
 
 def epayco_response(request):   # For the client
     print(request.method)
@@ -210,14 +215,13 @@ def fetch_api(request):
         form = ClienteForm(body)
         if form.is_valid():
             client = form.save()
-            print('it would have been saved')
         else:
-            print('en efecto')
-            print(form.errors.as_json())
-            for key, value in json.loads(form.errors.as_json()).items():
-                print(key, value[0]['message'])
+            # print('en efecto')
+            # print(form.errors.as_json())
+            # for key, value in json.loads(form.errors.as_json()).items():
+            #     print(key, value[0]['message'])
             # messages.error(request, form.errors)
-            print('1')
+            # print('1')
             return JsonResponse({
                 'errors': [(key, value[0]['message']) for key, value in json.loads(form.errors.as_json()).items()]
             })
