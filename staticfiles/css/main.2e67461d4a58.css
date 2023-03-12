@@ -1,0 +1,49 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+
+/* .balota-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    background-color: rgb(116, 153, 141);
+} */
+
+h1 {
+    color: rgb(122, 172, 155);
+}
+
+.balota-input {
+    display: none;
+}
+
+.balota-input[type='checkbox']:checked + label {
+    background: rgba(255, 255, 255, 0);
+    color: black;
+}
+
+.balota-label {
+    background: linear-gradient(125deg, rgba(28,28,34,1) 74%, rgba(69,49,14,1) 100%, rgba(89,63,9,1) 100%);
+    -webkit-box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
+    -moz-box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
+    box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    color: white;
+}
+
+.balota-label:hover {
+    background: rgb(19, 19, 19);
+    -webkit-box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
+    -moz-box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
+    box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
+}
