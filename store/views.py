@@ -135,8 +135,8 @@ def confirmacion(request, *args, **kwargs):
               "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
               "tax": "0", 
               "email": client.correo,
-              "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation/",
-            #   "urlConfirmation": "http://127.0.0.1:8000/epayco_confirmation/",
+              "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation",
+            #   "urlConfirmation": "http://127.0.0.1:8000/epayco_confirmation",
               "methodConfirmation": "GET",
               "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/", 
             #   "urlResponse": "http://127.0.0.1:8000/epayco_response/",
