@@ -28,20 +28,22 @@ class Transaccion(models.Model):
     opciones_de_estado = [(0, 'Pendiente'), (1, 'Efectuada'), (2, 'Vencida')]
     
     estado = models.IntegerField(choices=opciones_de_estado, default=0)
-    cliente = models.OneToOneField(Cliente, on_delete=models.DO_NOTHING, default=None, null=True)
-    descuento = models.ForeignKey(Descuento, on_delete=models.SET_DEFAULT, default=None, null=True)
-    link_de_pago = models.CharField(max_length=100, default=None, null=True)
-    valor_inicial = models.IntegerField(default=None, null=True)
-    valor_final = models.IntegerField(validators=[MinValueValidator(0)], default=None, null=True)
+    cliente = models.OneToOneField(Cliente, on_delete=models.DO_NOTHING, default=None, null=True, blank=True)
+    descuento = models.ForeignKey(Descuento, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
+    link_de_pago = models.CharField(max_length=100, default=None, null=True, blank=True)
+    valor_inicial = models.IntegerField(default=None, null=True, blank=True)
+    valor_final = models.IntegerField(validators=[MinValueValidator(0)], default=None, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
-    valid_until = models.DateTimeField(default=None, null=True)
-    ref_epayco = models.CharField(max_length=100, default=None, null=True)
+    valid_until = models.DateTimeField(default=None, null=True, blank=True)
+    x_ref_payco = models.CharField(max_length=100, default=None, null=True, blank=True)
+    x_description = models.CharField(max_length=100, default=None, null=True, blank=True)
+    x_response = models.CharField(max_length=100, default=None, null=True, blank=True)
     
 class Balota(models.Model):
     numero = models.IntegerField(unique=True)
     precio = models.IntegerField(validators=[MinValueValidator(0)], default=10000)
     seleccionada = models.BooleanField(default=False)
-    transaccion = models.ForeignKey(Transaccion, on_delete=models.SET_DEFAULT, default=None, null=True)
+    transaccion = models.ForeignKey(Transaccion, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
     time_period = models.DurationField(default=(timedelta(seconds=600)))
     
     def __str__(self):

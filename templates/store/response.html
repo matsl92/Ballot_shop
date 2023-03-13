@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Felicidades{% endblock title %}
+{% block title %}Respuesta{% endblock title %}
 
 {% block content %}
-<h2>Felicidades {{ client.nombre }}, Has adquirido las siguientes balotas</h2>
+<h2>{{ message }}</h2>
 
-{% for ballot in ballots %}
-    <div>{{ ballot }}</div>
-{% endfor %}
+{% if transaction.estado == 1 %}
+    {% for ballot in transaction.balota_set.all %}
+        <div>{{ ballot }}</div>
+    {% endfor %}
+{% endif %}
 
 
 {% endblock content %}

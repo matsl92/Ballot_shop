@@ -7,9 +7,10 @@ urlpatterns = [
     path('datos_personales/', views.datos_personales, name='datos_personales'), 
     path('cuenta/', views.cuenta, name="cuenta"), 
     path('checkout/', views.confirmacion, name='confirmacion'), 
-    path('epayco_confirmation', views.epayco_confirmation, name="epayco_confirmation"), 
-    path('epayco_response/', views.epayco_response, name="epayco_response"), 
-    path('bill/', views.fetch_api, name='fetch')
+    path('epayco_confirmation', views.epayco_confirmation, name="epayco_confirmation"),
+    path('epayco_response/<int:transaction_id>/', views.epayco_response, name="epayco_response"),
+    path('bill/', views.fetch_api, name='fetch'), 
+    path('code_validation/', views.code_validation, name='code_validation')
     
     
     

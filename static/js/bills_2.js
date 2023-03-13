@@ -1,6 +1,42 @@
+const billGenerator = document.querySelector('#bill-generator');
+const codeValidator = document.querySelector('#code-validator');
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
+
+function validateCode() {
+    let discountCode = document.querySelector('#discount_code').value;
+    if (discountCode) {
+        const validationRequest = fetch(
+            // 'https://web-production-aea2.up.railway.app/code_validation/', 
+            'http://127.0.0.1:8000/code_validation/', 
+            {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application.json', 
+                    'X-CSRFToken': csrftoken
+                }, 
+                mode: 'same-origin',  
+                body: JSON.stringify({
+                    'discount_code': discountCode
+                })
+            }
+        )
+        
+        validationRequest.then(response => response.json())
+        .then(data =>{
+            console.log('after validation request');
+            console.log(data);
+        }
+        )
+    } else {
+        console.log('no discount code');
+    }
+}
+
+codeValidator.addEventListener('click', validateCode, false);
 
 function ajaxRequest() {
+    document.querySelector('#bill-generator').remove();
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     let _name = document.querySelector('#id_nombre').value;
     let lastname = document.querySelector('#id_apellido').value;
@@ -10,8 +46,9 @@ function ajaxRequest() {
     let ballot_ids = document.querySelectorAll('.ballot_ids');
     let ballot_id_list = []
     ballot_ids.forEach(element => ballot_id_list.push(element.defaultValue))
-    const request = fetch(
-        'https://web-production-aea2.up.railway.app/bill/', 
+    const billRequest = fetch(
+        // 'https://web-production-aea2.up.railway.app/bill/', 
+        'http://127.0.0.1:8000/bill/', 
         {
             method: 'POST', 
             headers: {
@@ -24,7 +61,7 @@ function ajaxRequest() {
                 'apellido': lastname, 
                 'correo': email, 
                 'celular': phone, 
-                'ballot_ids': ballot_id_list, 
+                'ballot_ids': ballotIdList, 
                 'discount_code': discount_code
             })
         }
@@ -43,7 +80,7 @@ function ajaxRequest() {
     //     console.log(error);
     //     console.log(error.json());
     // })
-    request.then(response => response.json())
+    billRequest.then(response => response.json())
     .then(data => {
 
         if (data.errors) {
@@ -51,6 +88,7 @@ function ajaxRequest() {
             console.log(data.errors)
         } else {
             console.log('There are no errors');
+            console.log(data);
             if (document.querySelector('#ajax-div')) {
                 document.querySelector('#ajax-div').remove();
             };
@@ -135,12 +173,20 @@ function ajaxRequest() {
             ballotId.name = "ballot_id";
             ajaxDiv.append(ballotId);
     
-            // create submit input
-            let input = document.createElement('input');
-            input.type = 'submit';
-            input.setAttribute('id', 'epayco-button');
-            input.value = 'ePayco';
-            ajaxDiv.append(input);
+            // // create submit input
+            // let input = document.createElement('input');
+            // input.type = 'submit';
+            // input.setAttribute('id', 'epayco-button');
+            // input.value = 'ePayco';
+            // ajaxDiv.append(input);
+
+            // create link
+            let link = document.createElement('a');
+            link.setAttribute('href', data.link);
+            link.setAttribute('id', 'epayco-link');
+            // link.value = 'ePayco2';
+            link.innerText = 'epayco2';
+            ajaxDiv.append(link);
             
             // add values and bill to ajax-div
             
@@ -161,9 +207,11 @@ function ajaxRequest() {
 
 
 
-const billGenerator = document.querySelector('#bill-generator');
 
-billGenerator.addEventListener('click', ajaxRequest);
+
+billGenerator.addEventListener('click', ajaxRequest, false);
+
+// billGenerator.preventDefault();
     
     
 //     request.then(response => response.text())

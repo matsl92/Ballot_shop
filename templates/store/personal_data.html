@@ -11,14 +11,16 @@
     {{ form.as_p }}
     <label for="discount_code">Código de descuento</label>
     <input type="text" id="discount_code" name="discount_code" value="">
-    {% for balota_id in balota_ids %}
-        <input type="hidden" class="ballot_ids" name="balota_id" value={{ balota_id }}>
-    {% endfor %}
-    {% comment %} <input type="submit" value="Enviar"> {% endcomment %}
+    <input type="button" id="code-validator", value="Validar código">
+    <input type="button" id="bill-generator" value="Generar factura">
 </form>
-<button id="bill-generator">Generar factura</button>
-
-{% comment %} <script type="text/javascript" scr="/static/js/bill.js"></script> {% endcomment %}
 
 {% endblock content %}
+
+{% block js_block %}
+    <script>
+        ballotIdList = {{ balota_ids|safe }}
+    </script>
+    <script type="text/javascript" src={% static "js/bills_2.js"%}></script>
+{% endblock js_block %}
 
