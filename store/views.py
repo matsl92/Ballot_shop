@@ -38,7 +38,13 @@ class BalotaListView(ListView):
     model = Balota
     
 def balotas(request):
+    # description = '80 Compra de balotas. Numeros 5, 6'
+    # transaction_id = int(description.split(' ')[0])
+    # print(type(transaction_id), transaction_id)
+    # print(Transaccion.objects.get(id=transaction_id))
+    # print(description.split(' ')[0])
     str_values = {'name': 'mateo', 'id': '32', 'age': '25'}
+    # print(f"hola{str_values['name']} no se que hacer en {8/4} horas{str_values['id']}/{str_values['age']}")
     base_url = reverse('store:balotas')
     str_values['option'] = '1'
     query_string = urlencode(str_values)
@@ -174,10 +180,11 @@ def epayco_confirmation(request):   # For us
     print('_'*20)
     print('request.GET.dict()', request.GET.dict())
     print('request.method', request.method)
-    x_description = request.GET.dict()['x_description'] # Our description
     x_ref_payco = request.GET.dict()['x_ref_payco'] # for detail request
-    transaction_id = request.GET.dict('x_extra1') # Our transaction id
-    ballot_ids = request.GET.dict('x_extra2') # ballot ids
+    x_description = request.GET.dict()['x_description'] # Our description
+    # transaction_id = request.GET.dict('x_extra1') # Our transaction id
+    transaction_id = int(x_description.split(' ')[0])
+    # ballot_ids = request.GET.dict('x_extra2') # ballot ids
     x_response = request.GET.dict()['x_response'] # Aceptada/Rechazada
     x_customer_email = request.GET.dict('x_customer_email') # email entered in epayco
     x_customer_movil = request.GET.dict('x_customer_movil') # phone entered in epayco
@@ -201,11 +208,9 @@ def epayco_confirmation(request):   # For us
         print('ESTO ES POST')
         ballot_ids = []
         epayco_conf = EpaycoConfirmation(post=str(request.POST))
-        epayco_conf.save()
-        context = {'ballots': [], 'client': None}
-        return render(request, 'store/response.html', context)
+        epayco_conf.save() 
     if request.method == 'GET':
-        print('Esto es get')
+        print('ESTO ES GET')
     return HttpResponse('confirmación epayco')
 
 def epayco_response(request, transaction_id):   # For the client
@@ -320,11 +325,12 @@ def fetch_api(request):
               "currency": "COP",
               "id": 0,  # Debe ser único, si se envia cero, epayco genera uno automaticamente
               "base": "0",
-              "description": f"Compra de balotas con los números: {', '.join([str(ballot.numero) for ballot in ballots])}",
+              "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}",
               "title": "Link de cobro",
               "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
               "tax": "0", 
               "email": client.correo,
+              'extra': transaction.id,
               "extra1": transaction.id,
               "extra2": ", ".join([str(ballot.id) for ballot in ballots]),
               "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation",
@@ -339,6 +345,9 @@ def fetch_api(request):
                 'Authorization': 'Bearer '+ token
             }
 
+            description = f"Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}/{transaction.id}"
+            print(description)
+            print('transaction_id', transaction.id)
             response = requests.request("POST", url, headers=headers, data=payload)
             print('8, second request is done')
             link = response.json()['data']['routeLink'] # if value_1 is 0 change transaction status to efectuada (2)
