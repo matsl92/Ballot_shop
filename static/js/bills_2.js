@@ -7,8 +7,8 @@ function validateCode() {
     let discountCode = document.querySelector('#discount_code').value;
     if (discountCode) {
         const validationRequest = fetch(
-            // 'https://web-production-aea2.up.railway.app/code_validation/', 
-            'http://127.0.0.1:8000/code_validation/', 
+            'https://web-production-aea2.up.railway.app/code_validation/', 
+            // 'http://127.0.0.1:8000/code_validation/', 
             {
                 method: 'POST', 
                 headers: {
@@ -47,8 +47,8 @@ function ajaxRequest() {
     let ballot_id_list = []
     ballot_ids.forEach(element => ballot_id_list.push(element.defaultValue))
     const billRequest = fetch(
-        // 'https://web-production-aea2.up.railway.app/bill/', 
-        'http://127.0.0.1:8000/bill/', 
+        'https://web-production-aea2.up.railway.app/bill/', 
+        // 'http://127.0.0.1:8000/bill/', 
         {
             method: 'POST', 
             headers: {

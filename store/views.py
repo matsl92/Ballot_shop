@@ -327,11 +327,11 @@ def fetch_api(request):
               "email": client.correo,
               "x_extra1": transaction.id,
               "x_extra2": ", ".join([str(ballot.id) for ballot in ballots]),
-            #   "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation",
-              "urlConfirmation": "http://127.0.0.1:8000/epayco_confirmation",
+              "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation",
+              "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/{}/".format(transaction.id), 
               "methodConfirmation": "GET",
-            #   "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/", 
-              "urlResponse": "http://127.0.0.1:8000/epayco_response/{}/".format(transaction.id),
+            #   "urlConfirmation": "http://127.0.0.1:8000/epayco_confirmation",
+            #   "urlResponse": "http://127.0.0.1:8000/epayco_response/{}/".format(transaction.id),
               "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date 
             })
             headers = {
