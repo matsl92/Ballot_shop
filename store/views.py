@@ -186,8 +186,8 @@ def epayco_confirmation(request):   # For us
     transaction_id = int(x_description.split(' ')[0])
     # ballot_ids = request.GET.dict('x_extra2') # ballot ids
     x_response = request.GET.dict()['x_response'] # Aceptada/Rechazada
-    x_customer_email = request.GET.dict('x_customer_email') # email entered in epayco
-    x_customer_movil = request.GET.dict('x_customer_movil') # phone entered in epayco
+    x_customer_email = request.GET.dict()['x_customer_email'] # email entered in epayco
+    x_customer_movil = request.GET.dict()['x_customer_movil'] # phone entered in epayco
     transaction = Transaccion.objects.get(id=transaction_id)
     transaction.x_ref_payco = x_ref_payco
     transaction.x_response = x_response

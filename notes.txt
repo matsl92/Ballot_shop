@@ -43,6 +43,9 @@ usar .env
 5:06:30
 5:11:05
 
+6:31:50
+6:37:10
+
 DONE
 
 Add button to validate the discount code
