@@ -46,6 +46,10 @@ usar .env
 6:31:50
 6:37:10
 
+5 min epayco_response
+
+
+
 DONE
 
 Add button to validate the discount code
