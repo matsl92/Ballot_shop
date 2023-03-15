@@ -9,6 +9,36 @@
 <form action={% url 'store:confirmacion' %} method="post" id="bill-form">
     {% csrf_token %}
     {{ form.as_p }}
+    {% comment %} <div class="form-wrapper">
+        <div class="form-error"></div>
+        <div class="form-field">
+            <label for="id_nombre">Nombre</label>
+            {{ form.nombre }}
+        </div>
+    </div>
+    <div class="form-wrapper">
+        <div class="form-error"></div>
+        <div class="form-field">
+            <label for="id_apellido">Apellido</label>
+            {{ form.apellido }}
+        </div>
+    </div>
+    <div class="form-wrapper">
+        <div class="form-error"></div>
+        <div class="form-field">
+            <label for="id_correo">Correo</label>
+            {{ form.correo }}
+        </div>
+    </div>
+    <div class="form-wrapper">
+        <div class="form-error"></div>
+        <div class="form-field">
+            <label for="id_celular">Celular</label>
+            {{ form.celular }}
+        </div>
+    </div> {% endcomment %}
+
+
     <label for="discount_code">Código de descuento</label>
     <input type="text" id="discount_code" name="discount_code" value="">
     <input type="button" id="code-validator", value="Validar código">

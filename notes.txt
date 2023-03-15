@@ -47,7 +47,7 @@ usar .env
 6:37:10
 
 5 min epayco_response
-
+4:30 epayco response after redirect
 
 
 DONE

@@ -2,13 +2,30 @@ const billGenerator = document.querySelector('#bill-generator');
 const codeValidator = document.querySelector('#code-validator');
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
+function modifyFormHtml() {
+    fields = ['id_nombre', 'id_apellido', 'id_correo', 'id_celular'];
+    fields.forEach(function(field_id) {
+        field = document.querySelector(`#${field_id}`);
+        console.log(field);
+        document.createElement('div');
+    })
+
+    labels = document.getElementsByTagName('label');
+    console.log(labels);
+    for (label of labels) {
+        console.log(label);
+        console.log(label.htmlFor);
+    }
+}
+
+modifyFormHtml();
 
 function validateCode() {
     let discountCode = document.querySelector('#discount_code').value;
     if (discountCode) {
         const validationRequest = fetch(
-            'https://web-production-aea2.up.railway.app/code_validation/', 
-            // 'http://127.0.0.1:8000/code_validation/', 
+            // 'https://web-production-aea2.up.railway.app/code_validation/', 
+            'http://127.0.0.1:8000/code_validation/', 
             {
                 method: 'POST', 
                 headers: {
@@ -36,7 +53,6 @@ function validateCode() {
 codeValidator.addEventListener('click', validateCode, false);
 
 function ajaxRequest() {
-    document.querySelector('#bill-generator').remove();
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     let _name = document.querySelector('#id_nombre').value;
     let lastname = document.querySelector('#id_apellido').value;
@@ -47,8 +63,8 @@ function ajaxRequest() {
     let ballot_id_list = []
     ballot_ids.forEach(element => ballot_id_list.push(element.defaultValue))
     const billRequest = fetch(
-        'https://web-production-aea2.up.railway.app/bill/', 
-        // 'http://127.0.0.1:8000/bill/', 
+        // 'https://web-production-aea2.up.railway.app/bill/', 
+        'http://127.0.0.1:8000/bill/', 
         {
             method: 'POST', 
             headers: {
@@ -87,6 +103,7 @@ function ajaxRequest() {
             console.log('There are some errors');
             console.log(data.errors)
         } else {
+            document.querySelector('#bill-generator').remove();
             console.log('There are no errors');
             console.log(data);
             if (document.querySelector('#ajax-div')) {
