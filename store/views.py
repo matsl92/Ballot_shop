@@ -14,11 +14,20 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from urllib.parse import urlencode
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 
 
 # VARIABLES AND FUNCTIONS
+token = os.getenv('TOKEN')
+epayco_login_url = os.getenv('EPAYCO_LOGIN_URL')
+epayco_create_link_url = os.getenv('EPAYCO_CREATE_LINK_URL')
 
-token = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
+# token = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
 
 ePayco_confirmation_time = timedelta(seconds=120)  # 120 segundos o más
 
@@ -304,20 +313,19 @@ def fetch_api(request):
         else: 
             print('6, ballots are not for free')
             
-            # First request
-            url = "https://apify.epayco.co/login/mail"
-            token = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
+            # Login request
+            url = epayco_login_url
             payload = ""
             headers = {
                 'Authorization': 'Basic ' + token,
                 'Content-Type': 'application/json'
             }
             response = requests.request("POST", url, headers=headers, data=payload)
-            token = response.json()['token']
+            given_token = response.json()['token']
             print('7, first request is done')
 
-            # Second request
-            url = "https://apify.epayco.co/collection/link/create"
+            # Create payment link request
+            url = epayco_create_link_url
             payload = json.dumps({
               "quantity": 1,
               "onePayment": True,
@@ -340,14 +348,13 @@ def fetch_api(request):
               "urlResponse": "http://127.0.0.1:8000/epayco_response/{}/".format(transaction.id),
               "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date 
             })
+            
             headers = {
                 'Content-Type': 'application/json', 
-                'Authorization': 'Bearer '+ token
+                'Authorization': 'Bearer '+ given_token
             }
 
             description = f"Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}/{transaction.id}"
-            print(description)
-            print('transaction_id', transaction.id)
             response = requests.request("POST", url, headers=headers, data=payload)
             print('8, second request is done')
             link = response.json()['data']['routeLink'] # if value_1 is 0 change transaction status to efectuada (2)

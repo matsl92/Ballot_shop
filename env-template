@@ -1,0 +1,3 @@
+TOKEN = Authorization token e.i: encoded email address and password joined by a colon(:)
+EPAYCO_LOGIN_URL = https://apify.epayco.co/login/mail
+EPAYCO_CREATE_LINK_URL = https://apify.epayco.co/collection/link/create
