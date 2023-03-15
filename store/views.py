@@ -49,7 +49,7 @@ response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/
 
 # VARIABLES AND FUNCTIONS
 
-ePayco_confirmation_time = timedelta(seconds=120)  # 120 segundos o más
+ePayco_confirmation_time = timedelta(seconds=600)  # 600 segundos o más
 
 def unbind_ballots():
     hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_confirmation_time)
@@ -68,19 +68,6 @@ class BalotaListView(ListView):
     model = Balota
     
 def balotas(request):
-    # description = '80 Compra de balotas. Numeros 5, 6'
-    # transaction_id = int(description.split(' ')[0])
-    # print(type(transaction_id), transaction_id)
-    # print(Transaccion.objects.get(id=transaction_id))
-    # print(description.split(' ')[0])
-    str_values = {'name': 'mateo', 'id': '32', 'age': '25'}
-    # print(f"hola{str_values['name']} no se que hacer en {8/4} horas{str_values['id']}/{str_values['age']}")
-    base_url = reverse('store:balotas')
-    str_values['option'] = '1'
-    query_string = urlencode(str_values)
-    url = '{}?{}'.format(base_url, query_string)
-    # return redirect(url)
-    print(url)
     unbind_ballots()
     context = {'object_list': Balota.objects.filter(transaccion=None)}
     return render(request, 'store/balota_list.html', context)
@@ -227,24 +214,18 @@ def epayco_confirmation(request):   # For us
     elif x_response == 'Rechazada':
         transaction.estado = 2
     
-    
-    
-    
-    
-    
-    
     transaction.save()
     
     if request.method == 'POST':
         print('ESTO ES POST')
-        ballot_ids = []
         epayco_conf = EpaycoConfirmation(post=str(request.POST))
         epayco_conf.save() 
     if request.method == 'GET':
         print('ESTO ES GET')
     
-    return HttpResponse(status_code=200)
-    return HttpResponse('confirmación epayco')
+    response = HttpResponse()
+    response.status_code = 200
+    return response
 
 def epayco_response(request, transaction_id):   # For the client
     transaction = Transaccion.objects.get(id=transaction_id)
