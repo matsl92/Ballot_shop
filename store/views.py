@@ -21,17 +21,33 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-
-# VARIABLES AND FUNCTIONS
-# token = os.getenv('TOKEN')
-# epayco_login_url = os.getenv('EPAYCO_LOGIN_URL')
-# epayco_create_link_url = os.getenv('EPAYCO_CREATE_LINK_URL')
+# ENVIRONMENT VARIABLES
 
 token = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
 
 epayco_login_url = 'https://apify.epayco.co/login/mail'
 
 epayco_create_link_url = 'https://apify.epayco.co/collection/link/create'
+
+# token = os.getenv('TOKEN')
+
+# epayco_login_url = os.getenv('EPAYCO_LOGIN_URL')
+
+# epayco_create_link_url = os.getenv('EPAYCO_CREATE_LINK_URL')
+
+
+# EPAYCO RESPONSE LINKS
+
+# Production
+confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
+response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
+
+# Localhost
+# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+# response_base_url = "http://127.0.0.1:8000/epayco_response/"
+
+
+# VARIABLES AND FUNCTIONS
 
 ePayco_confirmation_time = timedelta(seconds=120)  # 120 segundos o más
 
@@ -44,6 +60,7 @@ def unbind_ballots():
             
         transaction.estado = 2
         transaction.save()
+ 
  
 # VIEWS  
         
@@ -209,7 +226,8 @@ def epayco_confirmation(request):   # For us
         transaction.estado = 1
     elif x_response == 'Rechazada':
         transaction.estado = 2
-        
+    
+    
     
     
     
@@ -224,6 +242,8 @@ def epayco_confirmation(request):   # For us
         epayco_conf.save() 
     if request.method == 'GET':
         print('ESTO ES GET')
+    
+    return HttpResponse(status_code=200)
     return HttpResponse('confirmación epayco')
 
 def epayco_response(request, transaction_id):   # For the client
@@ -361,11 +381,9 @@ def fetch_api(request):
               'extra': transaction.id,
               "extra1": transaction.id,
               "extra2": ", ".join([str(ballot.id) for ballot in ballots]),
-              "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation",
-              "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/{}/".format(transaction.id), 
-              "methodConfirmation": "POST", # request.method = 'POST' anyway
-            #   "urlConfirmation": "http://127.0.0.1:8000/epayco_confirmation",
-            #   "urlResponse": "http://127.0.0.1:8000/epayco_response/{}/".format(transaction.id),
+              "urlConfirmation": confirmation_url, 
+              "urlResponse": response_base_url + str(transaction.id) + '/', 
+              "methodConfirmation": "GET", # request.method = 'POST' anyway
               "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date 
             })
             
@@ -374,7 +392,6 @@ def fetch_api(request):
                 'Authorization': 'Bearer '+ given_token
             }
 
-            # description = f"Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}/{transaction.id}"
             response = requests.request("POST", url, headers=headers, data=payload)
             # print('8, second request is done')
             link = response.json()['data']['routeLink'] # if value_1 is 0 change transaction status to efectuada (2)

@@ -1,5 +1,5 @@
-import requests
-import json
+# import requests
+# import json
 
 # # from django.conf import settings
 
@@ -52,20 +52,28 @@ import json
 
 from datetime import datetime, timedelta
 
-created_at = datetime(2023, 3, 4, 10)
+# created_at = datetime(2023, 3, 4, 10)
 
-valid_until = created_at + timedelta(seconds=30)
+# valid_until = created_at + timedelta(seconds=30)
 
-ePayco_time = timedelta(seconds=10)
+# ePayco_time = timedelta(seconds=10)
 
 # dt = datetime(2023, 3, 4, 9, 50)
 # for i in range(20):
 #   if dt 
 #   dt += timedelta(minutes=5)
   
-print(created_at < valid_until)
+# print(created_at < valid_until)
 
 
 # print(created_at.strftime('%Y-%m-%d %H:%M:%S'))
-print(created_at.strftime('%d/%m/%Y %H:%M'))
-print(created_at.strftime('%Y-%m-%d %H:%M:%S'))
+# print(created_at.strftime('%d/%m/%Y %H:%M'))
+# print(created_at.strftime('%Y-%m-%d %H:%M:%S'))
+
+response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
+
+url = response_base_url + str(23) +'/'
+
+print(url)
+
+print('Hello world!')

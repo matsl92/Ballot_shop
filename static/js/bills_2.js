@@ -2,21 +2,20 @@ const billGenerator = document.querySelector('#bill-generator');
 const codeValidator = document.querySelector('#code-validator');
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-// function modifyFormHtml() {
-//     fields = ['id_nombre', 'id_apellido', 'id_correo', 'id_celular'];
-//     fields.forEach(function(field_id) {
-//         field = document.querySelector(`#${field_id}`);
-//         console.log(field);
-//         document.createElement('div');
-//     })
+// PRODUCTION
 
-//     labels = document.getElementsByTagName('label');
-//     console.log(labels);
-//     for (label of labels) {
-//         console.log(label);
-//         console.log(label.htmlFor);
-//     }
-// }
+const codeValidationURL = 'https://web-production-aea2.up.railway.app/code_validation/';
+
+const linkCreationURL = 'https://web-production-aea2.up.railway.app/bill/';
+
+
+// LOCALHOST
+
+// const codeValidationURL = 'http://127.0.0.1:8000/code_validation/';
+
+// const linkCreationURL = 'http://127.0.0.1:8000/bill/';
+
+
 
 function addErrors(errors) {
     for (error of errors) {
@@ -31,7 +30,6 @@ function removeErrors() {
     }
 }
 
-// modifyFormHtml();
 
 function validateCode() {
     let messageDiv = document.querySelector('#discount-code-message');
@@ -39,8 +37,7 @@ function validateCode() {
     let discountCode = document.querySelector('#discount_code').value;
     if (discountCode) {
         const validationRequest = fetch(
-            'https://web-production-aea2.up.railway.app/code_validation/', 
-            // 'http://127.0.0.1:8000/code_validation/', 
+            codeValidationURL,  
             {
                 method: 'POST', 
                 headers: {
@@ -87,8 +84,7 @@ function ajaxRequest() {
     let ballot_id_list = []
     ballot_ids.forEach(element => ballot_id_list.push(element.defaultValue))
     const billRequest = fetch(
-        'https://web-production-aea2.up.railway.app/bill/', 
-        // 'http://127.0.0.1:8000/bill/', 
+        linkCreationURL,  
         {
             method: 'POST', 
             headers: {
@@ -107,19 +103,6 @@ function ajaxRequest() {
         }
     )
 
-    // .then((response) => {
-    //     if (!response.ok) {
-    //         console.log('There was an error');
-    //         // console.log(response.json());
-    //         // response.json().er
-    //     } else {
-    //         console.log('The request went well');
-    //         console.log(response.json());
-    //     }
-    // }, (error) => {
-    //     console.log(error);
-    //     console.log(error.json());
-    // })
     billRequest.then(response => response.json())
     .then(data => {
 
@@ -143,7 +126,7 @@ function ajaxRequest() {
             let bill = document.createElement('div');
             bill.setAttribute('id', 'bill');
     
-            // create ballots
+            // create ballots  *****************
             data.ballot_ids.forEach(function(id) {
                 const div = document.createElement("div");
                 const num = document.createElement("u");
@@ -216,13 +199,6 @@ function ajaxRequest() {
             ballotId.value = data.ballot_ids
             ballotId.name = "ballot_id";
             ajaxDiv.append(ballotId);
-    
-            // // create submit input
-            // let input = document.createElement('input');
-            // input.type = 'submit';
-            // input.setAttribute('id', 'epayco-button');
-            // input.value = 'ePayco';
-            // ajaxDiv.append(input);
 
             // create link
             let link = document.createElement('a');
@@ -244,38 +220,7 @@ function ajaxRequest() {
 
         }
     )
-        
-
-    // .then(data)
 }
-
-
-
-
 
 billGenerator.addEventListener('click', ajaxRequest, false);
 
-// billGenerator.preventDefault();
-    
-    
-//     request.then(response => response.text())
-//     .then((data) => {
-//         console.log(data);
-//         data.ballot_id_list.forEach(
-//             function(id) {
-//                 div = document.createElement("div");
-//                 num = document.createElement("u");
-//                 num.innerText = id;
-//                 div.append(num);
-//                 document.body.append(div);
-//             }
-//         )
-//     });
-        
-// };
-
-
-// propNames.forEach((name) => {
-//     const desc = Object.getOwnPropertyDescriptor(obj, name);
-//     Object.defineProperty(copy, name, desc);
-//   });
