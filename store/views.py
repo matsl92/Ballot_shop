@@ -256,10 +256,10 @@ def fetch_api(request):
         body = json.loads(request.body)
         form = ClienteForm(body)
         if form.is_valid():
-            print('1, valid form')
+            # print('1, valid form')
             client = form.save()
         else:
-            print('1, incomplete form')
+            # print('1, incomplete form')
             return JsonResponse({
                 'errors': [(key, value[0]['message']) for key, value in json.loads(form.errors.as_json()).items()]
             })
@@ -269,7 +269,7 @@ def fetch_api(request):
         for ballot in ballots:
             value_1 += ballot.precio
         
-        print('2,', value_1)
+        # print('2,', value_1)
         
         value_2 = value_1
         discount_code = body['discount_code']
@@ -280,38 +280,54 @@ def fetch_api(request):
                 discount = Descuento.objects.get(codigo=discount_code)
                 discount_id = discount.id
                 value_2 = int(value_1 * (1 - discount.porcentaje/100))
-                print('3, valid code: ', value_2)
-                messages.success(request, f'El código es válido, se aplicó un descuento del {discount.porcentaje}%.')
+                # print('3, valid code: ', value_2)
+                # messages.success(request, f'El código es válido, se aplicó un descuento del {discount.porcentaje}%.')
             else:
-                messages.warning(request, 'El código de descuento no es válido, por favor inténtalo nuevamente o continua con el valor original de la compra.')
+                # messages.warning(request, 'El código de descuento no es válido, por favor inténtalo nuevamente o continua con el valor original de la compra.')
                 print('3, invalid code:', value_2)
         
         for ballot in ballots:
             if ballot.transaccion != None:
                 print('4, not all ballots were available')
-                messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haga su selección nuevamente.')
+                # messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haga su selección nuevamente.')
                 return redirect('store:balotas') # this redirect should send the user and not just the fetch request
 
-        print('4, all ballots were available', )        
+        # print('4, all ballots were available', )        
         
         transaction = Transaccion(cliente=client, descuento=discount, valor_inicial=value_1, valor_final = value_2)
         transaction.save()
         # transaction_id = transaction.id
         
-        print('5, transaction saved')
+        # print('5, transaction saved')
         
         for ballot in ballots:
             transaction.balota_set.add(ballot)
             transaction.valid_until = transaction.created_at + ballot.time_period
         
-        # if value_2 == 0:
-        #     context = {'ballots': ballots, 'client': client}
-        #     print('6, ballots for free')
-        #     return render(request, 'store/response.html', context) # return link with client id to response page
+        if value_2 == 0:
+            context = {'ballots': ballots, 'client': client}
+            # print('6, ballots for free')
+            transaction.estado = 1
+            transaction.save()
+            link = reverse('store:epayco_response', kwargs={'transaction_id': transaction.id})
+            return JsonResponse({
+                'value_1': value_1, 
+                'value_2': value_2, 
+                'client': {
+                    'name': client.nombre, 
+                    'lastname': client.apellido, 
+                    'email': client.correo,  
+                    'id': client.id
+                }, 
+                'ballot_ids': [ballot.id for ballot in ballots], 
+                'discount_id': discount_id, 
+                'link': link
+            })
+            return render(request, 'store/response.html', context) # return link with client id to response page
         
         
         else: 
-            print('6, ballots are not for free')
+            # print('6, ballots are not for free')
             
             # Login request
             url = epayco_login_url
@@ -322,7 +338,7 @@ def fetch_api(request):
             }
             response = requests.request("POST", url, headers=headers, data=payload)
             given_token = response.json()['token']
-            print('7, first request is done')
+            # print('7, first request is done')
 
             # Create payment link request
             url = epayco_create_link_url
@@ -343,7 +359,7 @@ def fetch_api(request):
               "extra2": ", ".join([str(ballot.id) for ballot in ballots]),
             #   "urlConfirmation": "https://web-production-aea2.up.railway.app/epayco_confirmation",
             #   "urlResponse": "https://web-production-aea2.up.railway.app/epayco_response/{}/".format(transaction.id), 
-              "methodConfirmation": "GET", # request.method = 'POST' anyway
+              "methodConfirmation": "POST", # request.method = 'POST' anyway
               "urlConfirmation": "http://127.0.0.1:8000/epayco_confirmation",
               "urlResponse": "http://127.0.0.1:8000/epayco_response/{}/".format(transaction.id),
               "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date 
@@ -354,15 +370,15 @@ def fetch_api(request):
                 'Authorization': 'Bearer '+ given_token
             }
 
-            description = f"Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}/{transaction.id}"
+            # description = f"Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}/{transaction.id}"
             response = requests.request("POST", url, headers=headers, data=payload)
-            print('8, second request is done')
+            # print('8, second request is done')
             link = response.json()['data']['routeLink'] # if value_1 is 0 change transaction status to efectuada (2)
                                                         # and link to response page.
             transaction.link_de_pago = link
             transaction.save()
-            print(link)
-            print('9, we made it to the response part')
+            # print(link)
+            # print('9, we made it to the response part')
 
             return JsonResponse({
                 'value_1': value_1, 
