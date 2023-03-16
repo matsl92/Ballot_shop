@@ -228,6 +228,9 @@ def epayco_confirmation(request):   # For us
     return response
 
 def epayco_response(request, transaction_id):   # For the client
+    print('_'*20)
+    print('request.GET.dict()', request.GET.dict())
+    print('request.POST.dict()', request.POST.dict())
     transaction = Transaccion.objects.get(id=transaction_id)
     client = transaction.cliente
     

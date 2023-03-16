@@ -52,7 +52,7 @@
 
 {% block js_block %}
     <script>
-        ballotIdList = {{ balota_ids|safe }}
+        const ballotIdList = {{ balota_ids|safe }};
     </script>
     <script type="text/javascript" src={% static "js/bills_2.js"%}></script>
 {% endblock js_block %}
