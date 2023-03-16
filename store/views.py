@@ -368,7 +368,8 @@ def fetch_api(request):
               "urlConfirmation": confirmation_url, 
               "urlResponse": response_base_url + str(transaction.id) + '/', 
               "methodConfirmation": "GET", # request.method = 'POST' anyway
-              "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S')    # Format Date Time UTC payment link expiration date 
+              "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S'),    # Format Date Time UTC payment link expiration date 
+              "mateo_data": f"parametro opcional{transaction.id}",
             })
             
             headers = {
