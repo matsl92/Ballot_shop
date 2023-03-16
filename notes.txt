@@ -1,15 +1,26 @@
 PRIMARY
 
-Don-t forget to merge
 
-Use js to remove billGenerator button after the first use, for it won't be possible
-to generate a new bill for the same ballots before some time, since the ballots 
-are now selected
 
-Fetch will create the bill and the link all at once, so that it doesn't take too long
-to load epayco's page.
 
-personal-data, cuenta and confirmacion will be reduced to only two views
+
+
+
+Add late_confirmation field to Transaction, default=None datetime
+
+
+
+
+
+Look up for transaction status using the url with payco_referense
+
+Check the transaction value
+
+x_ref_payco
+x_description
+x_amount > valor pagado
+x_response  "Aceptada"
+late_confirmation
 
 
 
@@ -55,6 +66,21 @@ usar .env
 
 
 DONE
+
+15 minutes per link and three hours and a half for epayco response
+
+Change variable name for ballotasId
+
+remove slash from response url
+
+Fetch will create the bill and the link all at once, so that it doesn't take too long
+to load epayco's page.
+
+personal-data, cuenta and confirmacion will be reduced to only two views
+
+Use js to remove billGenerator button after the first use, for it won't be possible
+to generate a new bill for the same ballots before some time, since the ballots 
+are now selected
 
 Add button to validate the discount code
 

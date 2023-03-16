@@ -33,18 +33,20 @@ class Transaccion(models.Model):
     link_de_pago = models.CharField(max_length=100, default=None, null=True, blank=True)
     valor_inicial = models.IntegerField(default=None, null=True, blank=True)
     valor_final = models.IntegerField(validators=[MinValueValidator(0)], default=None, null=True, blank=True)
+    valor_pagado = models.PositiveIntegerField(default=None, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     valid_until = models.DateTimeField(default=None, null=True, blank=True)
     x_ref_payco = models.CharField(max_length=100, default=None, null=True, blank=True)
     x_description = models.CharField(max_length=100, default=None, null=True, blank=True)
     x_response = models.CharField(max_length=100, default=None, null=True, blank=True)
+    late_confirmation = models.DateTimeField(default=None, null=True, blank=True)
     
 class Balota(models.Model):
     numero = models.IntegerField(unique=True)
     precio = models.IntegerField(validators=[MinValueValidator(0)], default=10000)
     seleccionada = models.BooleanField(default=False)
     transaccion = models.ForeignKey(Transaccion, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
-    time_period = models.DurationField(default=(timedelta(seconds=600)))
+    time_period = models.DurationField(default=(timedelta(minutes=15)))
     
     def __str__(self):
         return str(self.numero)
