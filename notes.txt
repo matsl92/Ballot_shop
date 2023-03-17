@@ -1,36 +1,9 @@
 PRIMARY
 
-get transaccion using the data and not the url(Important!) no need for the url part
-
-ref_payco cannot be gotten when comming from 100% discount
-
-
-
-Add late_confirmation field to Transaction, default=None datetime
 
 
 
 
-
-Look up for transaction status using the url with payco_referense
-
-Check the transaction value
-
-x_ref_payco
-x_description
-x_amount > valor pagado
-x_response  "Aceptada"
-late_confirmation
-
-
-
-request.GET.dict() {'x_cust_id_cliente': '782193', 'x_ref_payco': '131250970', 'x_id_factura': '782193640e4afcc280d-1678658305360', 'x_id_invoice': '782193640e4afcc280d-1678658305360', 'x_description': '3', 'x_amount': '10000', 'x_amount_country': '10000', 'x_amount_ok': '10000', 'x_tax': '0', 'x_tax_ico': '0', 'x_amount_base': '0', 'x_currency_code': 'COP', 'x_bank_name': 'BANCO DE PRUEBAS', 'x_cardnumber': '457562*******0326', 'x_quotas': '2', 'x_respuesta': 'Aceptada', 'x_response': 'Aceptada', 'x_approval_code': '000000', 'x_transaction_id': '131250970', 'x_fecha_transaccion': '2023-03-12 16:59:09', 'x_transaction_date': '2023-03-12 16:59:09', 'x_payment_date': '', 'x_cod_respuesta': '1', 'x_cod_response': '1', 'x_response_reason_text': '00-Aprobada', 'x_errorcode': '00', 'x_cod_transaction_state': '1', 'x_transaction_state': 'Aceptada', 'x_franchise': 'VS', 'x_business': 'Mateo Salazar', 'x_customer_doctype': 'CC', 'x_customer_document': '12023948', 'x_customer_name': 'ma', 'x_customer_lastname': 'd', 'x_customer_email': 'juana33@gmail.com', 'x_customer_phone': '0000000', 'x_customer_movil': '2345354234', 'x_customer_ind_pais': '57', 'x_customer_country': 'CO', 'x_customer_city': 'Bogota', 'x_customer_address': 'bsagd de', 'x_customer_ip': '152.202.61.187', 'x_signature': '4866bcd3aa6d93594484b01de1a8f86ab240667867d671face1af5b9915b78fa', 'x_test_request': 'TRUE', 'x_extra1': '', 'x_extra2': '', 'x_extra3': '', 'x_extra4': '', 'x_extra5': '', 'x_extra6': '', 'x_extra7': '', 'x_extra8': '', 'x_extra9': '', 'x_extra10': ''}
-
-request.GET.dict() {'x_cust_id_cliente': '782193', 'x_ref_payco': '131251607', 'x_id_factura': '782193640e4ca3812cb-1678658727309', 'x_id_invoice': '782193640e4ca3812cb-1678658727309', 'x_description': '19', 'x_amount': '10000', 'x_amount_country': '10000', 'x_amount_ok': '10000', 'x_tax': '0', 'x_tax_ico': '0', 'x_amount_base': '0', 'x_currency_code': 'COP', 'x_bank_name': 'BANCO DE PRUEBAS', 'x_cardnumber': '415161*******3283', 'x_quotas': '3', 'x_respuesta': 'Rechazada', 'x_response': 'Rechazada', 'x_approval_code': '000000', 'x_transaction_id': '131251607', 'x_fecha_transaccion': '2023-03-12 17:06:27', 'x_transaction_date': '2023-03-12 17:06:27', 'x_payment_date': '', 'x_cod_respuesta': '2', 'x_cod_response': '2', 'x_response_reason_text': '04-Tarjeta Bloqueada,comuniquese con el centro de autorizacion', 'x_errorcode': '04', 'x_cod_transaction_state': '2', 'x_transaction_state': 'Rechazada', 'x_franchise': 'VS', 'x_business': 'Mateo Salazar', 'x_customer_doctype': 'CC', 'x_customer_document': '12343724', 'x_customer_name': 'camilo', 'x_customer_lastname': 'h', 'x_customer_email': 'camilohenaoalvarez@hotmail.com', 'x_customer_phone': '0000000', 'x_customer_movil': '2345434567', 'x_customer_ind_pais': '57', 'x_customer_country': 'CO', 'x_customer_city': 'Bogota', 'x_customer_address': 'ncdh ddf', 'x_customer_ip': '152.202.61.187', 'x_signature': '2586b063944ae8dc5962d4d7a3efe850ab02e6abfeddf29f1ab20ff329d37e81', 'x_test_request': 'TRUE', 'x_extra1': '', 'x_extra2': '', 'x_extra3': '', 'x_extra4': '', 'x_extra5': '', 'x_extra6': '', 'x_extra7': '', 'x_extra8': '', 'x_extra9': '', 'x_extra10': ''}
-
-
-
-JavaScript only in personal data template template
 
 SECONDARY
 
@@ -59,21 +32,21 @@ at the end of the URL.
 usar .env
 
 
-5:06:30
-5:11:05
-
-6:31:50
-6:37:10
-
-4:28:30    POST
-4:39 nada...
-4:47 ...
-
-5 min epayco_response
-4:30 epayco response after redirect
 
 
 DONE
+
+JavaScript only in personal data template template
+
+Check the transaction value
+
+get transaccion using the data and not the url(Important!) no need for the url part
+
+ref_payco cannot be gotten when comming from 100% discount
+
+Look up for transaction status using the url with payco_referense
+
+Add late_confirmation field to Transaction, default=None datetime
 
 15 minutes per link and three hours and a half for epayco response
 
@@ -100,17 +73,18 @@ input type submit will be inside the form using prevetDefault
 
 
 
+
+
+OTHER
+
 Format from response.text
 2023-07-05 00:00:00
 
 año-mes-día  unexpected
 "expirationDate": "2023-03-04 23:35:00"
 
+Epayco confirmation
 
+request.GET.dict() {'x_cust_id_cliente': '782193', 'x_ref_payco': '131250970', 'x_id_factura': '782193640e4afcc280d-1678658305360', 'x_id_invoice': '782193640e4afcc280d-1678658305360', 'x_description': '3', 'x_amount': '10000', 'x_amount_country': '10000', 'x_amount_ok': '10000', 'x_tax': '0', 'x_tax_ico': '0', 'x_amount_base': '0', 'x_currency_code': 'COP', 'x_bank_name': 'BANCO DE PRUEBAS', 'x_cardnumber': '457562*******0326', 'x_quotas': '2', 'x_respuesta': 'Aceptada', 'x_response': 'Aceptada', 'x_approval_code': '000000', 'x_transaction_id': '131250970', 'x_fecha_transaccion': '2023-03-12 16:59:09', 'x_transaction_date': '2023-03-12 16:59:09', 'x_payment_date': '', 'x_cod_respuesta': '1', 'x_cod_response': '1', 'x_response_reason_text': '00-Aprobada', 'x_errorcode': '00', 'x_cod_transaction_state': '1', 'x_transaction_state': 'Aceptada', 'x_franchise': 'VS', 'x_business': 'Mateo Salazar', 'x_customer_doctype': 'CC', 'x_customer_document': '12023948', 'x_customer_name': 'ma', 'x_customer_lastname': 'd', 'x_customer_email': 'juana33@gmail.com', 'x_customer_phone': '0000000', 'x_customer_movil': '2345354234', 'x_customer_ind_pais': '57', 'x_customer_country': 'CO', 'x_customer_city': 'Bogota', 'x_customer_address': 'bsagd de', 'x_customer_ip': '152.202.61.187', 'x_signature': '4866bcd3aa6d93594484b01de1a8f86ab240667867d671face1af5b9915b78fa', 'x_test_request': 'TRUE', 'x_extra1': '', 'x_extra2': '', 'x_extra3': '', 'x_extra4': '', 'x_extra5': '', 'x_extra6': '', 'x_extra7': '', 'x_extra8': '', 'x_extra9': '', 'x_extra10': ''}
 
-COOKIES
-Variable	Value
-csrftoken	
-'ZAu6OCnddkMwe7nGBhYRHOHk2IlXV3Sj'
-sessionid	
-'os6xpfn3zp4o8pro67x1oz3l3do322wg'
+request.GET.dict() {'x_cust_id_cliente': '782193', 'x_ref_payco': '131251607', 'x_id_factura': '782193640e4ca3812cb-1678658727309', 'x_id_invoice': '782193640e4ca3812cb-1678658727309', 'x_description': '19', 'x_amount': '10000', 'x_amount_country': '10000', 'x_amount_ok': '10000', 'x_tax': '0', 'x_tax_ico': '0', 'x_amount_base': '0', 'x_currency_code': 'COP', 'x_bank_name': 'BANCO DE PRUEBAS', 'x_cardnumber': '415161*******3283', 'x_quotas': '3', 'x_respuesta': 'Rechazada', 'x_response': 'Rechazada', 'x_approval_code': '000000', 'x_transaction_id': '131251607', 'x_fecha_transaccion': '2023-03-12 17:06:27', 'x_transaction_date': '2023-03-12 17:06:27', 'x_payment_date': '', 'x_cod_respuesta': '2', 'x_cod_response': '2', 'x_response_reason_text': '04-Tarjeta Bloqueada,comuniquese con el centro de autorizacion', 'x_errorcode': '04', 'x_cod_transaction_state': '2', 'x_transaction_state': 'Rechazada', 'x_franchise': 'VS', 'x_business': 'Mateo Salazar', 'x_customer_doctype': 'CC', 'x_customer_document': '12343724', 'x_customer_name': 'camilo', 'x_customer_lastname': 'h', 'x_customer_email': 'camilohenaoalvarez@hotmail.com', 'x_customer_phone': '0000000', 'x_customer_movil': '2345434567', 'x_customer_ind_pais': '57', 'x_customer_country': 'CO', 'x_customer_city': 'Bogota', 'x_customer_address': 'ncdh ddf', 'x_customer_ip': '152.202.61.187', 'x_signature': '2586b063944ae8dc5962d4d7a3efe850ab02e6abfeddf29f1ab20ff329d37e81', 'x_test_request': 'TRUE', 'x_extra1': '', 'x_extra2': '', 'x_extra3': '', 'x_extra4': '', 'x_extra5': '', 'x_extra6': '', 'x_extra7': '', 'x_extra8': '', 'x_extra9': '', 'x_extra10': ''}

@@ -52,10 +52,6 @@ response_base_url = "http://127.0.0.1:8000/epayco_response/"
 from .tools import get_ballot_ids_from_x_description
 
 def handle_transaction_response(data):
-    # transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
-    # x_ref_payco = data['x_ref_payco']
-    # x_description = data['x_description']
-    # x_amount = int(data['x_amount']) # > valor_pagado
     
     x_response = data['x_response']
     transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
@@ -63,6 +59,7 @@ def handle_transaction_response(data):
     transaction.x_ref_payco = data['x_ref_payco']
     transaction.valor_pagado = int(data['x_amount'])
     transaction.x_response = x_response
+    
     transaction.save()
     
     if transaction.estado == 0:
@@ -116,7 +113,6 @@ def unbind_ballots():
             
         transaction.estado = 2
         transaction.save()
- 
  
 # VIEWS  
         
@@ -295,32 +291,32 @@ def fetch_api(request):
 
 def epayco_response(request, transaction_id):   # For the client
     
-    if not 'ref_payco' in request.GET.dict().keys():
+    if not 'ref_payco' in request.GET.dict().keys():    
         transaction = Transaccion.objects.get(id=transaction_id)
         if transaction.estado == 1:
             message = f"¡Felicidades {transaction.cliente.nombre}! Has adquirido las siguientes balotas:"
             context = {'transaction': transaction, 'message': message}
             return render(request, 'store/response.html', context)
     
-    encoded_ref_payco = request.GET.dict()['ref_payco']
-    url = 'https://secure.epayco.co/validation/v1/reference/' + encoded_ref_payco
-    response = requests.request("GET", url)
-    data = response.json()['data']
-    
-    handle_transaction_response(data)
-    
-    transaction = Transaccion.objects.get(id=transaction_id)
-    client = transaction.cliente
-    
-    if transaction.estado == 0:
-        message = 'La transacción se encuentra en estado pediente, por favor recarga la pagina en unos segundos.'
-    elif transaction.estado == 1:
-        message = f'¡Felicidades {client.nombre}! Has adquirido las siguientes balotas:'
-    elif transaction.estado == 2:
-        message = 'La transacción no se ha llevado a cabo con éxito, por favor inténtalo nuevamente.'
+    else:
+        encoded_ref_payco = request.GET.dict()['ref_payco']
+        url = 'https://secure.epayco.co/validation/v1/reference/' + encoded_ref_payco
+        response = requests.request("GET", url)
+        data = response.json()['data']
         
-    context = {'client': client, 'message': message, 'transaction': transaction}
-    return render(request, 'store/response.html', context)
+        handle_transaction_response(data)
+        
+        transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
+        
+        if transaction.estado == 0:
+            message = 'La transacción se encuentra en estado pediente, por favor recarga la pagina en unos segundos.'
+        elif transaction.estado == 1:
+            message = f'¡Felicidades {transaction.cliente.nombre}! Has adquirido las siguientes balotas:'
+        elif transaction.estado == 2:
+            message = 'La transacción no se ha llevado a cabo con éxito, por favor inténtalo nuevamente.'
+            
+        context = {'message': message, 'transaction': transaction}
+        return render(request, 'store/response.html', context)
 
 @csrf_exempt # Not necessary for GET requests
 def epayco_confirmation(request):   # For us
