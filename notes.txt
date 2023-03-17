@@ -1,5 +1,9 @@
 PRIMARY
 
+Define whether passing ids or numbers in x_description
+
+keep the user from hitting the button before filling in all the required fields
+or display errors gotten from the fetch function
 
 
 
@@ -7,34 +11,20 @@ PRIMARY
 
 SECONDARY
 
-Late confirmation also gets trigered when a second attempt to pay is succesfull, 
-ballots must be kept protected
-
 Add alert field in Transaccion which will be trigered by a different amount or a 
 late confirmation with unavailable ballots
 
-Define whether passing ids or numbers in x_description
-
 Add personal data to bill
 
-keep the user from hitting the button before filling in all the required fields
-or display errors gotten from the fetch function
-
-Make another request to epayco using the ref_payco value to define the template elements 
-to be shown in epayco_response view
-
-To make a request to get transaction details one must send x_ref_payco as ref_payco
-
-Since epayco posts an ecoded value for ref_payco, another method will be used.
-The URLconfirmation will be different for each request. It'll have the transaction id
-at the end of the URL.
-
-usar .env
+use .env in production
 
 
 
 
 DONE
+
+Late confirmation also gets trigered when a second attempt to pay is succesfull, 
+ballots must be kept being protected
 
 JavaScript only in personal data template template
 

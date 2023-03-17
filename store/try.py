@@ -1,5 +1,5 @@
-# import requests
-# import json
+import requests
+import json
 
 # # from django.conf import settings
 
@@ -84,17 +84,22 @@ from datetime import datetime, timedelta
 # print(id)
 # print('hola')
 
-x_description = "96 Compra de balotas. Numeros 8, 13, 14"
-# x_description = "94 Compra de balotas. Numeros 8"
+# x_description = "96 Compra de balotas. Numeros 8, 13, 14"
+# # x_description = "94 Compra de balotas. Numeros 8"
 
-items = x_description.split(' ')
-items.pop(0)
-ballot_ids =[]
-for item in items:
-    try:
-        ballot_id = int(item.strip(','))
-        ballot_ids.append(ballot_id)
-    except:
-        pass
+# items = x_description.split(' ')
+# items.pop(0)
+# ballot_ids =[]
+# for item in items:
+#     try:
+#         ballot_id = int(item.strip(','))
+#         ballot_ids.append(ballot_id)
+#     except:
+#         pass
 
-print(ballot_ids)
+# print(ballot_ids)
+
+dic = {'a':1, 'b': {'er':'hola', 'rfd': 32}}
+string = json.dumps(dic)
+recover_dic = json.loads(string)
+print(type(recover_dic['b']))

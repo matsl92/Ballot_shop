@@ -52,7 +52,12 @@ class Balota(models.Model):
         return str(self.numero)
     
 class EpaycoLateConfirmation(models.Model):
-    post = models.TextField()
+    opciones_de_estado = [(0, 'OK'), (1, 'Por resolver')] 
+    
+    transaccion = models.OneToOneField(Transaccion, on_delete=models.CASCADE, default=None, null=True)   
+    estado = models.IntegerField(choices=opciones_de_estado, default=0)
+    datos_json = models.TextField(default='', null=True, blank=True)
+    descripcion = models.TextField(default='', null=True, blank=True)
 
 class Rango(models.Model):
     valor_minimo = models.IntegerField(validators=[MinValueValidator(0)])
