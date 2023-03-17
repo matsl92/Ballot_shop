@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic import ListView
 from .forms import ClienteForm
-from .models import Cliente, Balota, Transaccion, Descuento, EpaycoConfirmation
+from .models import Cliente, Balota, Transaccion, Descuento, EpaycoLateConfirmation
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.forms.models import model_to_dict
 from django.urls import reverse
@@ -53,17 +53,17 @@ from .tools import get_ballot_ids_from_x_description
 
 def handle_transaction_response(data):
     # transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
-    x_ref_payco = data['x_ref_payco']
-    x_description = data['x_description']
-    x_amount = int(data['x_amount']) # > valor_pagado
+    # x_ref_payco = data['x_ref_payco']
+    # x_description = data['x_description']
+    # x_amount = int(data['x_amount']) # > valor_pagado
+    
     x_response = data['x_response']
-    
-    transaction = Transaccion.objects.get(id=int(x_description.split(' ')[0]))
-    transaction.x_description = x_description
-    transaction.x_ref_payco = x_ref_payco
-    transaction.valor_pagado = x_amount
+    transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
+    transaction.x_description = data['x_description']
+    transaction.x_ref_payco = data['x_ref_payco']
+    transaction.valor_pagado = int(data['x_amount'])
+    transaction.x_response = x_response
     transaction.save()
-    
     
     if transaction.estado == 0:
         
@@ -74,24 +74,29 @@ def handle_transaction_response(data):
             transaction.estado = 2
         
         transaction.save()
-        
-        
+          
     elif transaction.estado == 1:
         pass
-        
-        
         
     elif transaction.estado == 2:
         
         if x_response == 'Aceptada':
             
-            ballots = [Balota.objects.get(id=id) for id in get_ballot_ids_from_x_description(x_description)]
+            ballots = [Balota.objects.get(id=id) for id in get_ballot_ids_from_x_description(data['x_description'])]
             for ballot in ballots:
                 
                 if ballot.transaccion == None:
                     ballot.transaccion = transaction
+                
                 else:
                     transaction.late_confirmation = timezone.now()
+                    late_confirmation = EpaycoLateConfirmation(post = str(data))
+            
+            try:
+                late_confirmation.save()
+            
+            except:
+                pass
             
             transaction.estado = 1
         
@@ -100,7 +105,7 @@ def handle_transaction_response(data):
         
     transaction.save()
         
-ePayco_confirmation_time = timedelta(hours=3, minutes=30)  # 600 segundos o más
+ePayco_confirmation_time = timedelta(hours=3, minutes=30)  
 
 def unbind_ballots():
     hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_confirmation_time)
@@ -111,10 +116,6 @@ def unbind_ballots():
             
         transaction.estado = 2
         transaction.save()
-    
-    for ballot in Balota.objects.all():
-        ballot.time_period = timedelta(minutes=15)
-        ballot.save()
  
  
 # VIEWS  
@@ -252,74 +253,88 @@ def epayco_confirmation(request):   # For us
     print('_'*20)
     print('request.GET.dict()', request.GET.dict())
     print('request.method', request.method)
-    x_ref_payco = request.GET.dict()['x_ref_payco'] # for detail request
-    x_description = request.GET.dict()['x_description'] # Our description
-    # transaction_id = request.GET.dict('x_extra1') # Our transaction id
-    transaction_id = int(x_description.split(' ')[0])
-    # ballot_ids = request.GET.dict('x_extra2') # ballot ids
-    x_response = request.GET.dict()['x_response'] # Aceptada/Rechazada
-    x_customer_email = request.GET.dict()['x_customer_email'] # email entered in epayco
-    x_customer_movil = request.GET.dict()['x_customer_movil'] # phone entered in epayco
-    transaction = Transaccion.objects.get(id=transaction_id)
-    transaction.x_ref_payco = x_ref_payco
-    transaction.x_response = x_response
-    transaction.x_description = x_description
-    if x_response == 'Aceptada':
-        transaction.estado = 1
-    elif x_response == 'Rechazada':
-        transaction.estado = 2
     
-    transaction.save()
+    # x_ref_payco = request.GET.dict()['x_ref_payco'] # for detail request
+    # x_description = request.GET.dict()['x_description'] # Our description
+    # x_amount = request.GET.dict()['x_amount']
+    # x_response = request.GET.dict()['x_response'] # Aceptada/Rechazada
     
-    if request.method == 'POST':
-        print('ESTO ES POST')
-        epayco_conf = EpaycoConfirmation(post=str(request.POST))
-        epayco_conf.save() 
-    if request.method == 'GET':
-        print('ESTO ES GET')
+    data = {
+        'x_ref_payco': request.GET.dict()['x_ref_payco'], 
+        'x_description': request.GET.dict()['x_description'], 
+        'x_amount': request.GET.dict()['x_amount'], 
+        'x_response': request.GET.dict()['x_response']
+    }
+   
+    handle_transaction_response(data)
+    
+    # transaction_id = int(x_description.split(' ')[0])
+    # x_customer_email = request.GET.dict()['x_customer_email'] # email entered in epayco
+    # x_customer_movil = request.GET.dict()['x_customer_movil'] # phone entered in epayco
+    # transaction = Transaccion.objects.get(id=transaction_id)
+    # transaction.x_ref_payco = x_ref_payco
+    # transaction.x_response = x_response
+    # transaction.x_description = x_description
+    # if x_response == 'Aceptada':
+    #     transaction.estado = 1
+    # elif x_response == 'Rechazada':
+    #     transaction.estado = 2
+    
+    # transaction.save()
+    
+    # if request.method == 'POST':
+    #     print('ESTO ES POST')
+    #     epayco_conf = EpaycoConfirmation(post=str(request.POST))
+    #     epayco_conf.save() 
+    # if request.method == 'GET':
+    #     print('ESTO ES GET')
     
     response = HttpResponse()
     response.status_code = 200
     return response
 
 def epayco_response(request, transaction_id):   # For the client
-    print('_'*20)
-    print('request.GET.dict()', request.GET.dict())
-    print('request.POST.dict()', request.POST.dict())
+    # print('_'*20)
+    # print('request.GET.dict()', request.GET.dict())
+    # print('request.POST.dict()', request.POST.dict())
     
     encoded_ref_payco = request.GET.dict()['ref_payco']
     url = 'https://secure.epayco.co/validation/v1/reference/' + encoded_ref_payco
     response = requests.request("GET", url)
     data = response.json()['data']
-    print(data)
-    print(data['x_response'])
-    x_response = data['x_response']
-    ref_payco = data['x_ref_payco']
-    amount = data['x_amount'] 
+    # print(data)
+    # print(data['x_response'])
+    
+    handle_transaction_response(data)
+    
+    # x_response = data['x_response']
+    # ref_payco = data['x_ref_payco']
+    # amount = data['x_amount'] 
+    
+    # transaction = Transaccion.objects.get(id=transaction_id)
+    # client = transaction.cliente
+    
+    # transaction.x_ref_payco = ref_payco
+    # transaction.save()
+    
+    # if transaction.valor_final == amount:
+    #     print('amount checked')
+    # else:
+    #     print('SHIT')
+        
+    # if x_response == 'Aceptada':
+    #     print('These ballots will not be released')
+    #     transaction.estado = 1
+    #     transaction.save()
+    # elif x_response == 'Rechazada':
+    #     print('Release them')
+    #     transaction.estado = 2
+    #     transaction.save()
+    # else:
+    #     print('wtf')
     
     transaction = Transaccion.objects.get(id=transaction_id)
     client = transaction.cliente
-    
-    transaction.x_ref_payco = ref_payco
-    transaction.save()
-    
-    if transaction.valor_final == amount:
-        print('amount checked')
-    else:
-        print('SHIT')
-        
-    if x_response == 'Aceptada':
-        print('These ballots will not be released')
-        transaction.estado = 1
-        transaction.save()
-    elif x_response == 'Rechazada':
-        print('Release them')
-        transaction.estado = 2
-        transaction.save()
-    else:
-        print('wtf')
-    
-    
     
     if transaction.estado == 0:
         message = 'La transacción se encuentra en estado pediente, por favor recarga la pagina en unos segundos.'

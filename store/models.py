@@ -51,7 +51,7 @@ class Balota(models.Model):
     def __str__(self):
         return str(self.numero)
     
-class EpaycoConfirmation(models.Model):
+class EpaycoLateConfirmation(models.Model):
     post = models.TextField()
 
 class Rango(models.Model):

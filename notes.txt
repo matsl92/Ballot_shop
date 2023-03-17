@@ -1,6 +1,6 @@
 PRIMARY
 
-
+get transaccion using the data and not the url(Important!) no need for the url part
 
 
 
@@ -33,6 +33,14 @@ request.GET.dict() {'x_cust_id_cliente': '782193', 'x_ref_payco': '131251607', '
 JavaScript only in personal data template template
 
 SECONDARY
+
+Late confirmation also gets trigered when a second attempt to pay is succesfull, 
+ballots must be kept protected
+
+Add alert field in Transaccion which will be trigered by a different amount or a 
+late confirmation with unavailable ballots
+
+Define whether passing ids or numbers in x_description
 
 Add personal data to bill
 
