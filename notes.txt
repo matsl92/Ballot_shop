@@ -2,7 +2,7 @@ PRIMARY
 
 get transaccion using the data and not the url(Important!) no need for the url part
 
-
+ref_payco cannot be gotten when comming from 100% discount
 
 
 
