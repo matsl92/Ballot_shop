@@ -133,7 +133,7 @@ def unbind_ballots():
         transaction.save()
 
 def handle_transaction_response(data):
-    
+    print(type(data))
     # data should come from the link
     x_response = data['x_response']
     transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
@@ -412,6 +412,10 @@ def epayco_confirmation_4(request):   # For us
 
 @csrf_exempt
 def epayco_confirmation(request):
+    print('_'*20)
+    print('request.POST.dict()', request.POST.dict())
+    print('request.method', request.method)
+    
     print('_'*20)
     print('request.GET.dict()', request.GET.dict())
     print('request.method', request.method)
