@@ -120,6 +120,7 @@ def epayco_get_transaction_details(x_ref_payco):
 
     response = requests.request("GET", url, headers=headers, data=payload)
     # return response.json()
+    print('returned value from epayco_get_transaction_details', type(response.json()['data']['log']))
     return response.json()['data']['log']
 
 def unbind_ballots():
@@ -200,55 +201,7 @@ def handle_transaction_response(data):
     
     transaction.save()
     
-# def handle_transaction_response_one(data):
     
-#     x_response = data['x_response']
-#     transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
-#     transaction.x_description = data['x_description']
-#     transaction.x_ref_payco = data['x_ref_payco']
-#     transaction.valor_pagado = int(data['x_amount'])
-#     transaction.x_response = x_response
-    
-#     transaction.save()
-    
-#     if transaction.estado == 0:
-        
-#         if x_response == 'Aceptada':
-#             transaction.estado = 1
-          
-#     elif transaction.estado == 1:
-#         pass
-        
-#     elif transaction.estado == 2:
-        
-#         if x_response == 'Aceptada':
-            
-#             late_confirmation = EpaycoLateConfirmation(transaccion=transaction, datos_json=json.dumps(data))
-#             unavailable_ballot_ids = []
-            
-#             ballots = [Balota.objects.get(id=id) for id in get_ballot_ids_from_x_description(data['x_description'])]
-#             for ballot in ballots:
-                
-#                 if ballot.transaccion == None:
-#                     ballot.transaccion = transaction
-#                     ballot.save()
-                
-#                 else:
-#                     transaction.late_confirmation = timezone.now()
-#                     late_confirmation.estado = 1
-#                     unavailable_ballot_ids.append(ballot.id)
-            
-#             description = {'unavailable_ballot_ids': unavailable_ballot_ids}
-#             late_confirmation.descripcion = json.dumps(description)
-#             transaction.estado = 1
-#             late_confirmation.save()
-        
-#         elif x_response == 'Rechazada':
-#             pass
-        
-#     transaction.save()
- 
-
 # VIEWS  
         
 class BalotaListView(ListView):
@@ -412,11 +365,11 @@ def epayco_confirmation_4(request):   # For us
 
 @csrf_exempt
 def epayco_confirmation(request):
-    print('_'*20)
+    print('*'*20)
     print('request.POST.dict()', request.POST.dict())
     print('request.method', request.method)
     
-    print('_'*20)
+    print('*'*20)
     print('request.GET.dict()', request.GET.dict())
     print('request.method', request.method)
     
