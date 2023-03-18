@@ -29,11 +29,15 @@ epayco_login_url = 'https://apify.epayco.co/login/mail'
 
 epayco_create_link_url = 'https://apify.epayco.co/collection/link/create'
 
+epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
+
 # token = os.getenv('TOKEN')
 
 # epayco_login_url = os.getenv('EPAYCO_LOGIN_URL')
 
 # epayco_create_link_url = os.getenv('EPAYCO_CREATE_LINK_URL')
+
+# epayco_transaction_detail_url = os.getenv('EPAYCO_TRANSACTION_DETAIL_URL')
 
 
 # EPAYCO RESPONSE LINKS
@@ -49,10 +53,84 @@ response_base_url = "http://127.0.0.1:8000/epayco_response/"
 
 # VARIABLES AND FUNCTIONS
 
+url_base = '//'.join([confirmation_url.split('/')[0], confirmation_url.split('/')[2]])
+
 from .tools import get_ballot_ids_from_x_description
      
 # ePayco_confirmation_time = timedelta(hours=3, minutes=30) 
 ePayco_confirmation_time = timedelta(seconds=5) 
+
+def epayco_get_token():
+    # Login request
+    url = epayco_login_url
+    payload = ""
+    headers = {
+        'Authorization': 'Basic ' + token,
+        'Content-Type': 'application/json'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    given_token = response.json()['token']
+    return given_token
+
+def epayco_get_transaction_link(value_2, transaction, ballots, client):
+    url = epayco_create_link_url
+    payload = json.dumps({
+        "quantity": 1,
+        "onePayment": True,
+        "amount": str(value_2),
+        "currency": "COP",
+        "id": 0,  # Debe ser único, si se envia cero, epayco genera uno automaticamente
+        "base": "0",
+        "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}",
+        "title": "Link de cobro",
+        "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
+        "tax": "0", 
+        "email": client.correo,
+        'extra': transaction.id,
+        "extra1": transaction.id,
+        "extra2": ", ".join([str(ballot.id) for ballot in ballots]),
+        "urlConfirmation": confirmation_url, 
+        "urlResponse": response_base_url + str(transaction.id), 
+        "methodConfirmation": "GET", # request.method = 'POST' anyway
+        "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S'),    # Format Date Time UTC payment link expiration date 
+        "log": {
+            "x_extra_1": "hola", 
+            "extra_1": "holas", 
+            "extra1": "holanda"
+        }, 
+        "extras": {
+            "x_extra_1": "hola", 
+            "extra_1": "holas", 
+            "extra1": "holanda"
+        }
+    })
+    
+    headers = {
+        'Content-Type': 'application/json', 
+        'Authorization': 'Bearer '+ epayco_get_token()
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    # print('8, second request is done')
+    link = response.json()['data']['routeLink']
+    return link
+
+def epayco_get_transaction_details(x_ref_payco):
+    url = epayco_transaction_detail_url
+
+    payload = json.dumps({
+    "filter": {
+        "referencePayco": int(x_ref_payco)
+    }
+    })
+    headers = {
+    'Content-Type': 'application/json', 
+    'Authorization': 'Bearer '+ epayco_get_token()
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    # return response.json()
+    return response.json()['data']['log']
 
 def unbind_ballots():
     hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_confirmation_time)
@@ -66,34 +144,56 @@ def unbind_ballots():
 
 def handle_transaction_response(data):
     
+    # data should come from the link
     x_response = data['x_response']
     transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
     transaction.x_description = data['x_description']
-    transaction.x_ref_payco = data['x_ref_payco']
+    transaction.x_ref_payco = data['x_ref_payco'] # this
     transaction.valor_pagado = int(data['x_amount'])
-    transaction.x_response = x_response
+    transaction.x_response = x_response  # this
     
     transaction.save()
     
     if transaction.estado == 0:
         
-        if x_response == 'Aceptada':
+        if transaction.x_response == 'Pendiente':
+            pass
+        elif transaction.x_response == 'Rechazada':
+            pass
+        elif transaction.x_response == 'Fallida':
+            pass
+        elif transaction.x_response == 'Aceptada':
             transaction.estado = 1
-          
+    
+    
     elif transaction.estado == 1:
         pass
-        
+    
+    
     elif transaction.estado == 2:
-        
-        if x_response == 'Aceptada':
+        if transaction.x_response == 'Pendiente':
+            pass
+        elif transaction.x_response == 'Rechazada':
+            pass
+        elif transaction.x_response == 'Fallida':
+            pass
+        elif transaction.x_response == 'Aceptada':
             
-            late_confirmation = EpaycoLateConfirmation(transaccion=transaction, datos_json=json.dumps(data))
+            # late confirmation
+            late_confirmation = EpaycoLateConfirmation(
+                transaccion=transaction, datos_json=json.dumps(data)
+            )
+        
             unavailable_ballot_ids = []
             
-            ballots = [Balota.objects.get(id=id) for id in get_ballot_ids_from_x_description(data['x_description'])]
+            ballots = [
+                Balota.objects.get(id=id) for id in get_ballot_ids_from_x_description(
+                    data['x_description']
+                )
+            ]
             for ballot in ballots:
                 
-                if ballot.transaccion == None:
+                if ballot.transaccion == None or ballot.transaccion == transaction:
                     ballot.transaccion = transaction
                     ballot.save()
                 
@@ -105,12 +205,58 @@ def handle_transaction_response(data):
             description = {'unavailable_ballot_ids': unavailable_ballot_ids}
             late_confirmation.descripcion = json.dumps(description)
             transaction.estado = 1
-            late_confirmation.save()
-        
-        elif x_response == 'Rechazada':
-            pass
-        
+            late_confirmation.save() 
+    
+    
     transaction.save()
+    
+# def handle_transaction_response_one(data):
+    
+#     x_response = data['x_response']
+#     transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
+#     transaction.x_description = data['x_description']
+#     transaction.x_ref_payco = data['x_ref_payco']
+#     transaction.valor_pagado = int(data['x_amount'])
+#     transaction.x_response = x_response
+    
+#     transaction.save()
+    
+#     if transaction.estado == 0:
+        
+#         if x_response == 'Aceptada':
+#             transaction.estado = 1
+          
+#     elif transaction.estado == 1:
+#         pass
+        
+#     elif transaction.estado == 2:
+        
+#         if x_response == 'Aceptada':
+            
+#             late_confirmation = EpaycoLateConfirmation(transaccion=transaction, datos_json=json.dumps(data))
+#             unavailable_ballot_ids = []
+            
+#             ballots = [Balota.objects.get(id=id) for id in get_ballot_ids_from_x_description(data['x_description'])]
+#             for ballot in ballots:
+                
+#                 if ballot.transaccion == None:
+#                     ballot.transaccion = transaction
+#                     ballot.save()
+                
+#                 else:
+#                     transaction.late_confirmation = timezone.now()
+#                     late_confirmation.estado = 1
+#                     unavailable_ballot_ids.append(ballot.id)
+            
+#             description = {'unavailable_ballot_ids': unavailable_ballot_ids}
+#             late_confirmation.descripcion = json.dumps(description)
+#             transaction.estado = 1
+#             late_confirmation.save()
+        
+#         elif x_response == 'Rechazada':
+#             pass
+        
+#     transaction.save()
  
 
 # VIEWS  
@@ -224,50 +370,63 @@ def fetch_api(request):
         else: 
             # print('6, ballots are not for free')
             
+            # given_token = epayco_get_token()
+            
             # Login request
-            url = epayco_login_url
-            payload = ""
-            headers = {
-                'Authorization': 'Basic ' + token,
-                'Content-Type': 'application/json'
-            }
-            response = requests.request("POST", url, headers=headers, data=payload)
-            given_token = response.json()['token']
+            # url = epayco_login_url
+            # payload = ""
+            # headers = {
+            #     'Authorization': 'Basic ' + token,
+            #     'Content-Type': 'application/json'
+            # }
+            # response = requests.request("POST", url, headers=headers, data=payload)
+            # given_token = response.json()['token']
+            
             # print('7, first request is done')
 
             # Create payment link request
-            url = epayco_create_link_url
-            payload = json.dumps({
-              "quantity": 1,
-              "onePayment": True,
-              "amount": str(value_2),
-              "currency": "COP",
-              "id": 0,  # Debe ser único, si se envia cero, epayco genera uno automaticamente
-              "base": "0",
-              "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}",
-              "title": "Link de cobro",
-              "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
-              "tax": "0", 
-              "email": client.correo,
-              'extra': transaction.id,
-              "extra1": transaction.id,
-              "extra2": ", ".join([str(ballot.id) for ballot in ballots]),
-              "urlConfirmation": confirmation_url, 
-              "urlResponse": response_base_url + str(transaction.id), 
-              "methodConfirmation": "GET", # request.method = 'POST' anyway
-              "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S'),    # Format Date Time UTC payment link expiration date 
-              "mateo_data": f"parametro opcional{transaction.id}",
-            })
+            # url = epayco_create_link_url
+            # payload = json.dumps({
+            #   "quantity": 1,
+            #   "onePayment": True,
+            #   "amount": str(value_2),
+            #   "currency": "COP",
+            #   "id": 0,  # Debe ser único, si se envia cero, epayco genera uno automaticamente
+            #   "base": "0",
+            #   "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}",
+            #   "title": "Link de cobro",
+            #   "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
+            #   "tax": "0", 
+            #   "email": client.correo,
+            #   'extra': transaction.id,
+            #   "extra1": transaction.id,
+            #   "extra2": ", ".join([str(ballot.id) for ballot in ballots]),
+            #   "urlConfirmation": confirmation_url, 
+            #   "urlResponse": response_base_url + str(transaction.id), 
+            #   "methodConfirmation": "GET", # request.method = 'POST' anyway
+            #   "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S'),    # Format Date Time UTC payment link expiration date 
+            #   "log": {
+            #       "x_extra_1": "hola", 
+            #       "extra_1": "holas", 
+            #       "extra1": "holanda"
+            #   }, 
+            #   "extras": {
+            #       "x_extra_1": "hola", 
+            #       "extra_1": "holas", 
+            #       "extra1": "holanda"
+            #   }
+            # })
             
-            headers = {
-                'Content-Type': 'application/json', 
-                'Authorization': 'Bearer '+ given_token
-            }
+            # headers = {
+            #     'Content-Type': 'application/json', 
+            #     'Authorization': 'Bearer '+ epayco_get_token()
+            # }
 
-            response = requests.request("POST", url, headers=headers, data=payload)
+            # response = requests.request("POST", url, headers=headers, data=payload)
             # print('8, second request is done')
-            link = response.json()['data']['routeLink'] # if value_1 is 0 change transaction status to efectuada (2)
+            # link = response.json()['data']['routeLink'] # if value_1 is 0 change transaction status to efectuada (2)
                                                         # and link to response page.
+            link = epayco_get_transaction_link(value_2, transaction, ballots, client)
             transaction.link_de_pago = link
             transaction.save()
             # print(link)
@@ -289,12 +448,12 @@ def fetch_api(request):
             # return render(request, 'store/bill.html', context)
 
 def epayco_response(request, transaction_id):   # For the client
+     
+    transaction = Transaccion.objects.get(id=transaction_id)
     
-    if not 'ref_payco' in request.GET.dict().keys():    
-        transaction = Transaccion.objects.get(id=transaction_id)
+    if not transaction.link_de_pago:  
         if transaction.estado == 1:
-            message = f"¡Felicidades {transaction.cliente.nombre}! Has adquirido las siguientes balotas:"
-            context = {'transaction': transaction, 'message': message}
+            context = {'transaction': transaction}
             return render(request, 'store/response.html', context)
         
     else:
@@ -302,23 +461,17 @@ def epayco_response(request, transaction_id):   # For the client
         url = 'https://secure.epayco.co/validation/v1/reference/' + encoded_ref_payco
         response = requests.request("GET", url)
         data = response.json()['data']
+        data['view_link'] = ''.join([url_base, request.get_full_path()])
         
         handle_transaction_response(data)
         
         transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
         
-        if transaction.estado == 0:
-            message = 'La transacción se encuentra en estado pediente, por favor recarga la pagina en unos segundos.'
-        elif transaction.estado == 1:
-            message = f'¡Felicidades {transaction.cliente.nombre}! Has adquirido las siguientes balotas:'
-        elif transaction.estado == 2:
-            message = 'La transacción no se ha llevado a cabo con éxito, por favor inténtalo nuevamente.'
-            
-        context = {'message': message, 'transaction': transaction}
+        context = {'transaction': transaction, 'data':data}
         return render(request, 'store/response.html', context)
 
 @csrf_exempt # Not necessary for GET requests
-def epayco_confirmation(request):   # For us
+def epayco_confirmation_4(request):   # For us
     print('_'*20)
     print('request.GET.dict()', request.GET.dict())
     print('request.method', request.method)
@@ -338,3 +491,20 @@ def epayco_confirmation(request):   # For us
     response.status_code = 200
     return response
 
+def epayco_confirmation(request):
+    print('request.GET.dict()', request.GET.dict())
+    
+    x_ref_payco = request.GET.dict()['x_ref_payco']
+    
+    handle_transaction_response(epayco_get_transaction_details(x_ref_payco))
+    
+    response = HttpResponse()
+    
+    response.status_code = 200
+    
+    print('Doneee!')
+    return response
+       
+def transaction_detail(request):
+     
+    return JsonResponse(epayco_get_transaction_details('132299712'))

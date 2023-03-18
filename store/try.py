@@ -99,7 +99,15 @@ from datetime import datetime, timedelta
 
 # print(ballot_ids)
 
-dic = {'a':1, 'b': {'er':'hola', 'rfd': 32}}
-string = json.dumps(dic)
-recover_dic = json.loads(string)
-print(type(recover_dic['b']))
+# dic = {'a':1, 'b': {'er':'hola', 'rfd': 32}}
+# string = json.dumps(dic)
+# recover_dic = json.loads(string)
+# print(type(recover_dic['b']))
+
+
+confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+
+print(confirmation_url)
+
+url_base = '//'.join([confirmation_url.split('/')[0], confirmation_url.split('/')[2]])
+print(url_base)

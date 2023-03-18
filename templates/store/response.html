@@ -3,12 +3,39 @@
 {% block title %}Respuesta{% endblock title %}
 
 {% block content %}
-<h2>{{ message }}</h2>
 
-{% if transaction.estado == 1 %}
+
+{% if transaction.link_de_pago %}
+
+    {% if data.x_response == 'Aceptada' %}
+        <h3>¡Felicidades {{ transaction.cliente.nombre }}! Has adquirido las siguientes balotas:</h3>
+        {% for ballot in transaction.balota_set.all %}
+            <div>{{ ballot }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if data.x_response == 'Rechazada' %}
+        <h3>{{transaction.cliente.nombre}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h3>
+        <a href="{{ transaction.link_de_pago }}">ePayco</a>
+    {% endif %}
+
+    {% if data.x_response == 'Fallida' %}
+        <h3>{{transaction.cliente.nombre}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h3>
+        <a href="{{ transaction.link_de_pago }}">ePayco</a>
+    {% endif %}
+
+    {% if data.x_response == 'Pendiente' %}
+        <h3>{{transaction.cliente.nombre}}, Hemos tomado tus datos y las balotas asociadas a tu transacción, por favor revisa el siguiente link en unos minutos para confirmar tu compra.</h3>
+        <a href="{{ data.view_link }}">{{ data.view_link }}</a>    
+    {% endif %}
+
+{% else %}
+
+    <h3>¡Felicidades {{ transaction.cliente.nombre }}! Has adquirido las siguientes balotas:</h3>
     {% for ballot in transaction.balota_set.all %}
         <div>{{ ballot }}</div>
     {% endfor %}
+
 {% endif %}
 
 

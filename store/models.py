@@ -58,6 +58,9 @@ class EpaycoLateConfirmation(models.Model):
     estado = models.IntegerField(choices=opciones_de_estado, default=0)
     datos_json = models.TextField(default='', null=True, blank=True)
     descripcion = models.TextField(default='', null=True, blank=True)
+    
+    def __str__(self):
+        return 'Para ' + str(self.transaccion)
 
 class Rango(models.Model):
     valor_minimo = models.IntegerField(validators=[MinValueValidator(0)])
