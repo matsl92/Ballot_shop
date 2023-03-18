@@ -137,14 +137,13 @@ def unbind_ballots():
         transaction.save()
 
 def handle_transaction_response(data):
-    print('handle_transaction_response argument', type(data))
     # data should come from the link
     x_response = data['x_response']
     transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
     transaction.x_description = data['x_description']
-    transaction.x_ref_payco = data['x_ref_payco'] # this
+    transaction.x_ref_payco = data['x_ref_payco']
     transaction.valor_pagado = int(data['x_amount'])
-    transaction.x_response = x_response  # this
+    transaction.x_response = x_response
     
     transaction.save()
     
@@ -345,48 +344,14 @@ def epayco_response(request, transaction_id):   # For the client
         context = {'transaction': transaction, 'data':data}
         return render(request, 'store/response.html', context)
 
-@csrf_exempt # Not necessary for GET requests
-# def epayco_confirmation_4(request):   # For us
-#     print('_'*20)
-#     print('request.GET.dict()', request.GET.dict())
-#     print('request.method', request.method)
-    
-#     data = {
-#         'x_ref_payco': request.GET.dict()['x_ref_payco'], 
-#         'x_description': request.GET.dict()['x_description'], 
-#         'x_amount': request.GET.dict()['x_amount'], 
-#         'x_response': request.GET.dict()['x_response']
-#     }
-   
-#     handle_transaction_response(data)
-    
-#     print('Done!')
-    
-#     response = HttpResponse()
-#     response.status_code = 200
-#     return response
-
 @csrf_exempt
 def epayco_confirmation(request):
-    print('*'*20)
-    print('request.POST.dict()', request.POST.dict())
-    print('request.method', request.method)
-    
-    # print('*'*20)
-    # print('request.GET.dict()', request.GET.dict())
-    # print('request.method', request.method)
-    
-    # external_page  x_ref_payco,    x_response: Aceptada, x_description, x_amount
+    print('_'*20)
 
-    # request data   referencePayco, response:   Aprobada, description,   amount
-
-    
     x_ref_payco = request.POST.dict()['x_ref_payco']
-    print('x_ref_payco', x_ref_payco)
     
     data = epayco_get_transaction_details(x_ref_payco)
-    status_dict = {'Aprobada': 'Aceptada', 'Rechazada': 'Rechazada'}
-    response_dict = {'Aprobada': 'Aceptada', 'Rechazada': 'Rechazada'}
+    
     data['x_ref_payco'] = data['referencePayco']
     data['x_response'] = data['status']
     data['x_description'] = data['description']
