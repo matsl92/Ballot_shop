@@ -133,7 +133,7 @@ def unbind_ballots():
         transaction.save()
 
 def handle_transaction_response(data):
-    print(type(data))
+    print('handle_transaction_response argument', type(data))
     # data should come from the link
     x_response = data['x_response']
     transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
@@ -431,6 +431,6 @@ def epayco_confirmation(request):
     print('Doneee!')
     return response
        
-def transaction_detail(request):
+def transaction_detail(request, x_ref_payco):
      
-    return JsonResponse(epayco_get_transaction_details('132299712'))
+    return JsonResponse(epayco_get_transaction_details(x_ref_payco))

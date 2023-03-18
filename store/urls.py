@@ -9,7 +9,7 @@ urlpatterns = [
     path('epayco_response/<int:transaction_id>', views.epayco_response, name="epayco_response"),
     path('bill/', views.fetch_api, name='fetch'), 
     path('code_validation/', views.code_validation, name='code_validation'), 
-    path('transaction_detail', views.transaction_detail, name="detail")
+    path('transaction_detail/<str:x_ref_payco>', views.transaction_detail, name="detail")
 ]
     
     
