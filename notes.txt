@@ -1,5 +1,7 @@
 PRIMARY
 
+response.html should check whether transaction.estado == 2
+
 Define whether passing ids or numbers in x_description issues branch
 
 keep the user from hitting the button before filling in all the required fields

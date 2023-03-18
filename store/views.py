@@ -410,8 +410,11 @@ def epayco_confirmation_4(request):   # For us
     response.status_code = 200
     return response
 
+@csrf_exempt
 def epayco_confirmation(request):
+    print('_'*20)
     print('request.GET.dict()', request.GET.dict())
+    print('request.method', request.method)
     
     x_ref_payco = request.GET.dict()['x_ref_payco']
     
