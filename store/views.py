@@ -120,6 +120,8 @@ def epayco_get_transaction_details(x_ref_payco):
 
     response = requests.request("GET", url, headers=headers, data=payload)
     # return response.json()
+    print('-'*10)
+    print("response.json()['data']['log']", response.json()['data']['log'])
     print('returned value from epayco_get_transaction_details', type(response.json()['data']['log']))
     return response.json()['data']['log']
 
