@@ -1,5 +1,10 @@
 PRIMARY
 
+external_page  x_ref_payco,    x_response: Aceptada, x_description, x_amount
+
+request data   referencePayco, response:   Aprobada, description,   amount
+
+
 response.html should check whether transaction.estado == 2
 
 Define whether passing ids or numbers in x_description issues branch

@@ -124,7 +124,7 @@ def epayco_get_transaction_details(x_ref_payco):
     print("response.json()", response.json())
     print("response.json()['data']", response.json()['data'])
     print("response.json()['data']['log']", response.json()['data']['log'])
-    return response.json()['data']['log']
+    return response.json()['data']
 
 def unbind_ballots():
     hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_confirmation_time)
@@ -376,10 +376,22 @@ def epayco_confirmation(request):
     # print('request.GET.dict()', request.GET.dict())
     # print('request.method', request.method)
     
-    x_ref_payco = request.GET.dict()['x_ref_payco']
+    # external_page  x_ref_payco,    x_response: Aceptada, x_description, x_amount
+
+    # request data   referencePayco, response:   Aprobada, description,   amount
+
+    
+    x_ref_payco = request.POST.dict()['x_ref_payco']
     print('x_ref_payco', x_ref_payco)
     
-    handle_transaction_response(epayco_get_transaction_details(x_ref_payco))
+    data = epayco_get_transaction_details(x_ref_payco)
+    response_dict = {'Aprobada': 'Aceptada'}
+    data['x_ref_payco'] = data['referencePayco']
+    data['x_response'] = response_dict[data['response']]
+    data['x_description'] = data['description']
+    data['x_amount'] = data['amount']
+    
+    handle_transaction_response(data)
     
     response = HttpResponse()
     
