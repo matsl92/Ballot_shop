@@ -43,12 +43,12 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 # EPAYCO RESPONSE LINKS
 
 # Production
-# confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
-# response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
+confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
+response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
 
 # Localhost
-confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-response_base_url = "http://127.0.0.1:8000/epayco_response/"
+# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+# response_base_url = "http://127.0.0.1:8000/epayco_response/"
 
 
 # VARIABLES AND FUNCTIONS
@@ -93,16 +93,6 @@ def epayco_get_transaction_link(value_2, transaction, ballots, client):
         "urlResponse": response_base_url + str(transaction.id), 
         "methodConfirmation": "GET", # request.method = 'POST' anyway
         "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S'),    # Format Date Time UTC payment link expiration date 
-        "log": {
-            "x_extra_1": "hola", 
-            "extra_1": "holas", 
-            "extra1": "holanda"
-        }, 
-        "extras": {
-            "x_extra_1": "hola", 
-            "extra_1": "holas", 
-            "extra1": "holanda"
-        }
     })
     
     headers = {
@@ -297,10 +287,8 @@ def fetch_api(request):
         body = json.loads(request.body)
         form = ClienteForm(body)
         if form.is_valid():
-            # print('1, valid form')
             client = form.save()
         else:
-            # print('1, incomplete form')
             return JsonResponse({
                 'errors': [(key, value[0]['message']) for key, value in json.loads(form.errors.as_json()).items()]
             })
@@ -309,9 +297,6 @@ def fetch_api(request):
         ballots = [Balota.objects.get(id=int(id)) for id in body['ballot_ids']]
         for ballot in ballots:
             value_1 += ballot.precio
-        
-        # print('2,', value_1)
-        
         value_2 = value_1
         discount_code = body['discount_code']
         discount = None
@@ -331,15 +316,10 @@ def fetch_api(request):
             if ballot.transaccion != None:
                 print('4, not all ballots were available')
                 # messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haga su selección nuevamente.')
-                return redirect('store:balotas') # this redirect should send the user and not just the fetch request
-
-        # print('4, all ballots were available', )        
+                return redirect('store:balotas') # this redirect should send the user and not just the fetch request       
         
         transaction = Transaccion(cliente=client, descuento=discount, valor_inicial=value_1, valor_final = value_2)
         transaction.save()
-        # transaction_id = transaction.id
-        
-        # print('5, transaction saved')
         
         for ballot in ballots:
             transaction.balota_set.add(ballot)
@@ -347,7 +327,6 @@ def fetch_api(request):
         
         if value_2 == 0:
             context = {'ballots': ballots, 'client': client}
-            # print('6, ballots for free')
             transaction.estado = 1
             transaction.save()
             link = reverse('store:epayco_response', kwargs={'transaction_id': transaction.id})
@@ -368,69 +347,10 @@ def fetch_api(request):
         
         
         else: 
-            # print('6, ballots are not for free')
             
-            # given_token = epayco_get_token()
-            
-            # Login request
-            # url = epayco_login_url
-            # payload = ""
-            # headers = {
-            #     'Authorization': 'Basic ' + token,
-            #     'Content-Type': 'application/json'
-            # }
-            # response = requests.request("POST", url, headers=headers, data=payload)
-            # given_token = response.json()['token']
-            
-            # print('7, first request is done')
-
-            # Create payment link request
-            # url = epayco_create_link_url
-            # payload = json.dumps({
-            #   "quantity": 1,
-            #   "onePayment": True,
-            #   "amount": str(value_2),
-            #   "currency": "COP",
-            #   "id": 0,  # Debe ser único, si se envia cero, epayco genera uno automaticamente
-            #   "base": "0",
-            #   "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}",
-            #   "title": "Link de cobro",
-            #   "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
-            #   "tax": "0", 
-            #   "email": client.correo,
-            #   'extra': transaction.id,
-            #   "extra1": transaction.id,
-            #   "extra2": ", ".join([str(ballot.id) for ballot in ballots]),
-            #   "urlConfirmation": confirmation_url, 
-            #   "urlResponse": response_base_url + str(transaction.id), 
-            #   "methodConfirmation": "GET", # request.method = 'POST' anyway
-            #   "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S'),    # Format Date Time UTC payment link expiration date 
-            #   "log": {
-            #       "x_extra_1": "hola", 
-            #       "extra_1": "holas", 
-            #       "extra1": "holanda"
-            #   }, 
-            #   "extras": {
-            #       "x_extra_1": "hola", 
-            #       "extra_1": "holas", 
-            #       "extra1": "holanda"
-            #   }
-            # })
-            
-            # headers = {
-            #     'Content-Type': 'application/json', 
-            #     'Authorization': 'Bearer '+ epayco_get_token()
-            # }
-
-            # response = requests.request("POST", url, headers=headers, data=payload)
-            # print('8, second request is done')
-            # link = response.json()['data']['routeLink'] # if value_1 is 0 change transaction status to efectuada (2)
-                                                        # and link to response page.
             link = epayco_get_transaction_link(value_2, transaction, ballots, client)
             transaction.link_de_pago = link
             transaction.save()
-            # print(link)
-            # print('9, we made it to the response part')
 
             return JsonResponse({
                 'value_1': value_1, 
@@ -445,7 +365,6 @@ def fetch_api(request):
                 'discount_id': discount_id, 
                 'link': link
             })
-            # return render(request, 'store/bill.html', context)
 
 def epayco_response(request, transaction_id):   # For the client
      
