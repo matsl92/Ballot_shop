@@ -120,9 +120,10 @@ def epayco_get_transaction_details(x_ref_payco):
 
     response = requests.request("GET", url, headers=headers, data=payload)
     # return response.json()
-    print('-'*10)
+    print('-'*10, 'Inside epayco get transaction details')
+    print("response.json()", response.json())
+    print("response.json()['data']", response.json()['data'])
     print("response.json()['data']['log']", response.json()['data']['log'])
-    print('returned value from epayco_get_transaction_details', type(response.json()['data']['log']))
     return response.json()['data']['log']
 
 def unbind_ballots():
@@ -345,25 +346,25 @@ def epayco_response(request, transaction_id):   # For the client
         return render(request, 'store/response.html', context)
 
 @csrf_exempt # Not necessary for GET requests
-def epayco_confirmation_4(request):   # For us
-    print('_'*20)
-    print('request.GET.dict()', request.GET.dict())
-    print('request.method', request.method)
+# def epayco_confirmation_4(request):   # For us
+#     print('_'*20)
+#     print('request.GET.dict()', request.GET.dict())
+#     print('request.method', request.method)
     
-    data = {
-        'x_ref_payco': request.GET.dict()['x_ref_payco'], 
-        'x_description': request.GET.dict()['x_description'], 
-        'x_amount': request.GET.dict()['x_amount'], 
-        'x_response': request.GET.dict()['x_response']
-    }
+#     data = {
+#         'x_ref_payco': request.GET.dict()['x_ref_payco'], 
+#         'x_description': request.GET.dict()['x_description'], 
+#         'x_amount': request.GET.dict()['x_amount'], 
+#         'x_response': request.GET.dict()['x_response']
+#     }
    
-    handle_transaction_response(data)
+#     handle_transaction_response(data)
     
-    print('Done!')
+#     print('Done!')
     
-    response = HttpResponse()
-    response.status_code = 200
-    return response
+#     response = HttpResponse()
+#     response.status_code = 200
+#     return response
 
 @csrf_exempt
 def epayco_confirmation(request):
@@ -371,11 +372,12 @@ def epayco_confirmation(request):
     print('request.POST.dict()', request.POST.dict())
     print('request.method', request.method)
     
-    print('*'*20)
-    print('request.GET.dict()', request.GET.dict())
-    print('request.method', request.method)
+    # print('*'*20)
+    # print('request.GET.dict()', request.GET.dict())
+    # print('request.method', request.method)
     
     x_ref_payco = request.GET.dict()['x_ref_payco']
+    print('x_ref_payco', x_ref_payco)
     
     handle_transaction_response(epayco_get_transaction_details(x_ref_payco))
     
