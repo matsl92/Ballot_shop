@@ -62,23 +62,27 @@ class EpaycoLateConfirmation(models.Model):
 class Rango(models.Model):
     valor_minimo = models.IntegerField(validators=[MinValueValidator(0)])
     valor_maximo = models.IntegerField(validators=[MinValueValidator(0)])
-    paso = models.IntegerField(validators=[MinValueValidator(0)])
+    paso = models.IntegerField(validators=[MinValueValidator(1)])
     tiempo_de_reserva = models.DurationField()
     precio = models.IntegerField(validators=[MinValueValidator(0)], default=10000)
     
     def save(self):
-        if self.valor_minimo < self.valor_maximo and self.paso > 0:
+        n = (self.valor_maximo+1 - self.valor_minimo) // self.paso
+        if self.valor_minimo <= self.valor_maximo and n > 0:
             super().save()
-            for i in range((self.valor_maximo-self.valor_minimo)//self.paso):
-                ballot = Balota(
+            for i in range((self.valor_maximo+1-self.valor_minimo)//self.paso):
+                
+                if not self.valor_minimo + self.paso*i in [
+                    ballot.id for ballot in Balota.objects.all()
+                ]:
+                    
+                    ballot = Balota(
                     numero=self.valor_minimo+self.paso*i, 
                     precio = self.precio, 
                     time_period = self.tiempo_de_reserva
-                )
-                try:
+                    )
+                
                     ballot.save()
-                except:
-                    pass
                     
                     
                     
