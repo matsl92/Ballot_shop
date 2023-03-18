@@ -297,26 +297,6 @@ def epayco_response(request, transaction_id):   # For the client
             context = {'transaction': transaction, 'message': message}
             return render(request, 'store/response.html', context)
         
-        # delete this after testing
-        
-        # if transaction.estado == 2:
-        #     data = {
-        #     'x_ref_payco': 'XXXYYYYYXXX', 
-        #     'x_description': "105 Compra de balotas. Numeros 8, 13, 14", 
-        #     'x_amount': "10000", 
-        #     'x_response': "Aceptada"
-        #     }
-        
-        #     handle_transaction_response(data)
-            
-        #     print('Done!')
-            
-        #     response = HttpResponse()
-        #     response.status_code = 200
-        #     return response
-        
-        # _______________________________________
-    
     else:
         encoded_ref_payco = request.GET.dict()['ref_payco']
         url = 'https://secure.epayco.co/validation/v1/reference/' + encoded_ref_payco

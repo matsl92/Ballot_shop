@@ -1,11 +1,21 @@
 PRIMARY
 
-Define whether passing ids or numbers in x_description
+Define actions for Rechazada, Pendiente  I think it's just the message
+
+Update transaction fields when a second attempt gets it aproved
+
+Define whether passing ids or numbers in x_description issues branch
 
 keep the user from hitting the button before filling in all the required fields
 or display errors gotten from the fetch function
 
+Keep users from sending a form with ballots
 
+
+
+Paginate with twenty to therty ballots per page
+
+download template and make it work for welcoming view
 
 
 
