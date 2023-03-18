@@ -14,15 +14,20 @@
         {% endfor %}
     {% endif %}
 
-    {% if data.x_response == 'Rechazada' %}
-        <h3>{{transaction.cliente.nombre}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h3>
-        <a href="{{ transaction.link_de_pago }}">ePayco</a>
-    {% endif %}
+    {% if transaction.estado == 0 %}
+    
+        {% if data.x_response == 'Rechazada' %}
+            <h3>{{transaction.cliente.nombre}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h3>
+            <a href="{{ transaction.link_de_pago }}">ePayco</a>
+        {% endif %}
 
-    {% if data.x_response == 'Fallida' %}
-        <h3>{{transaction.cliente.nombre}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h3>
-        <a href="{{ transaction.link_de_pago }}">ePayco</a>
+        {% if data.x_response == 'Fallida' %}
+            <h3>{{transaction.cliente.nombre}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h3>
+            <a href="{{ transaction.link_de_pago }}">ePayco</a>
+        {% endif %}
+    
     {% endif %}
+    
 
     {% if data.x_response == 'Pendiente' %}
         <h3>{{transaction.cliente.nombre}}, Hemos tomado tus datos y las balotas asociadas a tu transacción, por favor revisa el siguiente link en unos minutos para confirmar tu compra.</h3>

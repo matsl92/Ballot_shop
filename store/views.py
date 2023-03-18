@@ -101,7 +101,6 @@ def epayco_get_transaction_link(value_2, transaction, ballots, client):
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
-    # print('8, second request is done')
     link = response.json()['data']['routeLink']
     return link
 
@@ -119,11 +118,7 @@ def epayco_get_transaction_details(x_ref_payco):
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
-    # return response.json()
-    print('-'*10, 'Inside epayco get transaction details')
-    print("response.json()", response.json())
-    print("response.json()['data']", response.json()['data'])
-    print("response.json()['data']['log']", response.json()['data']['log'])
+    
     return response.json()['data']
 
 def unbind_ballots():
@@ -137,7 +132,11 @@ def unbind_ballots():
         transaction.save()
 
 def handle_transaction_response(data):
-    # data should come from the link
+    
+    # data comes from a simple request for epayco_response
+    # but comes from an epayco request for epayco_confirmation since
+    # we don't have the encoded_ref_payco
+    
     x_response = data['x_response']
     transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
     transaction.x_description = data['x_description']
@@ -216,7 +215,6 @@ def balotas(request):
 
 def datos_personales(request):
     if request.method == 'POST':
-        # print(str(request.POST))
         balota_ids = dict(request.POST).get('id')
         form = ClienteForm()
         context = {'form': form, 'balota_ids': balota_ids}
@@ -342,6 +340,7 @@ def epayco_response(request, transaction_id):   # For the client
         transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
         
         context = {'transaction': transaction, 'data':data}
+        
         return render(request, 'store/response.html', context)
 
 @csrf_exempt
