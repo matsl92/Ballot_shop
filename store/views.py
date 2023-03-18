@@ -385,9 +385,10 @@ def epayco_confirmation(request):
     print('x_ref_payco', x_ref_payco)
     
     data = epayco_get_transaction_details(x_ref_payco)
-    response_dict = {'Aprobada': 'Aceptada'}
+    status_dict = {'Aprobada': 'Aceptada', 'Rechazada': 'Rechazada'}
+    response_dict = {'Aprobada': 'Aceptada', 'Rechazada': 'Rechazada'}
     data['x_ref_payco'] = data['referencePayco']
-    data['x_response'] = response_dict[data['response']]
+    data['x_response'] = data['status']
     data['x_description'] = data['description']
     data['x_amount'] = data['amount']
     
