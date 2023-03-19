@@ -207,6 +207,9 @@ def handle_transaction_response(data):
         
 class BalotaListView(ListView):
     model = Balota
+
+def home(request):
+    return render(request, )
     
 def balotas(request):
     unbind_ballots()
