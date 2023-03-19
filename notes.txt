@@ -1,21 +1,5 @@
 PRIMARY
 
-external_page  x_ref_payco,    x_response: Aceptada, x_description, x_amount
-
-request data   referencePayco, response:   Aprobada, description,   amount
-
-
-response.html should check whether transaction.estado == 2
-
-Define whether passing ids or numbers in x_description issues branch
-
-keep the user from hitting the button before filling in all the required fields
-or display errors gotten from the fetch function
-
-Keep users from sending a form with ballots
-
-transaction.valid_until according to the latest ballot
-
 Paginate with twenty to therty ballots per page
 
 download template and make it work for welcoming view
@@ -23,6 +7,12 @@ download template and make it work for welcoming view
 
 
 SECONDARY
+
+Define whether passing ids or numbers in x_description issues branch
+
+Keep users from sending a form without ballots
+
+transaction.valid_until according to the latest ballot
 
 Add alert field in Transaccion which will be trigered by a different amount or a 
 late confirmation with unavailable ballots
@@ -35,6 +25,11 @@ use .env in production
 
 
 DONE
+
+keep the user from hitting the button before filling in all the required fields
+or display errors gotten from the fetch function
+
+response.html should check whether transaction.estado == 2
 
 Define actions for Rechazada, Pendiente  I think it's just the message
 
