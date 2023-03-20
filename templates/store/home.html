@@ -44,14 +44,14 @@
         <link rel="stylesheet" href={% static "plugins/slick-carousel/slick.css" %}>
         <link rel="stylesheet" href={% static "plugins/slick-carousel/slick-theme.css" %}>
         <!-- Main Stylesheet -->
-        <link rel="stylesheet" href={% static "css/style.css" %}>
+        <link rel="stylesheet" href={% static "css/modified_template_styles.css" %}>
 
 
     </head>
 
     <body id="home" data-spy="scroll" data-target=".navbar-nav" data-offset="80">
-        <!--
-        Start Preloader
+        
+        <!--Start Preloader
         ==================================== -->
         <div class="preloader">
             <div class="sk-cube-grid">
@@ -69,8 +69,7 @@
         <!-- End Preloader
         ==================================== -->
             
-         <!--
-        Welcome Slider
+         <!--Welcome Slider
         ==================================== -->
 
         <section class="hero-area overlay" style="background-image: url('images/banner/hero-area.jpg');">
@@ -78,11 +77,14 @@
             <source src="images/banner/hero-video.mp4" type="video/mp4">
             </video> -->
             <div class="block">
-                <div class="video-button mb-5">
+                <div class="header">
+                    <div id="complete-logo"></div>
+                </div>
+                {% comment %} <div class="video-button mb-5">
                     <a class="popup-video" href="https://www.youtube.com/watch?v=jrkvirglgaQ">
                         <i class="tf-ion-play"></i>
                     </a>
-                </div>
+                </div> {% endcomment %}
                 <h1>Experience the new reality</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit, excepturi. At recusandae sit perferendis
                     autem,iste tempora nostrum numquam sapiente!</p>
@@ -90,8 +92,7 @@
             </div>
         </section>
 
-        <!-- 
-        Essential Scripts
+        <!-- Essential Scripts
         =====================================-->
         
         <!-- Main jQuery -->
