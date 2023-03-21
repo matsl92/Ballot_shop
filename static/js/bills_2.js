@@ -108,8 +108,6 @@ function ajaxRequest() {
 
         if (data.errors) {
             console.log('There are some errors');
-            // console.log(data.errors)
-            // removeErrors();
             addErrors(data.errors);
 
         } else {

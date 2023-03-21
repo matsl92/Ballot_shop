@@ -81,7 +81,7 @@ def epayco_get_transaction_link(value_2, transaction, ballots, client):
         "currency": "COP",
         "id": 0,  # Debe ser único, si se envia cero, epayco genera uno automaticamente
         "base": "0",
-        "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}",
+        "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}", # add ids
         "title": "Link de cobro",
         "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
         "tax": "0", 
@@ -317,7 +317,7 @@ def fetch_api(request):
                     'email': client.correo,  
                     'id': client.id
                 }, 
-                'ballot_ids': [ballot.id for ballot in ballots], 
+                'ballot_numbers': [ballot.numero for ballot in ballots], 
                 'discount_id': discount_id, 
                 'link': link
             })
@@ -339,7 +339,7 @@ def fetch_api(request):
                     'email': client.correo,  
                     'id': client.id
                 }, 
-                'ballot_ids': [ballot.id for ballot in ballots], 
+                'ballot_numbers': [ballot.numero for ballot in ballots], 
                 'discount_id': discount_id, 
                 'link': link
             })

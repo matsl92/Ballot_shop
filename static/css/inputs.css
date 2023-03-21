@@ -4,6 +4,27 @@ HELPERS
 =====
 */
 
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#discount_code {
+  width: 150px;
+}
+
+
+#code-validator {
+  width: 90px;
+}
+
+.discount-input-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+
 .ha-screen-reader{
     width: var(--ha-screen-reader-width, 1px);
     height: var(--ha-screen-reader-height, 1px);

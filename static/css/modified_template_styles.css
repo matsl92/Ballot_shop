@@ -1053,7 +1053,9 @@ font-size: 55px;
   Services section
 ==================================================================*/
 .service-block {
-  padding: 60px 20px;
+  width: 85vw;
+  max-width: 640px;
+  padding: 20px 20px;
   border-left: 1px solid rgba(236, 239, 241, 0.07);
   border-top: 1px solid rgba(236, 239, 241, 0.07);
   margin-bottom: 40px;
