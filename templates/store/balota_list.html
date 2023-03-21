@@ -4,17 +4,32 @@
 
 
 {% block content %}
-
-<h2>Balotas</h2>
+          
+<div class="block">
+    <h1>Elige tus balotas de la suerte</h1>
     <form action={% url 'store:datos_personales' %} method="post">
-
         {% csrf_token %}
-        {% for balota in object_list %}
-            <input class="balota-input" type="checkbox" name='id' id="{{ balota.id }}" value="{{ balota.id }}">
-            <label class="balota-label" for={{ balota.id }}>{{ balota.numero }}</label>
-        {% endfor %}
 
-        <input type="submit" value="Enviar">
+        <div class="container align-content-center">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="d-flex flex-wrap justify-content-center">
+                        {% for balota in ballot_package %}
+                            <input class="balota-input" type="checkbox" name='id' id="{{ balota.id }}" value="{{ balota.id }}">
+                            <label class="balota-label" for={{ balota.id }}>{{ balota.numero }}</label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div> 
+        </div>
+        
+        <input type="submit" value="Enviar balotas" class="btn btn-transparent smooth-scroll">
     </form>
+
+
+</div>
+
+
+
     
 {% endblock content %}

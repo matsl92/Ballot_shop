@@ -43,12 +43,12 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 # EPAYCO RESPONSE LINKS
 
 # Production
-confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
-response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
+# confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
+# response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
 
 # Localhost
-# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-# response_base_url = "http://127.0.0.1:8000/epayco_response/"
+confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+response_base_url = "http://127.0.0.1:8000/epayco_response/"
 
 
 # VARIABLES AND FUNCTIONS
@@ -216,7 +216,23 @@ def home(request):
     
 def balotas(request):
     unbind_ballots()
-    context = {'object_list': Balota.objects.filter(transaccion=None)}
+    ballots = list(Balota.objects.all())
+    ballot_package = []
+    count = 0
+    for c in range(6):
+        col = []
+        for r in range(3):
+            col.append(ballots[count])
+            count +=1
+        ballot_package.append(col)
+    print(ballot_package)
+    
+    ballot_package = list(Balota.objects.all())[0:15]
+    
+    
+                
+        
+    context = {'object_list': Balota.objects.filter(transaccion=None), 'ballot_package': ballot_package}
     return render(request, 'store/balota_list.html', context)
 
 def datos_personales(request):

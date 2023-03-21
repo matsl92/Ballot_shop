@@ -1,32 +1,117 @@
 {% load static %}
 <!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href={% static 'css/main.css' %}>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" 
-    crossorigin="anonymous"></script>
-    <title>{% block title %}{% endblock %}</title>
-</head>
-<body>
-    <h1>El altar</h1>
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <head>
+
+        <!-- Basic Page Needs
+        ================================================== -->
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}</title>
+
+        <!-- Mobile Specific Metas
+        ================================================== -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="Parallax HTML5 Template">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+        <meta name="author" content="Themefisher">
+        <meta name="generator" content="Themefisher Meghna Template v1.0">
+        
+        <!-- theme meta -->
+        <meta name="theme-name" content="meghna" />
+        
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href={% static "images/favicon.png" %} />
+
+        <!-- CSS
+            ================================================== -->
+        <!-- Fontawesome Icon font -->
+        <link rel="stylesheet" href={% static "plugins/themefisher-font/style.css" %}>
+        <!-- bootstrap.min css -->
+        <link rel="stylesheet" href={% static "plugins/bootstrap/bootstrap.min.css" %}>
+        <!-- Animate.css -->
+        <link rel="stylesheet" href={% static "plugins/animate-css/animate.css" %}>
+        <!-- Magnific popup css -->
+        <link rel="stylesheet" href={% static "plugins/magnific-popup/dist/magnific-popup.css" %}>
+        <!-- Slick Carousel -->
+        <link rel="stylesheet" href={% static "plugins/slick-carousel/slick.css" %}>
+        <link rel="stylesheet" href={% static "plugins/slick-carousel/slick-theme.css" %}>
+        <!-- Main Stylesheet -->
+        <link rel="stylesheet" href={% static "css/modified_template_styles.css" %}>
+        <!-- Specific Stylesheet -->
+        <link rel="stylesheet" href={% static 'css/main.css' %}>
+
+
+    </head>
+
+    <body id="home" data-spy="scroll" data-target=".navbar-nav" data-offset="80">
+        
+        <!--Start Preloader
+        ==================================== -->
+        <div class="preloader">
+            <div class="sk-cube-grid">
+                <div class="sk-cube sk-cube1"></div>
+                <div class="sk-cube sk-cube2"></div>
+                <div class="sk-cube sk-cube3"></div>
+                <div class="sk-cube sk-cube4"></div>
+                <div class="sk-cube sk-cube5"></div>
+                <div class="sk-cube sk-cube6"></div>
+                <div class="sk-cube sk-cube7"></div>
+                <div class="sk-cube sk-cube8"></div>
+                <div class="sk-cube sk-cube9"></div>
             </div>
-        {% endfor %}
-    {% endif %}
+        </div>
+        <!-- End Preloader
+        ==================================== -->
+            
+         <!--Welcome Slider
+        ==================================== -->
 
-    {% block content %}
+        <section class="hero-area overla" style="background-image: url('images/banner/hero-area.jpg');">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-    {% endblock %}
+            {% block content %}
 
-    {% block js_block %}{% endblock js_block %}
+            {% endblock %}
 
-</body>
+            {% block js_block %}{% endblock js_block %}
+        </section>
+
+        <!-- Essential Scripts
+        =====================================-->
+        
+        <!-- Main jQuery -->
+        <script src={% static "plugins/jquery/jquery.min.js" %}></script>
+        <!-- Bootstrap 3.1 -->
+        <script src={% static "plugins/bootstrap/bootstrap.min.js" %}></script>
+        <!-- Slick Carousel -->
+        <script src={% static "plugins/slick-carousel/slick.min.js" %}></script>
+        <!-- Portfolio Filtering -->
+        <script src={% static "plugins/filterzr/jquery.filterizr.min.js" %}></script>
+        <!-- Magnific popup -->
+        <script src={% static "plugins/magnific-popup/dist/jquery.magnific-popup.min.js" %}></script>
+        <!-- Google Map API -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgeuuDfRlweIs7D6uo4wdIHVvJ0LonQ6g"></script>
+        <script src={% static "plugins/google-map/gmap.js" %}></script>
+        <!-- wow.min Script -->
+        <script src={% static "plugins/wow/wow.min.js" %}></script>
+        <!-- Custom js -->
+        <script src={% static "js/script.js" %}></script>
+
+    </body>
+
 </html>

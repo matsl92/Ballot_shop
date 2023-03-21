@@ -15,16 +15,25 @@
 .header {
     display: grid;
     justify-items: center;
+
     /* background-color: var(--red); */
 }
 
 #complete-logo {
     display: block;
     background-image: url(../images/logos/complete-logo.png);
-    background-size: 31vw;
+    background-size: 34vh;
     background-repeat: no-repeat;
+    background-position: center;
     height: 286px;
-    width: 31%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media (min-width: 600px) {
+    #complete-logo {
+        background-size: 43vh;
+    }
 }
 
 /**
@@ -43,7 +52,8 @@ html {
 }
 
 body {
-  background-color: #353b43;
+  /* background-color: #353b43; */
+  background-color: var(--cream);
   font-family: "Anaheim", sans-serif;
   color: #737f8a;
   -webkit-font-smoothing: antialiased;
@@ -135,8 +145,8 @@ a:hover {
   border: 1px solid #4e595f;
 }
 .btn-transparent:hover, .btn-transparent:focus {
-  background-color: #57cbcc;
-  border-color: #57cbcc !important;
+  background-color: var(--orange);
+  border-color: var(--orange);
   color: #fff;
 }
 
@@ -627,7 +637,8 @@ a:hover {
   color: #57cbcc;
 }
 .hero-area .block h1 {
-  font-size: 90px;
+    /* font-size: 90px; */
+font-size: 55px;
   color: #fff;
   text-transform: capitalize;
   font-weight: 700;
