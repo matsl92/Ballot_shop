@@ -2,6 +2,10 @@
 {% load static %}
 {% block title %}Formulario{% endblock title %}
 
+{% block css %}
+<link rel="stylesheet" href={% static "css/inputs.css" %}>
+{% endblock css %}
+
 {% block content %}
 
 <div class="block">
@@ -11,7 +15,65 @@
     <form action={% url 'store:fetch' %} method="post" id="bill-form">
         {% csrf_token %}
         
-        <div class="form-wrapper">
+        <article class="col-lg-12 wow fadeInUp" data-wow-duration="500ms">
+
+
+            <div class="service-block text-center form-wrapper">
+
+
+                
+
+            <div class="page">
+
+
+                <div class="field field_v1">
+                    <div class="form-error" id="nombre-error">ins</div>
+                    <label for="id_nombre" class="ha-screen-reader">Nombre</label>
+                    {{ form.nombre }}
+                    <span class="field__label-wrap" aria-hidden="true">
+                      <span class="field__label">Nombre</span>
+                    </span>
+                </div>
+
+                <div class="form-error" id="apellido-error">iad</div>
+                <div class="field field_v1">
+                    <label for="id_apellido" class="ha-screen-reader">Apellido</label>
+                    {{ form.apellido }}
+                    <span class="field__label-wrap" aria-hidden="true">
+                      <span class="field__label">Apellido</span>
+                    </span>
+                </div>
+                
+                <div class="form-error" id="correo-error">asd</div>
+                <div class="field field_v1">
+                    <label for="id_correo" class="ha-screen-reader">Correo</label>
+                    {{ form.correo }}
+                    <span class="field__label-wrap" aria-hidden="true">
+                      <span class="field__label">Correo</span>
+                    </span>
+                </div>
+
+                <div class="field field_v1">
+                    <div class="form-error" id="celular-error">dfg</div>
+                    <label for="id_celular" class="ha-screen-reader">Celular</label>
+                    {{ form.celular }}
+                    <span class="field__label-wrap" aria-hidden="true">
+                      <span class="field__label">Celular</span>
+                    </span>
+                </div>
+   
+                <div class="field field_v3">
+                  <label for="email" class="ha-screen-reader">E-mail</label>
+                  <input id="email" class="field__input" placeholder="e.g. melnik909@ya.ru">
+                  <span class="field__label-wrap" aria-hidden="true">
+                    <span class="field__label">E-mail</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+        </article>
+        
+        {% comment %} <div class="form-wrapper">
             <div class="form-error" id="nombre-error"></div>
             <div class="form-field">
                 <label for="id_nombre">Nombre</label>
@@ -38,7 +100,7 @@
                 <label for="id_celular">Celular</label>
                 {{ form.celular }}
             </div>
-        </div>
+        </div> {% endcomment %}
         
         <div id="discount-code-message"></div>
         <label for="discount_code">Código de descuento</label>
@@ -51,6 +113,10 @@
 
 </div>
 
+
+
+
+
 {% endblock content %}
 
 {% block js_block %}
@@ -60,99 +126,3 @@
 <script type="text/javascript" src={% static "js/bills_2.js"%}></script>
 {% endblock js_block %}
 
-<!-- Start Services Section
-==================================== -->
-<section id="services" class="bg-one section">
-	<div class="container">
-		<div class="row">
-
-			<div class="col-lg-12">
-				<!-- section title -->
-				<div class="title text-center wow fadeIn" data-wow-duration="500ms">
-					<h2>Our <span class="color">Services</span></h2>
-					<div class="border"></div>
-				</div>
-				<!-- /section title -->
-			</div>
-
-			<!-- Single Service Item -->
-			<article class="col-lg-4 col-md-6 wow fadeInUp" data-wow-duration="500ms">
-				<div class="service-block text-center">
-					<div class="service-icon text-center">
-						<i class="tf-globe"></i>
-					</div>
-					<h3>WordPress Theme</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur.. Sed id lorem eget orci dictum facilisis vel id tellus. Nullam
-						iaculis arcu at mauris dapibus consectetur.</p>
-				</div>
-			</article>
-			<!-- End Single Service Item -->
-
-			<!-- Single Service Item -->
-			<article class="col-lg-4 col-md-6 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="200ms">
-				<div class="service-block text-center">
-					<div class="service-icon text-center">
-						<i class="tf-ion-laptop"></i>
-					</div>
-					<h3>Responsive Design</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur.. Sed id lorem eget orci dictum facilisis vel id tellus. Nullam
-						iaculis arcu at mauris dapibus consectetur.</p>
-				</div>
-			</article>
-			<!-- End Single Service Item -->
-
-			<!-- Single Service Item -->
-			<article class="col-lg-4 col-md-6 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="400ms">
-				<div class="service-block text-center">
-					<div class="service-icon text-center">
-						<i class="tf-genius"></i>
-					</div>
-					<h3>Media &amp; Advertisement</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur.. Sed id lorem eget orci dictum facilisis vel id tellus. Nullam
-						iaculis arcu at mauris dapibus consectetur.</p>
-				</div>
-			</article>
-			<!-- End Single Service Item -->
-
-			<!-- Single Service Item -->
-			<article class="col-lg-4 col-md-6 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="200ms">
-				<div class="service-block text-center">
-					<div class="service-icon text-center">
-						<i class="tf-dial"></i>
-					</div>
-					<h3>Graphic Design</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur.. Sed id lorem eget orci dictum facilisis vel id tellus. Nullam
-						iaculis arcu at mauris dapibus consectetur.</p>
-				</div>
-			</article>
-			<!-- End Single Service Item -->
-
-			<!-- Single Service Item -->
-			<article class="col-lg-4 col-md-6 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="400ms">
-				<div class="service-block text-center">
-					<div class="service-icon text-center">
-						<i class="tf-target3"></i>
-					</div>
-					<h3>Apps Development</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur.. Sed id lorem eget orci dictum facilisis vel id tellus. Nullam
-						iaculis arcu at mauris dapibus consectetur.</p>
-				</div>
-			</article>
-			<!-- End Single Service Item -->
-
-			<!-- Single Service Item -->
-			<article class="col-lg-4 col-md-6 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="600ms">
-				<div class="service-block text-center kill-margin-bottom">
-					<div class="service-icon text-center">
-						<i class="tf-lifesaver"></i>
-					</div>
-					<h3>Networking</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur.. Sed id lorem eget orci dictum facilisis vel id tellus. Nullam
-						iaculis arcu at mauris dapibus consectetur.</p>
-				</div>
-			</article>
-			<!-- End Single Service Item -->
-
-		</div> <!-- End row -->
-	</div> <!-- End container -->
-</section> <!-- End section -->

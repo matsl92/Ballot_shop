@@ -18,7 +18,7 @@ const linkCreationURL = 'http://127.0.0.1:8000/bill/';
 
 
 function addErrors(errors) {
-    for (error of errors) {
+    for (let error of errors) {
         let errorDiv = document.querySelector(`#${error[0]}-error`);
         errorDiv.innerText = error[1];
     }

@@ -11,7 +11,8 @@ urlpatterns = [
     path('bill/', views.fetch_api, name='fetch'), 
     path('code_validation/', views.code_validation, name='code_validation'), 
     path('transaction_detail/<str:x_ref_payco>', views.transaction_detail, name="detail"), 
-    path('template/', views.template, name='template')
+    path('template/', views.template, name='template'), 
+    path('inputs/', views.inputs, name='inputs')
 ]
     
     

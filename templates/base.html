@@ -29,7 +29,7 @@
         
         <!-- Favicon -->
         <link rel="shortcut icon" type="image/x-icon" href={% static "images/favicon.png" %} />
-
+        
         <!-- CSS
             ================================================== -->
         <!-- Fontawesome Icon font -->
@@ -47,6 +47,7 @@
         <link rel="stylesheet" href={% static "css/modified_template_styles.css" %}>
         <!-- Specific Stylesheet -->
         <link rel="stylesheet" href={% static 'css/main.css' %}>
+        {% block css %}{% endblock css %}
 
 
     </head>
@@ -88,12 +89,13 @@
 
             {% endblock %}
 
-            {% block js_block %}{% endblock js_block %}
         </section>
 
         <!-- Essential Scripts
         =====================================-->
         
+        <!-- Page script -->
+        {% block js_block %}{% endblock js_block %}
         <!-- Main jQuery -->
         <script src={% static "plugins/jquery/jquery.min.js" %}></script>
         <!-- Bootstrap 3.1 -->

@@ -208,6 +208,9 @@ def handle_transaction_response(data):
 class BalotaListView(ListView):
     model = Balota
 
+def inputs(request):
+    return render(request, 'store/inputs.html', {})
+
 def template(request):
     return render(request, 'index.html', {})
 
