@@ -219,18 +219,18 @@ def home(request):
     
 def balotas(request):
     unbind_ballots()
-    ballots = list(Balota.objects.all())
-    ballot_package = []
-    count = 0
-    for c in range(6):
-        col = []
-        for r in range(3):
-            col.append(ballots[count])
-            count +=1
-        ballot_package.append(col)
-    print(ballot_package)
+    # ballots = list(Balota.objects.filter(transaccion=None))
+    # ballot_package = []
+    # count = 0
+    # for c in range(6):
+    #     col = []
+    #     for r in range(3):
+    #         col.append(ballots[count])
+    #         count +=1
+    #     ballot_package.append(col)
+    # print(ballot_package)
     
-    ballot_package = list(Balota.objects.all())[0:15]
+    ballot_package = list(Balota.objects.filter(transaccion=None))[0:15]
     
     
                 
