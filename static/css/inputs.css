@@ -300,16 +300,16 @@ form {
 
 .field-name {
   background-color: aquamarine;
-  display: inline-block;
-  height: 10vh;
-  width: 9vw;
+  display: block;
+  height: 5vh;
+  width: 30vw;
 }
 
 .field-value {
   background-color: aquamarine;
-  display: inline-block;
-  height: 12vh;
-  width: 19vw;
+  display: block;
+  height: 5vh;
+  width: 30vw;
 }
 
 @media (max-width: 600px) {
@@ -319,11 +319,13 @@ form {
   }
 
   .field-name {
+    display: inline-block;
     height: 5vh;
     width: 13vw;
   }
     
   .field-value {
+    display: inline-block;
     height: 5vh;
     width: 45vw;
   }
@@ -336,11 +338,13 @@ form {
   }
 
   .field-name {
-    max-width: 60px;
+    max-width: 225px;
+    /* height: 11vh; */
   }
     
   .field-value {
-    max-width: 158px;
+    max-width: 225px;
+    /* height: 11vh; */
   }
 }
 
