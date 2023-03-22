@@ -2,21 +2,27 @@
 {% load static %}
 {% block title %}Formulario{% endblock title %}
 
+
+
 {% block css %}
+
 <link rel="stylesheet" href={% static "css/inputs.css" %}>
+
 {% endblock css %}
+
+
+
 
 {% block content %}
 
 <div class="block">
 
-    <h1>Datos personales</h1>
+    <div id="page-1">
     
-    <form action={% url 'store:fetch' %} method="post" id="bill-form">
-        {% csrf_token %}
-        
-        
-        
+        <h1>Datos personales</h1>
+
+        <form action={% url 'store:fetch' %} method="post" id="bill-form">
+            {% csrf_token %}
             <div class="service-block text-center form-wrapper">
 
                 <div class="page">
@@ -76,35 +82,104 @@
 
             </div>
 
-        <div class"col-sm-10 col-md-4" id="discount-code-message"></div>
-        <label class"col-sm-10 col-md-4" for="discount_code">Código de descuento</label>
-        <div class"col-sm-10 col-md-4">
-            <div class="row">
-                <div class="col-md-3 col-lg-3"></div>
-                <div class="col-md-6 col-lg-6 discount-input-wrapper">
-                    <input type="text" id="discount_code" name="discount_code" value="">
-                    <input type="button" id="code-validator" value="Validar">
+            <div class"col-sm-10 col-md-4" id="discount-code-message"></div>
+            <label class"col-sm-10 col-md-4" for="discount_code">Código de descuento</label>
+            <div class"col-sm-10 col-md-4">
+                <div class="row">
+                    <div class="col-md-3 col-lg-3"></div>
+                    <div class="col-md-6 col-lg-6 discount-input-wrapper">
+                        <input type="text" id="discount_code" name="discount_code" value="">
+                        <input type="button" id="code-validator" value="Validar">
+                    </div>
+                    <div class="col-md-3 col-lg-3"></div>
                 </div>
-                <div class="col-md-3 col-lg-3"></div>
-            </div>
-        </div>  
+            </div>  
+                
             
-        
-        <input type="button" id="bill-generator" class="btn btn-transparent smooth-scroll" value="Generar factura">
-    </form>
+            <input type="button" id="bill-generator" class="btn btn-transparent smooth-scroll" value="Generar factura">
+        </form>
+
+    </div>
+
+    {% comment %} ======= bill ======= {% endcomment %}
+
+    <div id="bill">
+
+        <section id="bill-title" class="bill-section">
+          <h1>Paga ahora con epayco</h1>
+        </section>
+    
+        <section id="ballots" class="bill-section">
+          <div class="container align-content-center">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="d-flex flex-wrap justify-content-center">
+                    {% for ballot in ballots %}
+                      <label class="balota-label">{{ ballot.numero }}</label>    
+                    {% endfor %}
+                    </div>
+                </div>
+            </div> 
+          </div>
+        </section>
+    
+        <section id="personal-data" class="bill-section">
+          <div class="row-1">
+            <div class="cont-2">
+              <div class="field-name field-item">Nombre</div>
+              <div id="client-name" class="field-value field-item"></div>
+            </div>
+            <div class="cont-2">
+              <div class="field-name field-item">Apellido</div>
+              <div id="client-lastname" class="field-value field-item"></div>
+            </div>
+          </div>
+          <div class="row-1">
+            <div class="cont-2">
+              <div class="field-name field-item">Correo</div>
+              <div id="client-email" class="field-value field-item"></div>
+            </div>
+            <div class="cont-2">
+              <div class="field-name field-item">Celular</div>
+              <div id="client-phone-number" class="field-value field-item"></div>
+            </div>
+          </div>
+        </section>
+    
+        <section id="prices" class="bill-section">
+            <div class="cont-2">
+              <div class="field-name field-item">Valor inicial</div>
+              <div id="value-1" class="field-value field-item"></div>
+            </div>
+            <div class="cont-2">
+              <div class="field-name field-item">Valor final</div>
+              <div id="value-2" class="field-value field-item"></div>
+            </div>
+        </section>
+    
+        <section id="gateway" class="bill-section">
+          <div class="row1">
+            <a id="epayco-button" href=""></a>
+          </div>
+        </section>
+    
+    
+      </div>
+
 
 </div>
 
-
-
-
-
 {% endblock content %}
 
+
+
+
 {% block js_block %}
+
 <script>
     const bId = {{ balota_ids|safe }};
 </script>
 <script type="text/javascript" src={% static "js/bills_2.js"%}></script>
+
 {% endblock js_block %}
 

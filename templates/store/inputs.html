@@ -12,29 +12,69 @@
 
   <div id="bill">
 
-    <section id="ballots" class="bill-section">
+    <section id="bill-title" class="bill-section">
+      <h1>Paga ahora con epayco</h1>
+    </section>
 
+    <section id="ballots" class="bill-section">
+      <div class="container align-content-center">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="d-flex flex-wrap justify-content-center">
+                  {% comment %} {% for balota in ballot_package %} {% endcomment %}
+                      
+                  
+                  <input class="balota-input" type="checkbox" name='id'>
+                  <label class="balota-label" >12</label>
+
+                  <input class="balota-input" type="checkbox" name='id'>
+                  <label class="balota-label" >12</label>
+
+                  <input class="balota-input" type="checkbox" name='id'>
+                  <label class="balota-label" >12</label>
+
+                  <input class="balota-input" type="checkbox" name='id'>
+                  <label class="balota-label" >12</label>
+
+                  <input class="balota-input" type="checkbox" name='id'>
+                  <label class="balota-label" >12</label>
+
+                  <input class="balota-input" type="checkbox" name='id'>
+                  <label class="balota-label" >12</label>
+
+                  <input class="balota-input" type="checkbox" name='id'>
+                  <label class="balota-label" >12</label>
+
+                  <input class="balota-input" type="checkbox" name='id'>
+                  <label class="balota-label" >12</label>
+
+                                    
+                  {% comment %} {% endfor %} {% endcomment %}
+                </div>
+            </div>
+        </div> 
+      </div>
     </section>
 
     <section id="personal-data" class="bill-section">
       <div class="row-1">
         <div class="cont-2">
           <div class="field-name field-item">Nombre</div>
-          <div class="field-value field-item">mateo</div>
+          <div id="client-name" class="field-value field-item">mateo</div>
         </div>
         <div class="cont-2">
           <div class="field-name field-item">Apellido</div>
-          <div class="field-value field-item">Salazar</div>
+          <div id="client-last-name" class="field-value field-item">Salazar</div>
         </div>
       </div>
       <div class="row-1">
         <div class="cont-2">
           <div class="field-name field-item">Correo</div>
-          <div class="field-value field-item">mateoslb70@gmail.com</div>
+          <div id="client-email" class="field-value field-item">mateoslb70@gmail.com</div>
         </div>
         <div class="cont-2">
           <div class="field-name field-item">Celular</div>
-          <div class="field-value field-item">3197012975</div>
+          <div id="client-phone-number" class="field-value field-item">3197012975</div>
         </div>
       </div>
     </section>
@@ -42,11 +82,11 @@
     <section id="prices" class="bill-section">
         <div class="cont-2">
           <div class="field-name field-item">Valor inicial</div>
-          <div class="field-value field-item">100000.00</div>
+          <div id="value-1" class="field-value field-item">100000.00</div>
         </div>
         <div class="cont-2">
           <div class="field-name field-item">Valor final</div>
-          <div class="field-value field-item">40000.00</div>
+          <div id="value-2" class="field-value field-item">40000.00</div>
         </div>
     </section>
 

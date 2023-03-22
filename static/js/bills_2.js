@@ -1,3 +1,12 @@
+function hideBill() {
+    let bill = document.getElementById('bill');
+    bill.style.display = 'none';
+}
+
+document.addEventListener("DOMContentLoaded", hideBill);
+
+
+
 const billGenerator = document.querySelector('#bill-generator');
 const codeValidator = document.querySelector('#code-validator');
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -74,7 +83,6 @@ codeValidator.addEventListener('click', validateCode, false);
 
 function ajaxRequest() {
     removeErrors();
-    document.querySelector('#bill-generator').remove();
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     let _name = document.querySelector('#id_nombre').value;
     let lastname = document.querySelector('#id_apellido').value;
@@ -111,12 +119,20 @@ function ajaxRequest() {
             addErrors(data.errors);
 
         } else {
+            document.querySelector('#bill-generator').remove();
             console.log('There are no errors');
             console.log(data);
-                
-            // First time           __________________________
-    
-           
+            document.getElementById('page-1').remove();
+            document.getElementById('client-name').innerText = data.client.name;
+            document.getElementById('client-lastname').innerText = data.client.lastname;
+            document.getElementById('client-email').innerText = data.client.email;
+            document.getElementById('client-phone-number').innerText = data.client.phone_number;
+            document.getElementById('value-1').innerText = data.value_1;
+            document.getElementById('value-2').innerText = data.value_2;
+            document.getElementById('epayco-button').href = data.link;
+
+            let bill = document.getElementById('bill');
+            bill.style.display = 'flex';
         }
 
         }

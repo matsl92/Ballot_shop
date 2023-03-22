@@ -240,9 +240,10 @@ def balotas(request):
 
 def datos_personales(request):
     if request.method == 'POST':
-        balota_ids = dict(request.POST).get('id')
         form = ClienteForm()
-        context = {'form': form, 'balota_ids': balota_ids}
+        balota_ids = dict(request.POST).get('id')
+        ballots = [Balota.objects.get(id=id) for id in balota_ids]
+        context = {'form': form, 'balota_ids': balota_ids, 'ballots': ballots}
         return render(request, 'store/personal_data.html', context)
 
 def code_validation(request):
@@ -314,7 +315,8 @@ def fetch_api(request):
                 'client': {
                     'name': client.nombre, 
                     'lastname': client.apellido, 
-                    'email': client.correo,  
+                    'email': client.correo, 
+                    'phone_number': client.celular.national_number, 
                     'id': client.id
                 }, 
                 'ballot_numbers': [ballot.numero for ballot in ballots], 
@@ -329,14 +331,14 @@ def fetch_api(request):
             link = epayco_get_transaction_link(value_2, transaction, ballots, client)
             transaction.link_de_pago = link
             transaction.save()
-
             return JsonResponse({
                 'value_1': value_1, 
                 'value_2': value_2, 
                 'client': {
                     'name': client.nombre, 
                     'lastname': client.apellido, 
-                    'email': client.correo,  
+                    'email': client.correo, 
+                    'phone_number': client.celular.national_number,
                     'id': client.id
                 }, 
                 'ballot_numbers': [ballot.numero for ballot in ballots], 
