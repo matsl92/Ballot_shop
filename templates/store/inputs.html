@@ -1,36 +1,71 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inputs</title>
-    <link rel="stylesheet" href={% static "css/inputs.css" %}>
-</head>
-<body>
-    <div class="page">
-        <div class="field field_v1">
-          <label for="first-name" class="ha-screen-reader">First name</label>
-          <input id="first-name" class="field__input" placeholder="e.g. Stanislav">
-          <span class="field__label-wrap" aria-hidden="true">
-            <span class="field__label">First name</span>
-          </span>
+{% block title %}Formulario{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href={% static "css/inputs.css" %}>
+{% endblock css %}
+
+{% block content %}
+
+<div class="block">
+
+  <div id="bill">
+
+    <section id="ballots" class="bill-section">
+
+    </section>
+
+    <section id="personal-data" class="bill-section">
+      <div class="personal-data-row">
+        <div class="personal-data-field">
+          <div class="field-name">Correo</div>
+          <div class="field-value">mateoslb70@gmail.com</div>
         </div>
-        <div class="field field_v2">
-          <label for="last-name" class="ha-screen-reader">Last name</label>
-          <input id="last-name"  class="field__input" placeholder="e.g. Melnikov">
-          <span class="field__label-wrap" aria-hidden="true">
-            <span class="field__label">Last name</span>
-          </span>
-        </div>    
-        <div class="field field_v3">
-          <label for="email" class="ha-screen-reader">E-mail</label>
-          <input id="email" class="field__input" placeholder="e.g. melnik909@ya.ru">
-          <span class="field__label-wrap" aria-hidden="true">
-            <span class="field__label">E-mail</span>
-          </span>
+        <div class="personal-data-field">2
+          
         </div>
+
       </div>
-</body>
-</html>
+
+      <div class="personal-data-row">
+
+        <div class="personal-data-field">3
+          
+        </div>
+        <div class="personal-data-field">4
+          
+        </div>
+
+      </div>
+
+    </section>
+
+    <section id="prices" class="bill-section">
+      
+    </section>
+
+    <section id="gateway" class="bill-section">
+      
+    </section>
+
+
+  </div>
+
+
+</div>
+
+
+
+{% endblock content %}
+
+
+
+
+
+{% block js_block %}
+  <script>
+      const bId = {{ balota_ids|safe }};
+  </script>
+  <script type="text/javascript" src={% static "js/bills_2.js"%}></script>
+{% endblock js_block %}
