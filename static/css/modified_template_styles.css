@@ -13,11 +13,30 @@
     --epayco-blue: rgb(28, 14, 73)
 }
 
+@font-face {
+  font-family: 'Retrofunk';
+  src: url('../fonts/Retrofunk\ Serif.otf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Badgear';
+  src: url('../fonts/Badgear\ Sans.otf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Nimitz';
+  src: url('../fonts/Nimitz\ Clean.otf');
+  font-style: normal;
+  font-weight: normal;
+}
+
 .header {
     display: grid;
     justify-items: center;
-
-    /* background-color: var(--red); */
 }
 
 #complete-logo {
@@ -36,13 +55,6 @@
         background-size: 43vh;
     }
 }
-
-/**
- * WEBSITE: https://themefisher.com
- * TWITTER: https://twitter.com/themefisher
- * FACEBOOK: https://www.facebook.com/themefisher
- * GITHUB: https://github.com/themefisher/
- */
 
 /*=== MEDIA QUERY ===*/
 @import url("https://fonts.googleapis.com/css?family=Anaheim|Quattrocento+Sans:400,700");
@@ -146,7 +158,7 @@ a:hover {
   border: 1px solid #4e595f;
 }
 .btn-transparent:hover, .btn-transparent:focus {
-  background-color: var(--orange);
+  background-color: var(--yellow);
   border-color: var(--orange);
   color: #fff;
 }
@@ -640,7 +652,9 @@ a:hover {
 .hero-area .block h1 {
     /* font-size: 90px; */
 font-size: 55px;
-  color: #fff;
+  /* color: #fff; */
+  font-family: 'Retrofunk';
+  color: var(--yellow);
   text-transform: capitalize;
   font-weight: 700;
   margin-bottom: 20px;
