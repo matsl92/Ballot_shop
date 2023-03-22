@@ -286,8 +286,6 @@ form {
 
 
 #bill {
-  /* display: flex; */
-  /* display: none; */
   flex-direction: column;
   color: black;
 }

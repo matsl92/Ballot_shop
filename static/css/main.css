@@ -96,3 +96,40 @@ body {
     background-size: cover;
     background-position: center;
 }
+
+
+
+
+/* Response-page */
+
+.response-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    /* background-color: aquamarine; */
+    margin: 3px;
+}
+
+#response-message {
+    height: 25vh;
+}
+
+#response-ballots {
+    height: 45vh;
+}
+
+#response-ballots .align-content-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#response-redirect {
+    height: 10vh;
+}
+
+#response-redirect .btn.btn-transparent {
+    border-color: #fff;
+}
+
