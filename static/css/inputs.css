@@ -222,8 +222,8 @@ form {
   */
   
   .field{
-    --fieldBorderColor: #D1C4E9;
-    --fieldBorderColorActive: #673AB7;
+    --fieldBorderColor: rgb(255 255 255);
+    --fieldBorderColorActive: var(--grey);
   }
   
   /*

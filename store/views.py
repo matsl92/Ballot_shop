@@ -43,12 +43,12 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 # EPAYCO RESPONSE LINKS
 
 # Production
-# confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
-# response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
+confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
+response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
 
 # Localhost
-confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-response_base_url = "http://127.0.0.1:8000/epayco_response/"
+# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+# response_base_url = "http://127.0.0.1:8000/epayco_response/"
 
 
 # VARIABLES AND FUNCTIONS

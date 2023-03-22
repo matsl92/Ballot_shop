@@ -17,7 +17,7 @@
   font-family: 'Retrofunk';
   src: url('../fonts/Retrofunk\ Serif.otf');
   font-style: normal;
-  font-weight: normal;
+  font-weight: lighter;
 }
 
 @font-face {
@@ -67,7 +67,9 @@ html {
 body {
   /* background-color: #353b43; */
   background-color: var(--cream);
-  font-family: "Anaheim", sans-serif;
+  /* font-family: "Anaheim", sans-serif; */
+  font-family: 'Badgear', "Retrofunk";
+
   color: #737f8a;
   -webkit-font-smoothing: antialiased;
   position: relative;
@@ -80,12 +82,12 @@ h4,
 h5,
 h6 {
   font-weight: 400;
-  font-family: "Quattrocento Sans", sans-serif;
-  color: #afbac4;
+  font-family: 'Nimitz',  "Retrofunk", sans-serif;
+  color: var(--black);
 }
 
 p {
-  font-family: "Quattrocento Sans", sans-serif;
+  font-family: "Nimitz", "Badgear", sans-serif;
 }
 
 /*=================================================================
@@ -653,8 +655,8 @@ a:hover {
     /* font-size: 90px; */
 font-size: 55px;
   /* color: #fff; */
-  font-family: 'Retrofunk';
-  color: var(--yellow);
+  font-family: 'Nimitz';
+  color: var(--light-brown);
   text-transform: capitalize;
   font-weight: 700;
   margin-bottom: 20px;
