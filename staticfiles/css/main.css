@@ -1,3 +1,17 @@
+:root {
+    --cream: rgb(220, 198, 174);
+    --black: rgb(15, 17, 16);
+    --yellow: rgb(205, 169, 95);
+    --red: rgb(202,47,42);
+    --gray: rgb(117, 114, 99);
+    --brown: rgb(118, 66, 42);
+    --orange: rgb(210, 112, 51);
+    --green: rgb(12, 77, 47);
+    --light-brown: rgb(132, 97, 77);
+    --light-green: rgb(127, 163, 102);
+    --dark-brown: rgb(36, 27, 22);
+}
+
 /* * {
     margin: 0;
     padding: 0;
@@ -14,36 +28,108 @@
     background-color: rgb(116, 153, 141);
 } */
 
-h1 {
+/* h1 {
     color: rgb(122, 172, 155);
+    font-family: retro;
+} */
+
+body {
+    height: 100vh;
+}
+
+.my-container {
+    display: flex;
+}
+
+.my-column {
+    margin: 6%;
+}
+
+.ballot-container {
+    margin: 6vh;
 }
 
 .balota-input {
     display: none;
 }
 
-.balota-input[type='checkbox']:checked + label {
-    background: rgba(255, 255, 255, 0);
-    color: black;
+.my-class {
+    display: grid;
+    justify-content: center;
 }
 
 .balota-label {
-    background: linear-gradient(125deg, rgba(28,28,34,1) 74%, rgba(69,49,14,1) 100%, rgba(89,63,9,1) 100%);
-    -webkit-box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
-    -moz-box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
-    box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80px;
-    height: 80px;
+    width: 10vh;
+    height: 10vh;
     border-radius: 50%;
-    color: white;
+    color: rgb(49, 42, 42);
+    font-size: 5vh;
+    margin: 1vh;
+    /* background-color: var(--brown); */
+    background-image: url('../images/items/green-ballot.png');
+    background-size: cover;
+    background-position: center;
 }
 
 .balota-label:hover {
-    background: rgb(19, 19, 19);
+    /* background: rgba(19, 19, 19, 0.2);
     -webkit-box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
     -moz-box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
-    box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32);
+    box-shadow: 12px 11px 4px -10px rgba(0,0,0,0.32); */
+    border-radius: 50%;
+    width: 10vh;
+    height: 10vh;
+    background-image: url('../images/items/green-ballot-hover.png');
+    background-size: cover;
+    background-position: center;
 }
+
+.balota-input[type='checkbox']:checked + label {
+    /* background: var(--black); */
+    color: #fff;
+    width: 10vh;
+    height: 10vh;
+    background-image: url('../images/items/black-ballot.png');
+    background-size: cover;
+    background-position: center;
+}
+
+
+
+
+/* Response-page */
+
+.response-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    /* background-color: aquamarine; */
+    margin: 3px;
+}
+
+#response-message {
+    height: 25vh;
+}
+
+#response-ballots {
+    height: 45vh;
+}
+
+#response-ballots .align-content-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#response-redirect {
+    height: 10vh;
+}
+
+#response-redirect .btn.btn-transparent {
+    border-color: #fff;
+}
+
