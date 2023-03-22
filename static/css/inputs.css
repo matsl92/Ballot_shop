@@ -1,3 +1,18 @@
+:root {
+  --cream: rgb(220, 198, 174);
+  --black: rgb(15, 17, 16);
+  --yellow: rgb(205, 169, 95);
+  --red: rgb(202,47,42);
+  --gray: rgb(117, 114, 99);
+  --brown: rgb(118, 66, 42);
+  --orange: rgb(210, 112, 51);
+  --green: rgb(12, 77, 47);
+  --light-brown: rgb(132, 97, 77);
+  --light-green: rgb(127, 163, 102);
+  --dark-brown: rgb(36, 27, 22);
+  --epayco-blue: rgb(28, 14, 73)
+}
+
 /*
 =====
 HELPERS
@@ -270,10 +285,15 @@ form {
       text-decoration: var(--uirLinkTextDecoration) !important;
   }
 
+
+#bill {
+  display: flex;
+}
+
 .bill-section {
-  background-color: #D1C4E9;
+  background-color: #937cbd;
   display: block;
-  width: 70vw;
+  width: 85vw;
   max-width: 500px;
   margin: 4px;
 }
@@ -283,75 +303,110 @@ form {
 }
 
 #personal-data {
-  padding: 1vh, 1vw;
   height:25vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;}
+
+.row-1 {
+  background-color: #181520;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
-.personal-data-field {
-  display: inline-block;
-  width: 30vw;
-  height: 10vh;
-  background-color: antiquewhite;
-  /* min-width: 210px; */
+.cont-2 {
+  background-color: #4508eb;
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.field-item {
+  background-color: #444247;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 7px;
 }
 
 .field-name {
-  background-color: aquamarine;
-  display: block;
-  height: 5vh;
-  width: 30vw;
+  width: 25%;
+  justify-content: center;
 }
 
 .field-value {
-  background-color: aquamarine;
-  display: block;
-  height: 5vh;
-  width: 30vw;
-}
-
-@media (max-width: 600px) {
-  .personal-data-field {
-    width: 60vw;
-    height: 5vh;
-  }
-
-  .field-name {
-    display: inline-block;
-    height: 5vh;
-    width: 13vw;
-  }
-    
-  .field-value {
-    display: inline-block;
-    height: 5vh;
-    width: 45vw;
-  }
-    
-}
-
-@media (min-width: 750px) {
-  .personal-data-field {
-    max-width: 225px;
-  }
-
-  .field-name {
-    max-width: 225px;
-    /* height: 11vh; */
-  }
-    
-  .field-value {
-    max-width: 225px;
-    /* height: 11vh; */
-  }
+  width: 75%;
+  justify-content: flex-start;
 }
 
 #prices {
-  height: 12.5vh;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+}
+
+#prices > .cont-2 {
+  background-color: aqua;
+  width: 50%;
+  height: 100%;
+  flex-direction: column;
+}
+
+#prices > .cont-2 > .field-item {
+  height: 50%;
+  width: 100%;
+}
+
+#prices .field-value {
+  justify-content: center;
 }
 
 #gateway {
-  height: 12.5vh;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+#epayco-button {
+  background-image: url(../images/items/epayco-white-logo.png);
+  background-size: 105px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--epayco-blue);
+  display: block;
+  width: 205px;
+  height: 50px;
+   border-radius: 30px;
+}
+
+#epayco-button:hover {
+  background-color: rgb(255, 255, 255);
+  background-image: url('../images/items/epayco-blue-logo.png');
+}
+
+@media (min-width: 600px) {
+  .row-1 {
+    flex-direction: row;
+  }
+
+  .cont-2 {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .field-item {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .field-name {
+    align-items: end;
+  }
+}
+
+
