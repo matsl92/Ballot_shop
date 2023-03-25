@@ -4,14 +4,23 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.utils import timezone
 from datetime import timedelta
 
+class Sociedad(models.Model):
+    name = models.CharField('Nombre', max_length=100)
+    
+    def __str__(self):
+        return self.name
+
 class Rifa(models.Model):
+    society = models.ForeignKey(Sociedad, on_delete=models.CASCADE, verbose_name='Sociedad')
+    name = models.CharField('Nombre de la rifa', max_length=100)
+    prize = models.CharField('Premio', max_length=200)
+    description = models.TextField('Descripción', max_length=1000, blank=True, null=True)
     Lottery_date = models.DateField('Fecha de sorteo')
     ballot_price = models.PositiveIntegerField('Precio de las balotas', default=10000)    
     min_number = models.IntegerField('Número mínimo', validators=[MinValueValidator(0)])
     max_number = models.IntegerField('Número máximo', validators=[MinValueValidator(0)])
     step = models.IntegerField('Paso', validators=[MinValueValidator(1)])
-    ballot_unavailable_time = models.DurationField('Tiempo de inhabilidad de las balotas')
-    prize = models.CharField('Premio', max_length=200)
+    ballot_unavailable_time = models.DurationField('Tiempo de inhabilidad de las balotas', default=timedelta(minutes=10))
     
     def save(self):
         n = (self.max_number+1 - self.min_number) // self.step   
@@ -30,6 +39,8 @@ class Rifa(models.Model):
                     )
                 
                     ballot.save()
+    def __str__(self):
+        return self.name
         
 class Cliente(models.Model):
     first_name = models.CharField('Nombre', max_length=100)
@@ -81,38 +92,15 @@ class Balota(models.Model):
 class EpaycoLateConfirmation(models.Model):
     status_options = [(0, 'OK'), (1, 'Por resolver')] 
     
-    transaccion = models.OneToOneField(Transaccion, on_delete=models.CASCADE, default=None, null=True)   
+    transaction = models.OneToOneField(Transaccion, on_delete=models.CASCADE, default=None, null=True, verbose_name='Transacción')   
     status = models.IntegerField('Estado', choices=status_options, default=0)
     json_data = models.TextField('Datos Json', default='', null=True, blank=True)
     description = models.TextField('Descripción', default='', null=True, blank=True)
     
     def __str__(self):
-        return 'Para ' + str(self.transaccion)
+        return 'Para ' + str(self.transaction)
 
-# class Rango(models.Model):
-#     valor_minimo = models.IntegerField(validators=[MinValueValidator(0)])
-#     valor_maximo = models.IntegerField(validators=[MinValueValidator(0)])
-#     paso = models.IntegerField(validators=[MinValueValidator(1)])
-#     tiempo_de_reserva = models.DurationField()
-#     precio = models.IntegerField(validators=[MinValueValidator(0)], default=10000)
-    
-#     def save(self):
-#         n = (self.valor_maximo+1 - self.valor_minimo) // self.paso
-#         if self.valor_minimo <= self.valor_maximo and n > 0:
-#             super().save()
-#             for i in range((self.valor_maximo+1-self.valor_minimo)//self.paso):
-                
-#                 if not self.valor_minimo + self.paso*i in [
-#                     ballot.id for ballot in Balota.objects.all()
-#                 ]:
-                    
-#                     ballot = Balota(
-#                     numero=self.valor_minimo+self.paso*i, 
-#                     precio = self.precio, 
-#                     time_period = self.tiempo_de_reserva
-#                     )
-                
-#                     ballot.save()
+
                     
 
                  

@@ -43,12 +43,12 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 # EPAYCO RESPONSE LINKS
 
 # Production
-confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
-response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
+# confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
+# response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
 
 # Localhost
-# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-# response_base_url = "http://127.0.0.1:8000/epayco_response/"
+confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+response_base_url = "http://127.0.0.1:8000/epayco_response/"
 
 
 # VARIABLES AND FUNCTIONS
@@ -81,11 +81,11 @@ def epayco_get_transaction_link(value_2, transaction, ballots, client):
         "currency": "COP",
         "id": 0,  # Debe ser único, si se envia cero, epayco genera uno automaticamente
         "base": "0",
-        "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.numero for ballot in ballots]}", # add ids
+        "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.number for ballot in ballots]}", # add ids
         "title": "Link de cobro",
         "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
         "tax": "0", 
-        "email": client.correo,
+        "email": client.email,
         'extra': transaction.id,
         "extra1": transaction.id,
         "extra2": ", ".join([str(ballot.id) for ballot in ballots]),
@@ -149,9 +149,6 @@ def unbind_ballots(lottery):
             
         transaction.status = 2
         transaction.save()
-        
-        
-
 
 def handle_transaction_response(data):
     
@@ -163,12 +160,12 @@ def handle_transaction_response(data):
     transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
     transaction.x_description = data['x_description']
     transaction.x_ref_payco = data['x_ref_payco']
-    transaction.valor_pagado = int(data['x_amount'])
+    transaction.validated_value = int(data['x_amount'])
     transaction.x_response = x_response
     
     transaction.save()
     
-    if transaction.estado == 0:
+    if transaction.status == 0:
         
         if transaction.x_response == 'Pendiente':
             pass
@@ -177,14 +174,14 @@ def handle_transaction_response(data):
         elif transaction.x_response == 'Fallida':
             pass
         elif transaction.x_response == 'Aceptada':
-            transaction.estado = 1
+            transaction.status = 1
     
     
-    elif transaction.estado == 1:
+    elif transaction.status == 1:
         pass
     
     
-    elif transaction.estado == 2:
+    elif transaction.status == 2:
         if transaction.x_response == 'Pendiente':
             pass
         elif transaction.x_response == 'Rechazada':
@@ -195,7 +192,7 @@ def handle_transaction_response(data):
             
             # late confirmation
             late_confirmation = EpaycoLateConfirmation(
-                transaccion=transaction, datos_json=json.dumps(data)
+                transaction=transaction, json_data=json.dumps(data)
             )
         
             unavailable_ballot_ids = []
@@ -207,18 +204,18 @@ def handle_transaction_response(data):
             ]
             for ballot in ballots:
                 
-                if ballot.transaccion == None or ballot.transaccion == transaction:
-                    ballot.transaccion = transaction
+                if ballot.transaction == None or ballot.transaction == transaction:
+                    ballot.transaction = transaction
                     ballot.save()
                 
                 else:
-                    transaction.late_confirmation = timezone.now()
-                    late_confirmation.estado = 1
+                    # transaction.late_confirmation = timezone.now()
+                    late_confirmation.status = 1
                     unavailable_ballot_ids.append(ballot.id)
             
             description = {'unavailable_ballot_ids': unavailable_ballot_ids}
-            late_confirmation.descripcion = json.dumps(description)
-            transaction.estado = 1
+            late_confirmation.description = json.dumps(description)
+            transaction.status = 1
             late_confirmation.save() 
     
     
@@ -245,12 +242,13 @@ def lottery_list(request):
     return render(request, 'store/lottery_list.html', context)
     
 def balotas(request):
-    lottery  = Rifa.objects.get(id=request.GET['lottery_id'])
+    # lottery  = Rifa.objects.get(id=request.GET['lottery_id'])
+    lottery = Rifa.objects.get(id=1)
     unbind_ballots(lottery)
     
-    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaccion=None))[0:15]
+    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:15]
         
-    context = {'object_list': Balota.objects.filter(transaccion=None), 'ballot_package': ballot_list}
+    context = {'ballot_package': ballot_list}
     return render(request, 'store/balota_list.html', context)
 
 def datos_personales(request):
@@ -263,13 +261,19 @@ def datos_personales(request):
 
 def code_validation(request):
     print('validation request')
-    discunt_code = json.loads(request.body)['discount_code']
-    print('discount code:', discunt_code)
-    if discunt_code in [discount.codigo for discount in Descuento.objects.filter(estado=True)]:
-        discount = Descuento.objects.get(codigo=discunt_code)
+    discount_code = json.loads(request.body)['discount_code']
+    ballot_ids = json.loads(request.body)['bId']
+    print(type(ballot_ids), ballot_ids)
+    print('discount code:', discount_code)
+    if discount_code in [
+        discount.discount_code for discount in Descuento.objects.filter(
+            status=True
+        ).filter(lottery=Balota.objects.get(id=ballot_ids[0]).lottery)
+    ]:
+        discount = Descuento.objects.get(discount_code=discount_code)
         return JsonResponse({
-            'percentage': discount.porcentaje, 
-            'status': discount.estado
+            'percentage': discount.percentage, 
+            'status': discount.status
         })
     else:
         return JsonResponse({
@@ -279,6 +283,7 @@ def code_validation(request):
 def fetch_api(request):
     if request.method=='POST':
         body = json.loads(request.body)
+        print(body)
         form = ClienteForm(body)
         if form.is_valid():
             client = form.save()
@@ -290,16 +295,20 @@ def fetch_api(request):
         value_1 = 0
         ballots = [Balota.objects.get(id=int(id)) for id in body['ballot_ids']]
         for ballot in ballots:
-            value_1 += ballot.precio
+            value_1 += ballot.price
         value_2 = value_1
         discount_code = body['discount_code']
         discount = None
         discount_id = None
         if discount_code != '':
-            if discount_code in [discount.codigo for discount in Descuento.objects.filter(estado=True)]:
-                discount = Descuento.objects.get(codigo=discount_code)
+            if discount_code in [
+                discount.discount_code for discount in Descuento.objects.filter(
+                    lottery=Balota.objects.get(id=ballots[0].id).lottery
+                ).filter(status=True)
+            ]:
+                discount = Descuento.objects.get(discount_code=discount_code)
                 discount_id = discount.id
-                value_2 = int(value_1 * (1 - discount.porcentaje/100))
+                value_2 = int(value_1 * (1 - discount.percentage/100))
                 # print('3, valid code: ', value_2)
                 # messages.success(request, f'El código es válido, se aplicó un descuento del {discount.porcentaje}%.')
             else:
@@ -307,17 +316,17 @@ def fetch_api(request):
                 print('3, invalid code:', value_2)
         
         for ballot in ballots:
-            if ballot.transaccion != None:
+            if ballot.transaction != None:
                 print('4, not all ballots were available')
                 # messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haga su selección nuevamente.')
                 return redirect('store:balotas') # this redirect should send the user and not just the fetch request       
         
-        transaction = Transaccion(cliente=client, descuento=discount, valor_inicial=value_1, valor_final = value_2)
+        transaction = Transaccion(client=client, discount=discount, value_1=value_1, value_2 = value_2)
         transaction.save()
         
         for ballot in ballots:
             transaction.balota_set.add(ballot)
-            transaction.valid_until = transaction.created_at + ballot.time_period
+            transaction.valid_until = transaction.created_at + ballot.unavailable_time
         
         if value_2 == 0:
             context = {'ballots': ballots, 'client': client}
@@ -328,13 +337,13 @@ def fetch_api(request):
                 'value_1': value_1, 
                 'value_2': value_2, 
                 'client': {
-                    'name': client.nombre, 
-                    'lastname': client.apellido, 
-                    'email': client.correo, 
-                    'phone_number': client.celular.national_number, 
+                    'name': client.first_name, 
+                    'lastname': client.last_name, 
+                    'email': client.email, 
+                    'phone_number': client.phone_number.national_number, 
                     'id': client.id
                 }, 
-                'ballot_numbers': [ballot.numero for ballot in ballots], 
+                'ballot_numbers': [ballot.number for ballot in ballots], 
                 'discount_id': discount_id, 
                 'link': link
             })
@@ -344,19 +353,19 @@ def fetch_api(request):
         else: 
             
             link = epayco_get_transaction_link(value_2, transaction, ballots, client)
-            transaction.link_de_pago = link
+            transaction.payment_link = link
             transaction.save()
             return JsonResponse({
                 'value_1': value_1, 
                 'value_2': value_2, 
                 'client': {
-                    'name': client.nombre, 
-                    'lastname': client.apellido, 
-                    'email': client.correo, 
-                    'phone_number': client.celular.national_number,
+                    'name': client.first_name, 
+                    'lastname': client.last_name, 
+                    'email': client.email, 
+                    'phone_number': client.phone_number.national_number,
                     'id': client.id
                 }, 
-                'ballot_numbers': [ballot.numero for ballot in ballots], 
+                'ballot_numbers': [ballot.number for ballot in ballots], 
                 'discount_id': discount_id, 
                 'link': link
             })
@@ -365,8 +374,8 @@ def epayco_response(request, transaction_id):   # For the client
      
     transaction = Transaccion.objects.get(id=transaction_id)
     
-    if not transaction.link_de_pago:  
-        if transaction.estado == 1:
+    if not transaction.payment_link:  
+        if transaction.status == 1:
             context = {'transaction': transaction}
             return render(request, 'store/response.html', context)
         

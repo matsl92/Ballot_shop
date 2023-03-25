@@ -8,11 +8,11 @@
 {% block content %}
 
 <div>
-    {% if transaction.link_de_pago %}
+    {% if transaction.payment_link %}
 
         {% if data.x_response == 'Aceptada' %}
         <div id="response-message" class="response-section">
-            <h1>¡Felicidades {{ transaction.cliente.nombre }}! Has adquirido las siguientes balotas:</h1>   
+            <h1>¡Felicidades {{ transaction.client.first_name }}! Has adquirido las siguientes balotas:</h1>   
         </div>
 
         <div id="response-ballots" class="response-section">
@@ -35,22 +35,22 @@
 
             {% if data.x_response == 'Rechazada' %}
             <div id="response-message" class="response-section">
-                <h1>{{transaction.cliente.nombre}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h1>
+                <h1>{{transaction.client.first_name}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h1>
             </div>
             
             <div id="response-redirect" class="response-section">
-                <a id="epayco-button" href="{{ transaction.link_de_pago }}"></a>
+                <a id="epayco-button" href="{{ transaction.payment_link }}"></a>
             </div>
             {% endif %}
 
 
             {% if data.x_response == 'Fallida' %}
             <div id="response-message" class="response-section">
-                <h1>{{transaction.cliente.nombre}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h1>
+                <h1>{{transaction.client.first_name}}, la transacción no se ha llevado a cabo con éxito, inténtalo nuevamente.</h1>
             </div>
             
             <div id="response-redirect" class="response-section">
-                <a id="epayco-button" href="{{ transaction.link_de_pago }}"></a>
+                <a id="epayco-button" href="{{ transaction.payment_link }}"></a>
             </div>
             {% endif %}
 
@@ -59,7 +59,7 @@
 
         {% if data.x_response == 'Pendiente' %}
         <div id="response-message" class="response-section">
-            <h2>{{transaction.cliente.nombre}}, Hemos tomado tus datos y las balotas asociadas a tu transacción, por favor revisa el siguiente link en unos minutos para confirmar tu compra.</h2>
+            <h2>{{transaction.client.first_name}}, Hemos tomado tus datos y las balotas asociadas a tu transacción, por favor revisa el siguiente link en unos minutos para confirmar tu compra.</h2>
         </div>
         <div id="response-redirect" class="response-section">
             <a href="{{ data.view_link }}">{{ data.view_link }}</a> 
@@ -68,7 +68,7 @@
 
     {% else %}
         <div id="response-message" class="response-section">
-            <h1>¡Felicidades {{ transaction.cliente.nombre }}! Has adquirido las siguientes balotas:</h1>   
+            <h1>¡Felicidades {{ transaction.client.first_name }}! Has adquirido las siguientes balotas:</h1>   
         </div>
 
         <div id="response-ballots" class="response-section">

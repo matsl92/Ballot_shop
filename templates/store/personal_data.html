@@ -30,10 +30,10 @@
                     <div class="row">
 
                         <div class="col-sm-12 col-md-6 col-lg-6">
-                            <div class="form-error" id="nombre-error"></div>
+                            <div class="form-error" id="first_name-error"></div>
                             <div class="field field_v1">
-                                <label for="id_nombre" class="ha-screen-reader">Nombre</label>
-                                {{ form.nombre }}
+                                <label for="first-name" class="ha-screen-reader">Nombre</label>
+                                {{ form.first_name }}
                                 <span class="field__label-wrap" aria-hidden="true">
                                     <span class="field__label">Nombre</span>
                                 </span>
@@ -42,10 +42,10 @@
 
                         <div class="col-sm-12 col-md-6 col-lg-6">
 
-                            <div class="form-error" id="apellido-error"></div>
+                            <div class="form-error" id="last_name-error"></div>
                             <div class="field field_v1">
-                                <label for="id_apellido" class="ha-screen-reader">Apellido</label>
-                                {{ form.apellido }}
+                                <label for="last-name" class="ha-screen-reader">Apellido</label>
+                                {{ form.last_name }}
                                 <span class="field__label-wrap" aria-hidden="true">
                                     <span class="field__label">Apellido</span>
                                 </span>
@@ -56,10 +56,10 @@
                     <div class="row">
 
                         <div class="col-sm-12 col-md-6 col-lg-6">
-                            <div class="form-error" id="correo-error"></div>
+                            <div class="form-error" id="email-error"></div>
                             <div class="field field_v1">
-                                <label for="id_correo" class="ha-screen-reader">Correo</label>
-                                {{ form.correo }}
+                                <label for="email" class="ha-screen-reader">Correo</label>
+                                {{ form.email }}
                                 <span class="field__label-wrap" aria-hidden="true">
                                     <span class="field__label">Correo</span>
                                 </span>
@@ -67,10 +67,10 @@
                         </div>
 
                         <div class="col-sm-12 col-md-6 col-lg-6">
-                            <div class="form-error" id="celular-error"></div>
+                            <div class="form-error" id="phone_number-error"></div>
                             <div class="field field_v1">
-                                <label for="id_celular" class="ha-screen-reader">Celular</label>
-                                {{ form.celular }}
+                                <label for="phone-number" class="ha-screen-reader">Celular</label>
+                                {{ form.phone_number }}
                                 <span class="field__label-wrap" aria-hidden="true">
                                     <span class="field__label">Celular</span>
                                 </span>
@@ -115,7 +115,7 @@
                 <div class="col-md-12">
                     <div class="d-flex flex-wrap justify-content-center">
                     {% for ballot in ballots %}
-                      <label class="balota-label">{{ ballot.numero }}</label>    
+                      <label class="balota-label">{{ ballot.number }}</label>    
                     {% endfor %}
                     </div>
                 </div>

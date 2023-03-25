@@ -1,5 +1,15 @@
 PRIMARY
 
+generate link and redirect
+
+make basic changes and then test
+
+Lottery fields name __str__, description=optional, sociedad=ForeignKey
+
+model sociedad name
+
+ids and nums
+
 model Rifa
 
 
@@ -17,6 +27,12 @@ download template and make it work for welcoming view
 
 
 SECONDARY
+
+Prove environment variables in railway git removing .env from .gitignore
+
+
+
+
 
 Define whether passing ids or numbers in x_description issues branch
 

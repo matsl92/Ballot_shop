@@ -13,16 +13,16 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 // PRODUCTION
 
-const codeValidationURL = 'https://web-production-aea2.up.railway.app/code_validation/';
+// const codeValidationURL = 'https://web-production-aea2.up.railway.app/code_validation/';
 
-const linkCreationURL = 'https://web-production-aea2.up.railway.app/bill/';
+// const linkCreationURL = 'https://web-production-aea2.up.railway.app/bill/';
 
 
 // LOCALHOST
 
-// const codeValidationURL = 'http://127.0.0.1:8000/code_validation/';
+const codeValidationURL = 'http://127.0.0.1:8000/code_validation/';
 
-// const linkCreationURL = 'http://127.0.0.1:8000/bill/';
+const linkCreationURL = 'http://127.0.0.1:8000/bill/';
 
 
 
@@ -55,7 +55,8 @@ function validateCode() {
                 }, 
                 mode: 'same-origin',  
                 body: JSON.stringify({
-                    'discount_code': discountCode
+                    'discount_code': discountCode, 
+                    'bId': bId
                 })
             }
         )
@@ -68,6 +69,7 @@ function validateCode() {
                 messageDiv.setAttribute('class', 'correct-field');
                 messageDiv.innerText = `El código es valido, tienes un descuento del ${data.percentage}%.`;
             } else if (data.error) {
+                console.log(data);
                 messageDiv.setAttribute('class', 'incorrect-message');
                 messageDiv.innerText = `${data.error}`;
             }
@@ -84,14 +86,14 @@ codeValidator.addEventListener('click', validateCode, false);
 function ajaxRequest() {
     removeErrors();
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    let _name = document.querySelector('#id_nombre').value;
-    let lastname = document.querySelector('#id_apellido').value;
-    let email = document.querySelector('#id_correo').value;
-    let phone = document.querySelector('#id_celular').value;
-    let discount_code = document.querySelector('#discount_code').value;
-    let ballot_ids = document.querySelectorAll('.ballot_ids');
-    let ballot_id_list = []
-    ballot_ids.forEach(element => ballot_id_list.push(element.defaultValue))
+    let firstName = document.querySelector('#first-name').value;
+    let lastName = document.querySelector('#last-name').value;
+    let email = document.querySelector('#email').value;
+    let phoneNumber = document.querySelector('#phone-number').value;
+    let discountCode = document.querySelector('#discount_code').value;
+    // let ballot_ids = document.querySelectorAll('.ballot_ids');
+    // let ballot_id_list = []
+    // ballot_ids.forEach(element => ballot_id_list.push(element.defaultValue))
     const billRequest = fetch(
         linkCreationURL,  
         {
@@ -102,12 +104,12 @@ function ajaxRequest() {
             }, 
             mode: 'same-origin',  
             body: JSON.stringify({
-                'nombre': _name, 
-                'apellido': lastname, 
-                'correo': email, 
-                'celular': phone, 
+                'first_name': firstName, 
+                'last_name': lastName, 
+                'email': email, 
+                'phone_number': phoneNumber, 
                 'ballot_ids': bId, 
-                'discount_code': discount_code
+                'discount_code': discountCode
             })
         }
     )
@@ -116,6 +118,7 @@ function ajaxRequest() {
     .then(data => {
         if (data.errors) {
             console.log('There are some errors');
+            console.log(data);
             addErrors(data.errors);
 
         } else {

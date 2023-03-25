@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0!!kblwag^i$z&%@a#3u5zkz59582t^e-1$44003)0r%w3*mns'
+# SECRET_KEY = 'django-insecure-0!!kblwag^i$z&%@a#3u5zkz59582t^e-1$44003)0r%w3*mns'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -136,11 +141,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ePayco settings
 
-BASIC_AUTH_TOKEN = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
+# BASIC_AUTH_TOKEN = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
 
 # Authorization = ' '.join(['Basic', BASIC_AUTH_TOKEN])
 
-PUBLIC_KEY = 'NzgyMTkz'
+# PUBLIC_KEY = 'NzgyMTkz'
 
 # Django PhoneNumber field settings
 
