@@ -82,4 +82,6 @@
     thisForm.querySelector('.error-message').classList.add('d-block');
   }
 
-})();
+});
+
+// })();
