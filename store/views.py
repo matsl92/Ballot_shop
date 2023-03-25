@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic import ListView
 from .forms import ClienteForm
-from .models import Cliente, Balota, Transaccion, Descuento, EpaycoLateConfirmation
+from .models import Cliente, Balota, Transaccion, Descuento, EpaycoLateConfirmation, Rifa
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.forms.models import model_to_dict
 from django.urls import reverse
@@ -121,15 +121,37 @@ def epayco_get_transaction_details(x_ref_payco):
     
     return response.json()['data']
 
-def unbind_ballots():
-    hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_confirmation_time)
+def unbind_ballots(lottery):
+    
+    # hopeless_transactions = Transaccion.objects.filter(estado=0).filter(valid_until__lte=timezone.now()-ePayco_confirmation_time)
+    # for transaction in hopeless_transactions:
+    #     for ballot in transaction.balota_set.all():
+    #         ballot.transaccion = None
+    #         ballot.save()
+            
+    #     transaction.estado = 2
+    #     transaction.save()
+    
+    
+    lottery_ballots = list(Balota.objects.filter(lottery=lottery))
+    lottery_transactions = []
+    for ballot in lottery_ballots:
+        if ballot.transaction != None and not ballot.transaction in lottery_transactions:
+            lottery_transactions.append(ballot.transaction)
+    hopeless_transactions = []
+    for transaction in lottery_transactions:
+        if transaction.status == 0 and transaction.valid_until < timezone.now()-ePayco_confirmation_time:
+            hopeless_transactions.append(transaction)
     for transaction in hopeless_transactions:
         for ballot in transaction.balota_set.all():
-            ballot.transaccion = None
+            ballot.transaction = None
             ballot.save()
             
-        transaction.estado = 2
+        transaction.status = 2
         transaction.save()
+        
+        
+
 
 def handle_transaction_response(data):
     
@@ -216,26 +238,19 @@ def template(request):
 
 def home(request):
     return render(request, 'store/home.html', {})
+
+def lottery_list(request):
+    object_list = Rifa.objects.all()
+    context = {'object_list': object_list}
+    return render(request, 'store/lottery_list.html', context)
     
 def balotas(request):
-    unbind_ballots()
-    # ballots = list(Balota.objects.filter(transaccion=None))
-    # ballot_package = []
-    # count = 0
-    # for c in range(6):
-    #     col = []
-    #     for r in range(3):
-    #         col.append(ballots[count])
-    #         count +=1
-    #     ballot_package.append(col)
-    # print(ballot_package)
+    lottery  = Rifa.objects.get(id=request.GET['lottery_id'])
+    unbind_ballots(lottery)
     
-    ballot_package = list(Balota.objects.filter(transaccion=None))[0:15]
-    
-    
-                
+    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaccion=None))[0:15]
         
-    context = {'object_list': Balota.objects.filter(transaccion=None), 'ballot_package': ballot_package}
+    context = {'object_list': Balota.objects.filter(transaccion=None), 'ballot_package': ballot_list}
     return render(request, 'store/balota_list.html', context)
 
 def datos_personales(request):

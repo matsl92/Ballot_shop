@@ -4,18 +4,18 @@ from .models import Cliente
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ['nombre', 'apellido', 'correo', 'celular']
+        fields = ['first_name', 'last_name', 'email', 'phone_number']
         widgets = {
-            'nombre': forms.TextInput(attrs={
+            'first_name': forms.TextInput(attrs={
                 'class': 'field__input', 'id': 'id_nombre', 'placeholder': 'ej: Juan'
                 }),
-            'apellido': forms.TextInput(attrs={
+            'last_name': forms.TextInput(attrs={
                 'class': 'field__input', 'id': 'id_apellido', 'placeholder': 'ej: Correa'
                 }),
-            'correo': forms.EmailInput(attrs={
+            'email': forms.EmailInput(attrs={
                 'class': 'field__input', 'id': 'id_correo', 'placeholder': 'ej: juan33@gmail.com'
                 }),
-            'celular': forms.TextInput(attrs={
+            'phone_number': forms.TextInput(attrs={
                 'class': 'field__input', 'id': 'id_celular', 'placeholder': 'ej: 4003002010'
                 }), 
         }

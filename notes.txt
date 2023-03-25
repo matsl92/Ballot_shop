@@ -1,5 +1,15 @@
 PRIMARY
 
+model Rifa
+
+
+
+
+
+
+
+
+
 Paginate with twenty to therty ballots per page
 
 download template and make it work for welcoming view
