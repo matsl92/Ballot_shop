@@ -228,7 +228,7 @@ class BalotaListView(ListView):
     model = Balota
 
 def inputs(request):
-    return render(request, 'store/inputs.html', {})
+    return render(request, 'store/index.html', {})
 
 def template(request):
     return render(request, 'index.html', {})
