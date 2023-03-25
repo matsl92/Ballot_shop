@@ -2,15 +2,7 @@ PRIMARY
 
 generate link and redirect
 
-make basic changes and then test
-
-Lottery fields name __str__, description=optional, sociedad=ForeignKey
-
-model sociedad name
-
-ids and nums
-
-model Rifa
+Solve transaction description with ids and numbers
 
 
 
@@ -19,8 +11,6 @@ model Rifa
 
 
 
-
-Paginate with twenty to therty ballots per page
 
 download template and make it work for welcoming view
 
@@ -33,6 +23,9 @@ Prove environment variables in railway git removing .env from .gitignore
 
 
 
+
+
+Paginate with twenty to therty ballots per page
 
 Define whether passing ids or numbers in x_description issues branch
 
@@ -53,6 +46,13 @@ use .env in production
 DONE
 
 keep the user from hitting the button before filling in all the required fields
+
+make basic changes and then test
+
+Lottery fields name __str__, description=optional, sociedad=ForeignKey
+
+model sociedad name
+
 or display errors gotten from the fetch function
 
 response.html should check whether transaction.estado == 2
