@@ -4,7 +4,7 @@ generate link and redirect
 
 Solve transaction description with ids and numbers
 
-
+Ballot price must be dinamic
 
 
 
@@ -18,12 +18,12 @@ download template and make it work for welcoming view
 
 SECONDARY
 
+
+
+
+
+
 Prove environment variables in railway git removing .env from .gitignore
-
-
-
-
-
 
 Paginate with twenty to therty ballots per page
 

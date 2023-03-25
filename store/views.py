@@ -237,8 +237,15 @@ def home(request):
     return render(request, 'store/index_2.html', context)
 
 def form(request):
-    context = {}
-    return render(request, 'store/form_2.html', context)
+    if request.method == 'POST':
+        # form = ClienteForm()
+        balota_ids = dict(request.POST).get('id')
+        ballots = [Balota.objects.get(id=id) for id in balota_ids]
+        subtotal = 0
+        for ballot in ballots:
+            subtotal += ballot.price
+        context = {'balota_ids': balota_ids, 'ballots': ballots, 'subtotal': subtotal}
+        return render(request, 'store/form_2.html', context)
 
 def lottery_list(request):
     object_list = Rifa.objects.all()
@@ -257,11 +264,22 @@ def balotas(request):
 
 def datos_personales(request):
     if request.method == 'POST':
-        form = ClienteForm()
+        # form = ClienteForm()
         balota_ids = dict(request.POST).get('id')
         ballots = [Balota.objects.get(id=id) for id in balota_ids]
-        context = {'form': form, 'balota_ids': balota_ids, 'ballots': ballots}
-        return render(request, 'store/personal_data.html', context)
+        subtotal = 0
+        for ballot in ballots:
+            subtotal += ballot.price
+        context = {'balota_ids': balota_ids, 'ballots': ballots, 'subtotal': subtotal}
+        return render(request, 'store/form_2.html', context)
+
+# def datos_personales(request):
+#     if request.method == 'POST':
+#         form = ClienteForm()
+#         balota_ids = dict(request.POST).get('id')
+#         ballots = [Balota.objects.get(id=id) for id in balota_ids]
+#         context = {'form': form, 'balota_ids': balota_ids, 'ballots': ballots}
+#         return render(request, 'store/personal_data.html', context)
 
 def code_validation(request):
     print('validation request')
@@ -286,8 +304,16 @@ def code_validation(request):
 
 def fetch_api(request):
     if request.method=='POST':
-        body = json.loads(request.body)
-        print(body)
+        print(request.POST)
+        body = {
+            'first_name': request.POST['first_name'], 
+            'last_name': request.POST['last_name'], 
+            'email': request.POST['email'], 
+            'phone_number': request.POST['phone_number'], 
+            'ballot_ids': [int(i) for i in request.POST['ballot_ids'].split(',')], 
+            'discount_code': request.POST['discount_code']
+        }
+        
         form = ClienteForm(body)
         if form.is_valid():
             client = form.save()
@@ -359,6 +385,7 @@ def fetch_api(request):
             link = epayco_get_transaction_link(value_2, transaction, ballots, client)
             transaction.payment_link = link
             transaction.save()
+            return redirect(link)
             return JsonResponse({
                 'value_1': value_1, 
                 'value_2': value_2, 
@@ -373,6 +400,97 @@ def fetch_api(request):
                 'discount_id': discount_id, 
                 'link': link
             })
+
+# def fetch_api(request):
+#     if request.method=='POST':
+#         print(request.POST)
+#         body = json.loads(request.body)
+#         print(body)
+#         form = ClienteForm(body)
+#         if form.is_valid():
+#             client = form.save()
+#         else:
+#             return JsonResponse({
+#                 'errors': [(key, value[0]['message']) for key, value in json.loads(form.errors.as_json()).items()]
+#             })
+        
+#         value_1 = 0
+#         ballots = [Balota.objects.get(id=int(id)) for id in body['ballot_ids']]
+#         for ballot in ballots:
+#             value_1 += ballot.price
+#         value_2 = value_1
+#         discount_code = body['discount_code']
+#         discount = None
+#         discount_id = None
+#         if discount_code != '':
+#             if discount_code in [
+#                 discount.discount_code for discount in Descuento.objects.filter(
+#                     lottery=Balota.objects.get(id=ballots[0].id).lottery
+#                 ).filter(status=True)
+#             ]:
+#                 discount = Descuento.objects.get(discount_code=discount_code)
+#                 discount_id = discount.id
+#                 value_2 = int(value_1 * (1 - discount.percentage/100))
+#                 # print('3, valid code: ', value_2)
+#                 # messages.success(request, f'El código es válido, se aplicó un descuento del {discount.porcentaje}%.')
+#             else:
+#                 # messages.warning(request, 'El código de descuento no es válido, por favor inténtalo nuevamente o continua con el valor original de la compra.')
+#                 print('3, invalid code:', value_2)
+        
+#         for ballot in ballots:
+#             if ballot.transaction != None:
+#                 print('4, not all ballots were available')
+#                 # messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haga su selección nuevamente.')
+#                 return redirect('store:balotas') # this redirect should send the user and not just the fetch request       
+        
+#         transaction = Transaccion(client=client, discount=discount, value_1=value_1, value_2 = value_2)
+#         transaction.save()
+        
+#         for ballot in ballots:
+#             transaction.balota_set.add(ballot)
+#             transaction.valid_until = transaction.created_at + ballot.unavailable_time
+        
+#         if value_2 == 0:
+#             context = {'ballots': ballots, 'client': client}
+#             transaction.status = 1
+#             transaction.save()
+#             link = reverse('store:epayco_response', kwargs={'transaction_id': transaction.id})
+#             return JsonResponse({
+#                 'value_1': value_1, 
+#                 'value_2': value_2, 
+#                 'client': {
+#                     'name': client.first_name, 
+#                     'lastname': client.last_name, 
+#                     'email': client.email, 
+#                     'phone_number': client.phone_number.national_number, 
+#                     'id': client.id
+#                 }, 
+#                 'ballot_numbers': [ballot.number for ballot in ballots], 
+#                 'discount_id': discount_id, 
+#                 'link': link
+#             })
+#             return render(request, 'store/response.html', context) # return link with client id to response page
+        
+        
+#         else: 
+            
+#             link = epayco_get_transaction_link(value_2, transaction, ballots, client)
+#             transaction.payment_link = link
+#             transaction.save()
+#             return JsonResponse({
+#                 'value_1': value_1, 
+#                 'value_2': value_2, 
+#                 'client': {
+#                     'name': client.first_name, 
+#                     'lastname': client.last_name, 
+#                     'email': client.email, 
+#                     'phone_number': client.phone_number.national_number,
+#                     'id': client.id
+#                 }, 
+#                 'ballot_numbers': [ballot.number for ballot in ballots], 
+#                 'discount_id': discount_id, 
+#                 'link': link
+#             })
 
 def epayco_response(request, transaction_id):   # For the client
      
