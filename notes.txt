@@ -45,6 +45,8 @@ use .env in production
 
 DONE
 
+Ballots can be checked and total is dinamic
+
 keep the user from hitting the button before filling in all the required fields
 
 make basic changes and then test

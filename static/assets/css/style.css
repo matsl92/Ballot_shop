@@ -541,6 +541,19 @@ section {
   color: #f5f8fd;
 }
 
+.balota-input {
+  display: none;
+}
+
+.balota-input[type='checkbox']:checked + label {
+  background: rgb(36, 27, 22);
+  color: #f5f8fd;
+}
+
+.balota-input[type='checkbox']:checked + .balota-label .bi {
+  color: rgb(202,47,42);
+}
+
 .services .title {
   margin-left: 80px;
   font-weight: 700;

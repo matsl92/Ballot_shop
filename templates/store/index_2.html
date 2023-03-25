@@ -40,7 +40,7 @@
     <div class="d-flex flex-column">
 
       <div class="profile">
-        <img src="assets/img/short-600.jpg" alt="" class="img-fluid rounded-circle">
+        <img src={% static "assets/img/short-600.jpg" %} alt="" class="img-fluid rounded-circle">
         <h1 class="text-light"><a href="index.html">El Altar - Taquería</a></h1>
         <div class="social-links mt-4 text-center">
           
@@ -121,86 +121,39 @@
         </div>
 
           
-          <div class="row justify-content-center mx-5 px-5">
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up">
-                <div class="icon"><i class="bi">1</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
-                <div class="icon"><i class="bi">2</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
-                <div class="icon"><i class="bi">3</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
-                <div class="icon"><i class="bi">4</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="400">
-                <div class="icon"><i class="bi">5</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="600">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="700">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="800">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="900">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1000">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1100">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1200">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1300">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1400">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1500">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1600">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1700">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1800">
-                <div class="icon"><i class="bi">6</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1800">
-                <div class="icon"><i class="bi">1</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="1900">
-                <div class="icon"><i class="bi">2</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="2000">
-                <div class="icon"><i class="bi">3</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="2100">
-                <div class="icon"><i class="bi">4</i></div>
-              </div>
-              <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="2200">
-                <div class="icon"><i class="bi">5</i></div>
-              </div> 
-              
-            <!-- <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
-              <div class="icon"><i class="bi bi-calendar4-week"></i></div>
-              <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
-              <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
-            </div> -->
-          </div>
+        <form action={% url 'store:datos_personales' %} method="post" id="ballot-form">
+            {% csrf_token %}
+            <div class="row justify-content-center mx-5 px-5">
+                
+
+                {% for ballot in ballots %}
+
+                <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                    <div class="icon">
+                        <input class="balota-input" type="checkbox" name='id' id="{{ ballot.id }}" value="{{ ballot.id }}" onclick="modifyPrice()">
+                        <label class="balota-label icon" for={{ ballot.id }}>
+                            <i class="bi">{{ ballot }}</i>
+                        </label>
+                    </div>
+                </div>
+
+                {% comment %} <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon"><i class="bi">{{ ballot }}</i></div>
+                </div> {% endcomment %}
+
+
+                {% endfor %}
+
+                
+                
+                
+                <!-- <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
+                    <div class="icon"><i class="bi bi-calendar4-week"></i></div>
+                    <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
+                    <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
+                </div> -->
+            </div>
+        </form>
 
           <hr style="margin: auto; color: rgb(202,47,42); width:60%;">
 
@@ -214,7 +167,7 @@
                   <thead>
                     <tr>
                       <th style="text-align: left;">Total</th>
-                      <th>$ 0</th>
+                      <th id="total" >$ 0</th>
                     </tr>
                   </thead>
                 </table>
@@ -222,7 +175,7 @@
             </div>
 
             <div class="col-lg-6 col-md-6">
-              <button type="submit" class="final-button">
+              <button type="submit" class="final-button" form="ballot-form">
                 Comprar
               </button>
             </div>
@@ -267,6 +220,7 @@
 
   <!-- Template Main JS File -->
   <script src={% static "assets/js/main.js" %}></script>
+  <script src={% static 'assets/js/adder.js' %}></script>
 
 </body>
 

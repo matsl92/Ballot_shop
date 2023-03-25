@@ -227,14 +227,18 @@ def handle_transaction_response(data):
 class BalotaListView(ListView):
     model = Balota
 
-def inputs(request):
-    return render(request, 'store/index.html', {})
-
-def template(request):
-    return render(request, 'index.html', {})
-
 def home(request):
-    return render(request, 'store/home.html', {})
+    lottery = Rifa.objects.get(id=1)
+    unbind_ballots(lottery)
+    
+    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:30]
+        
+    context = {'ballots': ballot_list}
+    return render(request, 'store/index_2.html', context)
+
+def form(request):
+    context = {}
+    return render(request, 'store/form_2.html', context)
 
 def lottery_list(request):
     object_list = Rifa.objects.all()
@@ -330,7 +334,7 @@ def fetch_api(request):
         
         if value_2 == 0:
             context = {'ballots': ballots, 'client': client}
-            transaction.estado = 1
+            transaction.status = 1
             transaction.save()
             link = reverse('store:epayco_response', kwargs={'transaction_id': transaction.id})
             return JsonResponse({
