@@ -13,16 +13,25 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 // PRODUCTION
 
+// Mateo
+
 // const codeValidationURL = 'https://web-production-aea2.up.railway.app/code_validation/';
 
 // const linkCreationURL = 'https://web-production-aea2.up.railway.app/bill/';
 
 
+// Camilo
+
+const codeValidationURL = 'https://web-production-ec2a.up.railway.app/code_validation/';
+
+const linkCreationURL = 'https://web-production-ec2a.up.railway.app/bill/';
+
+
 // LOCALHOST
 
-const codeValidationURL = 'http://127.0.0.1:8000/code_validation/';
+// const codeValidationURL = 'http://127.0.0.1:8000/code_validation/';
 
-const linkCreationURL = 'http://127.0.0.1:8000/bill/';
+// const linkCreationURL = 'http://127.0.0.1:8000/bill/';
 
 
 

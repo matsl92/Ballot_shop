@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'web-production-aea2.up.railway.app']
+ALLOWED_HOSTS = ['*', 'web-production-aea2.up.railway.app', 'web-production-ec2a.up.railway.app']
 
 
 # Application definition
@@ -155,7 +155,7 @@ PHONENUMBER_DEFAULT_REGION = 'CO'
 
 # CSRF trusted origins
 
-CSRF_TRUSTED_ORIGINS = ['https://web-production-aea2.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://web-production-aea2.up.railway.app', 'https://web-production-ec2a.up.railway.app']
 
 CSRF_COOKIE_SECURE = True
 

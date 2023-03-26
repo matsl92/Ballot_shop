@@ -23,9 +23,9 @@ const formSubmitter = document.querySelector('#form-submitter');
 
 // PRODUCTION
 
-const codeValidationURL = 'https://web-production-aea2.up.railway.app/code_validation/';
+const codeValidationURL = 'https://web-production-ec2a.up.railway.app/code_validation/';
 
-const linkCreationURL = 'https://web-production-aea2.up.railway.app/bill/';
+const linkCreationURL = 'https://web-production-ec2a.up.railway.app/bill/';
 
 
 // LOCALHOST
