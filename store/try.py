@@ -105,9 +105,9 @@ from datetime import datetime, timedelta
 # print(type(recover_dic['b']))
 
 
-confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
 
-print(confirmation_url)
+# print(confirmation_url)
 
-url_base = '//'.join([confirmation_url.split('/')[0], confirmation_url.split('/')[2]])
-print(url_base)
+# url_base = '//'.join([confirmation_url.split('/')[0], confirmation_url.split('/')[2]])
+# print(url_base)

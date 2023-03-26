@@ -226,13 +226,19 @@ class BalotaListView(ListView):
 
 def home(request):
     print(request.GET.dict())
-    if request.GET.dict()['tr_pk']:
+    
+    transaction_status = ''
+    
+    link = ''
+    
+    try:
         transaction = Transaccion.objects.get(id=int(request.GET.dict()['tr_pk']))
     
         if not transaction.payment_link:  
             if transaction.status == 1:
-                context = {'transaction': transaction}
-                return render(request, 'store/response.html', context)
+                transaction_status = 'Aceptada'
+                
+                print('100%')
             
         else:
             encoded_ref_payco = request.GET.dict()['ref_payco']
@@ -243,18 +249,33 @@ def home(request):
             
             handle_transaction_response(data)
             
-            transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
+            transaction_status = data['x_response']
             
-            context = {'transaction': transaction, 'data':data}
+            if transaction_status == 'Rechazada' or transaction_status == 'Fallida':
+                link = transaction.payment_link
+                print('includes link')
             
-            return render(request, 'store/response.html', context)
+            print("not 100% discount")
+            
+    except:
+        
+        print('exception')
+        
+        pass
     
     lottery = Rifa.objects.get(id=1)
     unbind_ballots(lottery)
     
     ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:30]
+    try:
+        ballot_price = ballot_list[0].price
+    except:
+        ballot_price = 1000000
         
-    context = {'ballots': ballot_list}
+    context = {
+        'ballots': ballot_list, 'transaction_status': transaction_status, 
+        'link':link, 'ballot_price': ballot_price
+    }
     return render(request, 'store/index_2.html', context)
 
 def form(request):

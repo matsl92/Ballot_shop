@@ -1,6 +1,12 @@
 PRIMARY
 
-generate link and redirect
+actualizar archivos html
+
+
+
+
+
+
 
 Solve transaction description with ids and numbers
 
@@ -46,6 +52,8 @@ use .env in production
 
 
 DONE
+
+generate link and redirect
 
 Ballots can be checked and total is dinamic
 
@@ -108,6 +116,12 @@ input type submit will be inside the form using prevetDefault
 
 
 OTHER
+
+
+Aceptada  http://127.0.0.1:8000/?tr_pk=12&ref_payco=c02c25388e4e331cda1c67d8#facts
+Rechazada http://127.0.0.1:8000/?tr_pk=13&ref_payco=6d9028e82b53981c22948190
+Fallida http://127.0.0.1:8000/?tr_pk=14&ref_payco=c7641fcc1d5344baee7b5513
+Pendiente http://127.0.0.1:8000/?tr_pk=15&ref_payco=d31423fff84bdcef327a26ec
 
 Format from response.text
 2023-07-05 00:00:00

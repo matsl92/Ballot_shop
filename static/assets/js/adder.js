@@ -1,11 +1,11 @@
-const ballotPrice = 10000;
+// const ballotPrice = 10000;
 
 function modifyPrice() {
     let total = 0;
     let ballotInputs = document.querySelectorAll('.balota-input');
     ballotInputs.forEach(input => {
         if (input.checked == true) {
-            total += ballotPrice;
+            total += bP;
         }
     })
 
@@ -65,7 +65,7 @@ function validateCode() {
     let messageDiv = document.querySelector('#discount-code-message');
     let discountCode = document.querySelector('#discount_code').value;
     let billSubtotal = parseInt(getNumberOutOfString(document.querySelector('#bill-subtotal').innerText));
-    if (discountCode) {
+    if (true) {
         const validationRequest = fetch(
             codeValidationURL,  
             {
@@ -87,7 +87,6 @@ function validateCode() {
             // console.log('after validation request');
             // console.log(data);
             if (data.percentage) {
-                messageDiv.setAttribute('class', 'correct-field');
                 messageDiv.innerText = `El código es valido`;
                 let discountValue = billSubtotal * (data.percentage/100);
                 let billTotal = billSubtotal - discountValue;
@@ -97,6 +96,8 @@ function validateCode() {
                 // console.log(data);
                 messageDiv.setAttribute('class', 'incorrect-message');
                 messageDiv.innerText = `${data.error}`;
+                document.querySelector('#discount-values').innerText = '';
+                document.querySelector('#bill-total').innerText = billSubtotal;
             }
         }
         )

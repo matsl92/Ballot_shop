@@ -15,7 +15,7 @@
   <link href={% static "assets/img/logo180.png" %} rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href={% static "https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" %} rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href={% static "assets/vendor/aos/aos.css" %} rel="stylesheet">
@@ -54,7 +54,8 @@
       <hr style="color:#fff;">
       <nav id="navbar" class="nav-menu navbar">
         <ul>
-          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
+          {% comment %} <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li> {% endcomment %}
+          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>{{ transaction_status }} {{ link }}</span></a></li>
           <li><a href="#facts" class="nav-link scrollto"><i class="bx bx-heart"></i> <span>Quiero tacos todo el año!</span></a></li>
           <li><a href="#" class="nav-link scrollto"><i class="bx bx-phone"></i> <span>(+57) 300-00-00</span></a></li>
           <!-- <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
@@ -220,6 +221,9 @@
 
   <!-- Template Main JS File -->
   <script src={% static "assets/js/main.js" %}></script>
+  <script>
+    const bP = {{ ballot_price|safe }}
+  </script>
   <script src={% static 'assets/js/adder.js' %}></script>
 
 </body>

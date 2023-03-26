@@ -155,17 +155,17 @@ h6 {
 
 /*animated scroll arrow animation*/
 @-webkit-keyframes fade_move_down {
-  0%   { -webkit-transform:translate(0,-30px) rotate(0deg); opacity: 0;  }
+  0%   { -webkit-transform:translate(0,-15px) rotate(0deg); opacity: 0;  }
   50%  { opacity: 1;  }
   100% { -webkit-transform:translate(0,10px) rotate(0deg); opacity: 0; }
 }
 @-moz-keyframes fade_move_down {
-  0%   { -moz-transform:translate(0,-30px) rotate(0deg); opacity: 0;  }
+  0%   { -moz-transform:translate(0,-15px) rotate(0deg); opacity: 0;  }
   50%  { opacity: 1;  }
   100% { -moz-transform:translate(0,10px) rotate(0deg); opacity: 0; }
 }
 @keyframes fade_move_down {
-  0%   { transform:translate(0,-30px) rotate(0deg); opacity: 0;  }
+  0%   { transform:translate(0,-15px) rotate(0deg); opacity: 0;  }
   50%  { opacity: 1;  }
   100% { transform:translate(0,10px) rotate(0deg); opacity: 0; }
 }
@@ -551,7 +551,7 @@ section {
 }
 
 .balota-input[type='checkbox']:checked + .balota-label .bi {
-  color: rgb(202,47,42);
+  color: rgb(210, 112, 51);
 }
 
 .services .title {
