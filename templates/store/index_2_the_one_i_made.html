@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
   <title>El Altar - Taquería</title>
   <meta content="" name="description">
@@ -40,14 +40,13 @@
     <div class="d-flex flex-column">
 
       <div class="profile">
-        <!-- <img src={% static "assets/img/short-600.jpg" %} alt="" class="img-fluid rounded-circle"> -->
         <img src={% static "assets/img/short-600.jpg" %} alt="" class="img-fluid rounded-circle">
-        <h1 class="text-light"><a href={% url 'store:home' %}>El Altar - Taquería</a></h1>
+        <h1 class="text-light"><a href="index.html">El Altar - Taquería</a></h1>
         <div class="social-links mt-4 text-center">
           
           <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-          <a href="https://instagram.com/elaltar_?igshid=YmMyMTA2M2Y=" class="instagram"><i class="bx bxl-instagram"></i></a>
-          <a href="https://wa.me/573042977894" class="whatsapp"><i class="bx bxl-whatsapp"></i></a>
+          <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+          <a href="#" class="whatsapp"><i class="bx bxl-whatsapp"></i></a>
           
         </div>
       </div>
@@ -55,9 +54,9 @@
       <hr style="color:#fff;">
       <nav id="navbar" class="nav-menu navbar">
         <ul>
-          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
-          <!-- <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>{{ transaction_status }} {{ link }}</span></a></li> -->
-          <li><a href="#facts" class="nav-link scrollto"><i class="bx bx-heart"></i> <span>Quiero tacos GRATIS!</span></a></li>
+          {% comment %} <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li> {% endcomment %}
+          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>{{ transaction_status }} {{ link }}</span></a></li>
+          <li><a href="#facts" class="nav-link scrollto"><i class="bx bx-heart"></i> <span>Quiero tacos todo el año!</span></a></li>
           <li><a href="#" class="nav-link scrollto"><i class="bx bx-phone"></i> <span>(+57) 300-00-00</span></a></li>
           <!-- <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
           <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Services</span></a></li>
@@ -74,6 +73,7 @@
       <p>Somos <span class="typed" data-typed-items="tradición mexicana, sabor, experiencias"></span></p>
     </div>
     <a href="#facts" class="back-to-bottom d-flex align-items-center justify-content-center"><i class="bi bi-arrow-down-short"></i> quiero un año de tacos ¡ GRATIS !</a>
+    <!-- <a href="#about" class="scroll-down"><i class="bi bi-arrow-down-short"></i> quiero tacos todo el año!</a> -->
   </section><!-- End Hero -->
 
   <main id="main">
@@ -81,25 +81,10 @@
     <!-- ======= Facts Section ======= -->
     <section id="facts" class="facts">
 
+
         <div class="row no-gutters justify-content-center">
 
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up">
-            <div class="count-box">
-              <i class="bi bi-award"></i>
-              <span data-purecounter-start="0" data-purecounter-end="365" data-purecounter-duration="1" class="purecounter"></span>
-              <p><strong>Días de tacos GRATIS !</strong><br>Para el ganador de la rifa</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="200">
-            <div class="count-box">
-              <i class="bi bi-calendar-heart"></i>
-              <span data-purecounter-start="0" data-purecounter-end="28" data-purecounter-duration="1" class="purecounter"></span>
-              <p><strong>Días</strong><br>Para que se juegue la rifa</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="300">
+          <div class="col-lg-4 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up">
             <div class="count-box">
               <i class="bi bi-pin-map"></i>
               <span data-purecounter-start="0" data-purecounter-end="3" data-purecounter-duration="1" class="purecounter"></span>
@@ -107,11 +92,19 @@
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="400">
+          <div class="col-lg-4 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
             <div class="count-box">
               <i class="bi bi-clock-history"></i>
               <span data-purecounter-start="0" data-purecounter-end="5" data-purecounter-duration="1" class="purecounter"></span>
-              <p><strong>Años</strong><br>Haciendo los mejores tacos de Medellín</p>
+              <p><strong>Años</strong><br>haciendo los mejores tacos de Medellín</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="200">
+            <div class="count-box">
+              <i class="bi bi-award"></i>
+              <span data-purecounter-start="0" data-purecounter-end="28" data-purecounter-duration="1" class="purecounter"></span>
+              <p><strong>Días</strong><br>para que se juegue la rifa!</p>
             </div>
           </div>
 
@@ -123,7 +116,7 @@
     <section id="services" class="services">
       <div class="container">
 
-        <div class="section-title justify-content-center text-center">
+        <div class="section-title">
           <h2>Participa por un año de tacos ¡ GRATIS !</h2>
           <!-- <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p> -->
         </div>
@@ -194,6 +187,7 @@
       </div>
     </section><!-- End Services Section -->
 
+
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -214,13 +208,6 @@
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <div class="toast-container position-fixed top-0 end-0 p-3">
-    <div id="notification" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      
-    </div>
-  </div>
-
-
   <!-- Vendor JS Files -->
   <script src={% static "assets/vendor/purecounter/purecounter_vanilla.js" %}></script>
   <script src={% static "assets/vendor/aos/aos.js" %}></script>
@@ -234,98 +221,8 @@
 
   <!-- Template Main JS File -->
   <script src={% static "assets/js/main.js" %}></script>
-
-  
   <script>
     const bP = {{ ballot_price|safe }}
-
-    const empty = "{{ empty|safe }}";
-    const toastTrigger = "{{ transaction_status|safe }}";
-    const toastLiveExample = document.getElementById('notification');
-    const toast = new bootstrap.Toast(toastLiveExample,{
-        delay: 10000
-    });
-    const link = "{{ link|safe }}"
-
-    if (toastTrigger == 'Aceptada') {
-      toastLiveExample.classList.remove("bg-danger");
-      toastLiveExample.classList.remove("bg-warning");
-      toastLiveExample.classList.remove("bg-success");
-      toastLiveExample.classList.add("bg-success");
-      
-      toastLiveExample.innerHTML = `
-        <div class="toast-header">
-          <i class="bi bi-check"></i>
-          <strong class="me-auto"> Transacción Aprobada</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body text-white">
-          Hola, tu compra fue exitosa!
-        </div>
-      `;
-
-      toast.show();
-
-    } else if (toastTrigger == 'Pendiente') {
-      toastLiveExample.classList.remove("bg-danger");
-      toastLiveExample.classList.remove("bg-warning");
-      toastLiveExample.classList.remove("bg-success");
-      toastLiveExample.classList.add("bg-warning");
-      
-      toastLiveExample.innerHTML = `
-        <div class="toast-header">
-          <i class="bi bi-exclamation-triangle-fill"></i>
-          <strong class="me-auto"> Transacción Pendiente</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-          Tu banco ha puesto la transacción en estado pendiente.<br><strong>Te pedimos estar atento al proceso.</strong>
-        </div>
-      `;
-
-      toast.show();
-
-    } else if (toastTrigger == 'Rechazada' || toastTrigger == 'Fallida' ) {
-      toastLiveExample.classList.remove("bg-danger");
-      toastLiveExample.classList.remove("bg-warning");
-      toastLiveExample.classList.remove("bg-success");
-      toastLiveExample.classList.add("bg-danger");
-      
-      toastLiveExample.innerHTML = `
-        <div class="toast-header">
-          <i class="bi bi-x"></i>
-          <strong class="me-auto"> Transacción Rechazada</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body text-white">
-          La transacción no fue exitosa.
-          <br>
-          puedes vovler a intentarlo presionando click <a href="${link}" style="color: #fff;"><strong>aquí</strong></a>
-        </div>
-      `;
-
-      toast.show();
-    } else if (empty == 'empty') {
-      toastLiveExample.classList.remove("bg-danger");
-      toastLiveExample.classList.remove("bg-warning");
-      toastLiveExample.classList.remove("bg-success");
-      toastLiveExample.classList.add("bg-danger");
-      
-      toastLiveExample.innerHTML = `
-        <div class="toast-header">
-          <i class="bi bi-x"></i>
-          <strong class="me-auto"> Error</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body text-white">
-          Debes seleccionar almenos una balota.
-        </div>
-      `;
-
-      toast.show();
-    }
-
-
   </script>
   <script src={% static 'assets/js/adder.js' %}></script>
 

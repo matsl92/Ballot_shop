@@ -40,12 +40,12 @@
 
       <div class="profile">
         <img src={% static "assets/img/short-600.jpg" %} alt="" class="img-fluid rounded-circle">
-        <h1 class="text-light"><a href="index.html">El Altar - Taquería</a></h1>
+        <h1 class="text-light"><a href={% url 'store:home' %}>El Altar - Taquería</a></h1>
         <div class="social-links mt-4 text-center">
           
           <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-          <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-          <a href="#" class="whatsapp"><i class="bx bxl-whatsapp"></i></a>
+          <a href="https://instagram.com/elaltar_?igshid=YmMyMTA2M2Y=" class="instagram"><i class="bx bxl-instagram"></i></a>
+          <a href="https://wa.me/573042977894" class="whatsapp"><i class="bx bxl-whatsapp"></i></a>
           
         </div>
       </div>
@@ -53,8 +53,8 @@
       <hr style="color:#fff;">
       <nav id="navbar" class="nav-menu navbar">
         <ul>
-          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
-          <li><a href="#facts" class="nav-link scrollto"><i class="bx bx-heart"></i> <span>Quiero tacos todo el año!</span></a></li>
+          <li><a href={% url 'store:home' %} class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
+          <li><a href="{% url 'store:home' %}#services" class="nav-link scrollto"><i class="bx bx-heart"></i> <span>Quiero tacos GRATIS!</span></a></li>
           <li><a href="#" class="nav-link scrollto"><i class="bx bx-phone"></i> <span>(+57) 300-00-00</span></a></li>
           <!-- <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
           <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Services</span></a></li>
@@ -73,7 +73,7 @@
         <div class="d-flex justify-content-between align-items-center">
           <h2>Facturación</h2>
           <ol>
-            <li><a href="index.html">Home</a></li>
+            <li><a href={% url 'store:home' %}>Home</a></li>
             <li>Facturación</li>
           </ol>
         </div>
@@ -106,14 +106,20 @@
 
 
                     <!-- ======= Elementos necesarios para la validación del código. ids necesarios======= -->                    
-
-                    <input type="text" id="discount_code" name="discount_code" value="">
-                    <input type="button" id="code-validator" value="Validar">
-                    <div id="discount-code-message"></div>   
-
-
-
-                    <p id="discount-values"></p>
+                    <div class="row">
+                      <div class="col-md-8">
+                        <input type="text" id="discount_code" name="discount_code" value="" class="form-control">
+                      </div>
+                      <div class="col-md-4">
+                        <input type="button" id="code-validator" value="Validar" class="btn btn-dark">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-10">
+                        <p id="discount-code-message"></p> 
+                      </div>
+                    </div>
+                    {% comment %} <p id="discount-values">$ {{ subtotal }}</p> {% endcomment %}
                   </div>
     
                   <div class="phone">
@@ -148,8 +154,8 @@
                   </div>
                   <div class="my-3">
                     <div class="loading">Cargando</div>
-                    <div class="error-message">Estado NO OK -------- !</div>
-                    <div class="sent-message">Estado OK -------- !</div>
+                    <div class="error-message">Error en formulario</div>
+                    <div class="sent-message">Formulario válido</div>
                   </div>
                   <div class="text-center"><button type="submit" id="form-submitter">Pagar</button></div>
                 </form>

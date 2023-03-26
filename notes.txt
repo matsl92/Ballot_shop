@@ -1,8 +1,6 @@
 PRIMARY
 
-Modificar tiempos
-
-Imagen de epayco en botón
+display error notification when a ballot is no longer available
 
 Definir STR methods y ocultar campos en admin
 
@@ -26,8 +24,9 @@ Variables de entorno
 
 
 
-
 SECONDARY
+
+Imagen de epayco en botón
 
 Simplify client form so that its form will reject almost nothing
 
@@ -57,6 +56,10 @@ use .env in production
 
 
 DONE
+
+Prevent form submition without checked ballots
+
+Modificar tiempos
 
 Modify client model to be easier to satisfy
 

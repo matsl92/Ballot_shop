@@ -78,6 +78,9 @@ class Transaccion(models.Model):
     x_description = models.CharField(max_length=100, default=None, null=True, blank=True)
     x_response = models.CharField(max_length=100, default=None, null=True, blank=True)
     
+    def __str__(self):
+        return f"Transacción {self.id}"
+    
 class Balota(models.Model):
     number = models.IntegerField('Número')
     price = models.PositiveIntegerField('Precio', default=10000)

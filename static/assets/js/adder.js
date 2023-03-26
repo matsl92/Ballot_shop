@@ -23,29 +23,31 @@ const formSubmitter = document.querySelector('#form-submitter');
 
 // PRODUCTION
 
-// const codeValidationURL = 'https://web-production-aea2.up.railway.app/code_validation/';
+const codeValidationURL = 'https://web-production-aea2.up.railway.app/code_validation/';
 
-// const linkCreationURL = 'https://web-production-aea2.up.railway.app/bill/';
+const linkCreationURL = 'https://web-production-aea2.up.railway.app/bill/';
 
 
 // LOCALHOST
 
-const codeValidationURL = 'http://127.0.0.1:8000/code_validation/';
+// const codeValidationURL = 'http://127.0.0.1:8000/code_validation/';
 
-const linkCreationURL = 'http://127.0.0.1:8000/bill/';
+// const linkCreationURL = 'http://127.0.0.1:8000/bill/';
 
 
 
 // Prevent Double Submits
-document.querySelectorAll('form').forEach(form => {
+document.querySelectorAll('#personal-data-form').forEach(form => {
 	form.addEventListener('submit', (e) => {
 		// Prevent if already submitting
 		if (form.classList.contains('is-submitting')) {
 			e.preventDefault();
+            console.log('Prevented default');
 		}
 		
 		// Add class to hook our visual indicator on
 		form.classList.add('is-submitting');
+        console.log('added class is-submitting');
 	});
 });
 
@@ -86,10 +88,10 @@ function validateCode() {
             // console.log('after validation request');
             // console.log(data);
             if (data.percentage) {
-                messageDiv.innerText = `El código es valido`;
                 let discountValue = billSubtotal * (data.percentage/100);
                 let billTotal = billSubtotal - discountValue;
-                document.querySelector('#discount-values').innerText = `${data.percentage}% - $ ${discountValue}`;
+                messageDiv.innerText = `${data.percentage}% = $ ${discountValue}`;
+                // document.querySelector('#discount-values').innerText = `${data.percentage}% - $ ${discountValue}`;
                 document.querySelector('#bill-total').innerText = billTotal; 
             } else if (data.error) {
                 // console.log(data);
