@@ -15,22 +15,6 @@ function modifyPrice() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const billGenerator = document.querySelector('#bill-generator');
 const codeValidator = document.querySelector('#code-validator');
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -49,6 +33,21 @@ const formSubmitter = document.querySelector('#form-submitter');
 const codeValidationURL = 'http://127.0.0.1:8000/code_validation/';
 
 const linkCreationURL = 'http://127.0.0.1:8000/bill/';
+
+
+
+// Prevent Double Submits
+document.querySelectorAll('form').forEach(form => {
+	form.addEventListener('submit', (e) => {
+		// Prevent if already submitting
+		if (form.classList.contains('is-submitting')) {
+			e.preventDefault();
+		}
+		
+		// Add class to hook our visual indicator on
+		form.classList.add('is-submitting');
+	});
+});
 
 
 
@@ -105,7 +104,10 @@ function validateCode() {
 }
 
 
-codeValidator.addEventListener('click', validateCode, false);
+if (codeValidator) {
+
+    codeValidator.addEventListener('click', validateCode, false);
+}
 
 
 
@@ -138,5 +140,9 @@ function addMissingFields() {
 }
 
 
-formSubmitter.addEventListener('click', addMissingFields);
+if (formSubmitter) {
+    
+    formSubmitter.addEventListener('click', addMissingFields);
+}
+
 

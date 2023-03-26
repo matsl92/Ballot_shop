@@ -44,11 +44,10 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 
 # Production
 # confirmation_url = "https://web-production-aea2.up.railway.app/epayco_confirmation"
-# response_base_url = "https://web-production-aea2.up.railway.app/epayco_response/"
+# response_base_url = "https://web-production-aea2.up.railway.app"
 
 # Localhost
 confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-# response_base_url = "http://127.0.0.1:8000/epayco_response/"
 response_base_url = "http://127.0.0.1:8000"
 
 
@@ -57,7 +56,6 @@ response_base_url = "http://127.0.0.1:8000"
 url_base = '//'.join([confirmation_url.split('/')[0], confirmation_url.split('/')[2]])
 
 from .tools import (
-    get_ballot_ids_from_x_description, 
     make_transaction_description, 
     get_values_from_transaction_description
 )
@@ -230,8 +228,6 @@ class BalotaListView(ListView):
     model = Balota
 
 def home(request):
-    # print(request.GET.dict())
-    
     transaction_status = ''
     
     link = ''
@@ -264,7 +260,7 @@ def home(request):
             
     except:
         
-        print('exception')
+        print('exception, probably is not a redirection as epayco_response')
         
         pass
     
@@ -392,8 +388,8 @@ def fetch_api(request):
         for ballot in ballots:
             if ballot.transaction != None:
                 print('4, not all ballots were available')
-                # messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haga su selección nuevamente.')
-                return redirect('store:balotas') # this redirect should send the user and not just the fetch request       
+                messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haz tu selección nuevamente.')
+                return redirect('store:home') # this redirect should send the user and not just the fetch request       
         
         transaction = Transaccion(client=client, discount=discount, value_1=value_1, value_2 = value_2)
         transaction.save()
@@ -401,11 +397,14 @@ def fetch_api(request):
         for ballot in ballots:
             transaction.balota_set.add(ballot)
             transaction.valid_until = transaction.created_at + ballot.unavailable_time
+        transaction.save()
         
         if value_2 == 0:
             transaction.status = 1
             transaction.save()
-            link = reverse('store:epayco_response', kwargs={'transaction_id': transaction.id})
+            # link = reverse('store:epayco_response', kwargs={'transaction_id': transaction.id})
+            link = reverse('store:home')
+            link += '?tr_pk=' + str(transaction.pk)
             return redirect(link)
         
         else: 

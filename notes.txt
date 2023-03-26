@@ -27,7 +27,6 @@ Variables de entorno
 
 
 
-
 SECONDARY
 
 Simplify client form so that its form will reject almost nothing
@@ -58,6 +57,8 @@ use .env in production
 
 
 DONE
+
+Modify client model to be easier to satisfy
 
 Solve transaction description with ids and numbers
 

@@ -45,8 +45,8 @@ class Rifa(models.Model):
 class Cliente(models.Model):
     first_name = models.CharField('Nombre', max_length=100)
     last_name = models.CharField('Apellido', max_length=100)
-    email = models.EmailField('Correo electrónico')
-    phone_number = PhoneNumberField('Número de celular')
+    email = models.CharField('Correo electrónico', max_length=100)
+    phone_number = models.PositiveIntegerField('Número de celular')
     
     def __str__(self):
         return self.first_name
