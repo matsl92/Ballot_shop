@@ -18,7 +18,9 @@ download template and make it work for welcoming view
 
 SECONDARY
 
+Simplify client form so that its form will reject almost nothing
 
+Must hendle fetch_api's redirections when the process is not absolutely completed
 
 
 

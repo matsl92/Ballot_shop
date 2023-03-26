@@ -48,7 +48,8 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 
 # Localhost
 confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-response_base_url = "http://127.0.0.1:8000/epayco_response/"
+# response_base_url = "http://127.0.0.1:8000/epayco_response/"
+response_base_url = "http://127.0.0.1:8000"
 
 
 # VARIABLES AND FUNCTIONS
@@ -85,13 +86,9 @@ def epayco_get_transaction_link(value_2, transaction, ballots, client):
         "title": "Link de cobro",
         "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
         "tax": "0", 
-        "email": client.email,
-        'extra': transaction.id,
-        "extra1": transaction.id,
-        "extra2": ", ".join([str(ballot.id) for ballot in ballots]),
         "urlConfirmation": confirmation_url, 
-        "urlResponse": response_base_url + str(transaction.id), 
-        "methodConfirmation": "GET", # request.method = 'POST' anyway
+        "urlResponse": response_base_url + '?tr_pk=' + str(transaction.id), 
+        "methodConfirmation": "GET", # request.method = 'POST' anyway ?tr_id=
         "expirationDate": timezone.localtime(transaction.valid_until).strftime('%Y-%m-%d %H:%M:%S'),    # Format Date Time UTC payment link expiration date 
     })
     
@@ -228,6 +225,30 @@ class BalotaListView(ListView):
     model = Balota
 
 def home(request):
+    print(request.GET.dict())
+    if request.GET.dict()['tr_pk']:
+        transaction = Transaccion.objects.get(id=int(request.GET.dict()['tr_pk']))
+    
+        if not transaction.payment_link:  
+            if transaction.status == 1:
+                context = {'transaction': transaction}
+                return render(request, 'store/response.html', context)
+            
+        else:
+            encoded_ref_payco = request.GET.dict()['ref_payco']
+            url = 'https://secure.epayco.co/validation/v1/reference/' + encoded_ref_payco
+            response = requests.request("GET", url)
+            data = response.json()['data']
+            data['view_link'] = ''.join([url_base, request.get_full_path()])
+            
+            handle_transaction_response(data)
+            
+            transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
+            
+            context = {'transaction': transaction, 'data':data}
+            
+            return render(request, 'store/response.html', context)
+    
     lottery = Rifa.objects.get(id=1)
     unbind_ballots(lottery)
     
@@ -304,7 +325,6 @@ def code_validation(request):
 
 def fetch_api(request):
     if request.method=='POST':
-        print(request.POST)
         body = {
             'first_name': request.POST['first_name'], 
             'last_name': request.POST['last_name'], 
@@ -329,7 +349,6 @@ def fetch_api(request):
         value_2 = value_1
         discount_code = body['discount_code']
         discount = None
-        discount_id = None
         if discount_code != '':
             if discount_code in [
                 discount.discount_code for discount in Descuento.objects.filter(
@@ -337,7 +356,6 @@ def fetch_api(request):
                 ).filter(status=True)
             ]:
                 discount = Descuento.objects.get(discount_code=discount_code)
-                discount_id = discount.id
                 value_2 = int(value_1 * (1 - discount.percentage/100))
                 # print('3, valid code: ', value_2)
                 # messages.success(request, f'El código es válido, se aplicó un descuento del {discount.porcentaje}%.')
@@ -359,26 +377,10 @@ def fetch_api(request):
             transaction.valid_until = transaction.created_at + ballot.unavailable_time
         
         if value_2 == 0:
-            context = {'ballots': ballots, 'client': client}
             transaction.status = 1
             transaction.save()
             link = reverse('store:epayco_response', kwargs={'transaction_id': transaction.id})
-            return JsonResponse({
-                'value_1': value_1, 
-                'value_2': value_2, 
-                'client': {
-                    'name': client.first_name, 
-                    'lastname': client.last_name, 
-                    'email': client.email, 
-                    'phone_number': client.phone_number.national_number, 
-                    'id': client.id
-                }, 
-                'ballot_numbers': [ballot.number for ballot in ballots], 
-                'discount_id': discount_id, 
-                'link': link
-            })
-            return render(request, 'store/response.html', context) # return link with client id to response page
-        
+            return redirect(link)
         
         else: 
             
@@ -386,20 +388,6 @@ def fetch_api(request):
             transaction.payment_link = link
             transaction.save()
             return redirect(link)
-            return JsonResponse({
-                'value_1': value_1, 
-                'value_2': value_2, 
-                'client': {
-                    'name': client.first_name, 
-                    'lastname': client.last_name, 
-                    'email': client.email, 
-                    'phone_number': client.phone_number.national_number,
-                    'id': client.id
-                }, 
-                'ballot_numbers': [ballot.number for ballot in ballots], 
-                'discount_id': discount_id, 
-                'link': link
-            })
 
 # def fetch_api(request):
 #     if request.method=='POST':
