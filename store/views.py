@@ -56,7 +56,11 @@ response_base_url = "http://127.0.0.1:8000"
 
 url_base = '//'.join([confirmation_url.split('/')[0], confirmation_url.split('/')[2]])
 
-from .tools import get_ballot_ids_from_x_description
+from .tools import (
+    get_ballot_ids_from_x_description, 
+    make_transaction_description, 
+    get_values_from_transaction_description
+)
      
 # ePayco_confirmation_time = timedelta(hours=3, minutes=30) 
 ePayco_confirmation_time = timedelta(seconds=5) 
@@ -82,7 +86,8 @@ def epayco_get_transaction_link(value_2, transaction, ballots, client):
         "currency": "COP",
         "id": 0,  # Debe ser único, si se envia cero, epayco genera uno automaticamente
         "base": "0",
-        "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.number for ballot in ballots]}", # add ids
+        "description": make_transaction_description(ballots, transaction), 
+        # "description": f"{transaction.id} Compra de balotas. Numeros: {[ballot.number for ballot in ballots]}", # add ids
         "title": "Link de cobro",
         "typeSell": "2", # 1 for email payment, 2 for via link, 3 via mobile SMS, 4 via social networks
         "tax": "0", 
@@ -149,12 +154,15 @@ def unbind_ballots(lottery):
 
 def handle_transaction_response(data):
     
-    # data comes from a simple request for epayco_response
-    # but comes from an epayco request for epayco_confirmation since
-    # we don't have the encoded_ref_payco
+    # epayco_response gets data from a simple request 
+    # but epayco_confirmation makes a more complex process since it doesn't
+    # have that encoded ref_payco
     
+    purchase_details = get_values_from_transaction_description(data['x_description'])
+    print(purchase_details)
     x_response = data['x_response']
-    transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
+    transaction = Transaccion.objects.get(id=purchase_details['transaction_id'])
+    # transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
     transaction.x_description = data['x_description']
     transaction.x_ref_payco = data['x_ref_payco']
     transaction.validated_value = int(data['x_amount'])
@@ -194,11 +202,8 @@ def handle_transaction_response(data):
         
             unavailable_ballot_ids = []
             
-            ballots = [
-                Balota.objects.get(id=id) for id in get_ballot_ids_from_x_description(
-                    data['x_description']
-                )
-            ]
+            ballots = [Balota.objects.get(id=id) for id in purchase_details['ballot_ids']]
+            
             for ballot in ballots:
                 
                 if ballot.transaction == None or ballot.transaction == transaction:
@@ -225,7 +230,7 @@ class BalotaListView(ListView):
     model = Balota
 
 def home(request):
-    print(request.GET.dict())
+    # print(request.GET.dict())
     
     transaction_status = ''
     
@@ -233,12 +238,12 @@ def home(request):
     
     try:
         transaction = Transaccion.objects.get(id=int(request.GET.dict()['tr_pk']))
-    
+
         if not transaction.payment_link:  
             if transaction.status == 1:
                 transaction_status = 'Aceptada'
                 
-                print('100%')
+                print('100% discount')
             
         else:
             encoded_ref_payco = request.GET.dict()['ref_payco']

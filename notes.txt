@@ -1,6 +1,12 @@
 PRIMARY
 
-actualizar archivos html
+Modificar tiempos
+
+Imagen de epayco en botón
+
+Definir STR methods y ocultar campos en admin
+
+Variables de entorno
 
 
 
@@ -8,9 +14,6 @@ actualizar archivos html
 
 
 
-Solve transaction description with ids and numbers
-
-Ballot price must be dinamic
 
 
 
@@ -18,7 +21,10 @@ Ballot price must be dinamic
 
 
 
-download template and make it work for welcoming view
+
+
+
+
 
 
 
@@ -53,6 +59,10 @@ use .env in production
 
 DONE
 
+Solve transaction description with ids and numbers
+
+Ballot price must be dinamic
+
 generate link and redirect
 
 Ballots can be checked and total is dinamic
@@ -60,6 +70,8 @@ Ballots can be checked and total is dinamic
 keep the user from hitting the button before filling in all the required fields
 
 make basic changes and then test
+
+download template and make it work for welcoming view
 
 Lottery fields name __str__, description=optional, sociedad=ForeignKey
 
