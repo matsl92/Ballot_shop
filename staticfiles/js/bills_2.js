@@ -22,9 +22,9 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 // Camilo
 
-const codeValidationURL = 'https://web-production-ec2a.up.railway.app/code_validation/';
+const codeValidationURL = 'https://web-production-31f8.up.railway.app/code_validation/';
 
-const linkCreationURL = 'https://web-production-ec2a.up.railway.app/bill/';
+const linkCreationURL = 'https://web-production-31f8.up.railway.app/bill/';
 
 
 // LOCALHOST
