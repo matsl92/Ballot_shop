@@ -6,7 +6,9 @@ Definir STR methods y ocultar campos en admin
 
 Variables de entorno
 
+Add image icon so that it appears when the link is shortnamed
 
+Add pagination and display ballots in several columns for mobile
 
 
 

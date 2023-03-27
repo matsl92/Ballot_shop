@@ -12,6 +12,7 @@ from .forms import ClienteForm
 from .models import Cliente, Balota, Transaccion, Descuento, EpaycoLateConfirmation, Rifa
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
+from .strings import message_mapper 
 import os
 from dotenv import load_dotenv
 
@@ -224,11 +225,21 @@ class BalotaListView(ListView):
 
 def home(request):
     print(request.GET.dict())
-    empty = ''
+    
+    dictionary = {}
     try:
-        empty = request.GET.dict()['empty']
+        msg = request.GET.dict()['msg']
+        data = message_mapper[msg]
+        context['data'] = data
     except:
         pass
+    
+    
+    # empty = ''
+    # try:
+    #     empty = request.GET.dict()['empty']
+    # except:
+    #     pass
     transaction_status = ''
     
     link = ''
@@ -276,8 +287,11 @@ def home(request):
     
     print(transaction_status)
     context = {
-        'ballots': ballot_list, 'transaction_status': transaction_status, 
-        'link':link, 'ballot_price': ballot_price, 'empty': empty
+        'ballots': ballot_list, 
+        'transaction_status': transaction_status, 
+        'link':link, 
+        'ballot_price': ballot_price, 
+        **dictionary
     }
     return render(request, 'store/index_2.html', context)
 
@@ -378,6 +392,8 @@ def fetch_api(request):
             if ballot.transaction != None:
                 print('4, not all ballots were available')
                 messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haz tu selección nuevamente.')
+                link = redirect('store:home')
+                link += '?err=unb'
                 return redirect('store:home')       
         
         transaction = Transaccion(client=client, discount=discount, value_1=value_1, value_2 = value_2)

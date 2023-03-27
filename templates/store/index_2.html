@@ -238,7 +238,8 @@
   
   <script>
     const bP = {{ ballot_price|safe }}
-
+    const data = {{ data|safe }}
+    
     const empty = "{{ empty|safe }}";
     const toastTrigger = "{{ transaction_status|safe }}";
     const toastLiveExample = document.getElementById('notification');
