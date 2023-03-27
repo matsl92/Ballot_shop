@@ -1,4 +1,10 @@
-// const ballotPrice = 10000;
+const data2 = JSON.parse(
+    document.getElementById('context-variables').textContent
+);
+
+console.log(data2);
+
+const bP = data2.ballot_price;
 
 function modifyPrice() {
     let total = 0;
@@ -62,7 +68,11 @@ function getNumberOutOfString(string) {
 }
 
 
+const bId = data2;
 function validateCode() {
+    console.log(data2);
+    console.log(bId);
+    console.log('hey there');
     let messageDiv = document.querySelector('#discount-code-message');
     let discountCode = document.querySelector('#discount_code').value;
     let billSubtotal = parseInt(getNumberOutOfString(document.querySelector('#bill-subtotal').innerText));

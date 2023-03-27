@@ -221,8 +221,6 @@ def handle_transaction_response(data):
 # VIEWS  
 
 def home(request):
-    print(request.GET.dict())
-    
     
     js_variables = {'msg':['', '']}
     
@@ -260,10 +258,6 @@ def home(request):
         
         pass
     
-    
-    
-    
-    
     try:
         key = request.GET.dict()['msg']
         js_variables['msg'] = message_mapper[key]
@@ -274,28 +268,19 @@ def home(request):
     
     
     lottery = Rifa.objects.first()
+    
     unbind_ballots(lottery)
     
     ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:30]
+    
     try:
         js_variables['ballot_price'] = ballot_list[0].price
     except:
         js_variables['ballot_price'] = 1000000
-        
-        
-    # js_variables = {
-    #     'msg': '', 
-    #     'ballot_price': 10000, 
     
+    context = {'ballots': ballot_list, 'js_variables': js_variables}
     
-    #     'link': 'www.google.com'
-    # }
-    
-    context = {
-        'ballots': ballot_list, 
-        'js_variables': js_variables
-    }
-    return render(request, 'store/test_index_2.html', context)
+    return render(request, 'store/index.html', context)
     
 def datos_personales(request):
     if request.method == 'POST':
@@ -305,8 +290,8 @@ def datos_personales(request):
             subtotal = 0
             for ballot in ballots:
                 subtotal += ballot.price
-            context = {'balota_ids': balota_ids, 'ballots': ballots, 'subtotal': subtotal}
-            return render(request, 'store/form_2.html', context)
+            context = {'bId': balota_ids, 'ballots': ballots, 'subtotal': subtotal}
+            return render(request, 'store/form.html', context)
         except:
             url = reverse('store:home')
             return redirect(url + '?msg=empty')
@@ -331,6 +316,7 @@ def code_validation(request):
 
 def fetch_api(request):
     if request.method=='POST':
+        print(request.POST)
         body = {
             'first_name': request.POST['first_name'], 
             'last_name': request.POST['last_name'], 

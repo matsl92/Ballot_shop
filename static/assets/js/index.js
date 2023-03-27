@@ -1,11 +1,8 @@
 const data = JSON.parse(
-    document.currentScript.nextElementSibling.textContent
+    document.getElementById('context-variables').textContent
 );
 
 console.log(data);
-
-// const bP = {{ ballot_price|safe }}
-// const data = {{ data|safe }}
 
 const toastTrigger = data.msg[0];
 
@@ -91,3 +88,8 @@ if (toastTrigger == 'suc') {
   
     toast.show();
   }
+
+
+
+
+
