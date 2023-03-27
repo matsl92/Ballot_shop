@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href={% static "assets/img/logo32.png" %} rel="icon">
+</head>
+<body>
+    <h1>This is test view</h1>
+
+    <script src="{% static 'assets/js/test.js' %}" defer></script>
+    {{ js_variables|json_script }}
+
+</body>
+</html>
+
+
+
+<div class="toast-header">
+    <i class="bi bi-check"></i>
+    <strong class="me-auto"> Transacción Aprobada</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+</div>
+<div class="toast-body text-white">
+Hola, tu compra fue exitosa!
+</div>
+
+
+
+
+<div class="toast-header">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <strong class="me-auto"> Transacción Pendiente</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+</div>
+<div class="toast-body">
+    Tu banco ha puesto la transacción en estado pendiente.<br><strong>Te pedimos estar atento al proceso.</strong>
+</div>

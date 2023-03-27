@@ -42,12 +42,12 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 # EPAYCO RESPONSE LINKS
 
 # Production
-confirmation_url = "https://web-production-31f8.up.railway.app/epayco_confirmation"
-response_base_url = "https://web-production-31f8.up.railway.app"
+# confirmation_url = "https://web-production-31f8.up.railway.app/epayco_confirmation"
+# response_base_url = "https://web-production-31f8.up.railway.app"
 
 # Localhost
-# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-# response_base_url = "http://127.0.0.1:8000"
+confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+response_base_url = "http://127.0.0.1:8000"
 
 
 # VARIABLES AND FUNCTIONS
@@ -219,37 +219,20 @@ def handle_transaction_response(data):
     
     
 # VIEWS  
-        
-class BalotaListView(ListView):
-    model = Balota
 
 def home(request):
     print(request.GET.dict())
     
-    dictionary = {}
-    try:
-        msg = request.GET.dict()['msg']
-        data = message_mapper[msg]
-        context['data'] = data
-    except:
-        pass
     
-    
-    # empty = ''
-    # try:
-    #     empty = request.GET.dict()['empty']
-    # except:
-    #     pass
-    transaction_status = ''
-    
-    link = ''
+    js_variables = {'msg':['', '']}
     
     try:
+        """" Epeyco response """
         transaction = Transaccion.objects.get(id=int(request.GET.dict()['tr_pk']))
 
         if not transaction.payment_link:  
             if transaction.status == 1:
-                transaction_status = 'Aceptada'
+                js_variables['msg'] = message_mapper['Aceptada']
                 
                 print('100% discount')
             
@@ -262,65 +245,58 @@ def home(request):
             
             handle_transaction_response(data)
             
-            transaction_status = data['x_response']
+            js_variables['msg'] = message_mapper[data['x_response']]
             
-            if transaction_status == 'Rechazada' or transaction_status == 'Fallida':
-                link = transaction.payment_link
+            if data['x_response'] == 'Rechazada' or data['x_response'] == 'Fallida':
+                js_variables['link'] = transaction.payment_link
+                
                 print('includes link')
             
             print("not 100% discount")
             
     except:
         
-        print('exception, probably is not a redirection as epayco_response')
+        print('Not and epayco response')
         
         pass
     
-    lottery = Rifa.objects.get(id=1)
+    
+    
+    
+    
+    try:
+        key = request.GET.dict()['msg']
+        js_variables['msg'] = message_mapper[key]
+        
+    except:
+        print('Not msg in GET')
+        pass
+    
+    
+    lottery = Rifa.objects.first()
     unbind_ballots(lottery)
     
     ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:30]
     try:
-        ballot_price = ballot_list[0].price
+        js_variables['ballot_price'] = ballot_list[0].price
     except:
-        ballot_price = 1000000
+        js_variables['ballot_price'] = 1000000
+        
+        
+    # js_variables = {
+    #     'msg': '', 
+    #     'ballot_price': 10000, 
     
-    print(transaction_status)
+    
+    #     'link': 'www.google.com'
+    # }
+    
     context = {
         'ballots': ballot_list, 
-        'transaction_status': transaction_status, 
-        'link':link, 
-        'ballot_price': ballot_price, 
-        **dictionary
+        'js_variables': js_variables
     }
-    return render(request, 'store/index_2.html', context)
-
-def form(request):
-    if request.method == 'POST':   
-        # form = ClienteForm()
-        balota_ids = dict(request.POST).get('id')
-        ballots = [Balota.objects.get(id=id) for id in balota_ids]
-        subtotal = 0
-        for ballot in ballots:
-            subtotal += ballot.price
-        context = {'balota_ids': balota_ids, 'ballots': ballots, 'subtotal': subtotal}
-        return render(request, 'store/form_2.html', context)
-
-def lottery_list(request):
-    object_list = Rifa.objects.all()
-    context = {'object_list': object_list}
-    return render(request, 'store/lottery_list.html', context)
+    return render(request, 'store/test_index_2.html', context)
     
-def balotas(request):
-    # lottery  = Rifa.objects.get(id=request.GET['lottery_id'])
-    lottery = Rifa.objects.get(id=1)
-    unbind_ballots(lottery)
-    
-    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:15]
-        
-    context = {'ballot_package': ballot_list}
-    return render(request, 'store/balota_list.html', context)
-
 def datos_personales(request):
     if request.method == 'POST':
         try:
@@ -333,7 +309,7 @@ def datos_personales(request):
             return render(request, 'store/form_2.html', context)
         except:
             url = reverse('store:home')
-            return redirect(url + '?empty=empty')
+            return redirect(url + '?msg=empty')
 
 def code_validation(request):
     discount_code = json.loads(request.body)['discount_code']
@@ -392,9 +368,9 @@ def fetch_api(request):
             if ballot.transaction != None:
                 print('4, not all ballots were available')
                 messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haz tu selección nuevamente.')
-                link = redirect('store:home')
-                link += '?err=unb'
-                return redirect('store:home')       
+                link = reverse('store:home')
+                link += '?msg=unavailable'
+                return redirect(link)       
         
         transaction = Transaccion(client=client, discount=discount, value_1=value_1, value_2 = value_2)
         transaction.save()
@@ -418,30 +394,6 @@ def fetch_api(request):
             transaction.save()
             return redirect(link)
 
-def epayco_response(request, transaction_id):   # For the client
-     
-    transaction = Transaccion.objects.get(id=transaction_id)
-    
-    if not transaction.payment_link:  
-        if transaction.status == 1:
-            context = {'transaction': transaction}
-            return render(request, 'store/response.html', context)
-        
-    else:
-        encoded_ref_payco = request.GET.dict()['ref_payco']
-        url = 'https://secure.epayco.co/validation/v1/reference/' + encoded_ref_payco
-        response = requests.request("GET", url)
-        data = response.json()['data']
-        data['view_link'] = ''.join([url_base, request.get_full_path()])
-        
-        handle_transaction_response(data)
-        
-        transaction = Transaccion.objects.get(id=int(data['x_description'].split(' ')[0]))
-        
-        context = {'transaction': transaction, 'data':data}
-        
-        return render(request, 'store/response.html', context)
-
 @csrf_exempt
 def epayco_confirmation(request):
     print('_'*20)
@@ -463,3 +415,15 @@ def epayco_confirmation(request):
     
     print('Doneee!')
     return response
+
+def test_view(request):
+    js_variables = {
+        'transaction_status': 'aceptada', 
+        'link': 'https://railway.com', 
+    }
+    context = { 
+        'ballots': 'all_ballots', 
+        'follower_count': 30, 
+        'js_variables': js_variables
+    }
+    return render(request, 'store/test.html', context)
