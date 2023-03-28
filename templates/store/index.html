@@ -131,12 +131,12 @@
           
         <form action={% url 'store:datos_personales' %} method="post" id="ballot-form">
             {% csrf_token %}
-            <div class="row justify-content-center mx-5 px-5">
+            <div class="row text-center d-flex justify-content-center gx-0">
                 
 
                 {% for ballot in ballots %}
 
-                <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                <div class="col-auto icon-box" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
                     <div class="icon">
                         <input class="balota-input" type="checkbox" name='id' id="{{ ballot.id }}" value="{{ ballot.id }}" onclick="modifyPrice()">
                         <label class="balota-label icon" for={{ ballot.id }}>

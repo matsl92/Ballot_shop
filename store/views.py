@@ -403,33 +403,29 @@ def epayco_confirmation(request):
     print('Doneee!')
     return response
 
-# def test_view(request):
-#     object_list = []
-#     for i in range(100):
-#         object_list.append(i)
+def test_view(request):
     
-    
-#     package = []
-#     n_slides = a = math.ceil(21/5)
-    
-    
-#     count = 0
-#     for i in range(n_slides):
-#         slide = []
-#         for j in range(32):
-#             slide.append(object_list[count])
-#             count += 1
-#             if count == len(object_list):
-#                 break
-#         package.append(slide)
-        
-        
-    
-#     for i in range(len(object_list)):
-#         sub.append(object_list[i])
+    object_list = []
+    for i in range(100):
+        object_list.append(i)
+
+    n_ballots = 32
+    n_slides = math.ceil(len(object_list)/n_ballots)
+
+    package = []
+
+    count = 0
+    for i in range(n_slides):
+        slide = []
+        for j in range(n_ballots):
+            slide.append(object_list[count])
+            count += 1
+            if count == len(object_list):
+                break
+        package.append(slide)
         
         
         
             
-    context = {'object_list': object_list}
+    context = {'packaga': package}
     return render(request, 'store/test.html', context)

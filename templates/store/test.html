@@ -130,50 +130,7 @@
 
 
 
-        <!-- Swiper -->
-        <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
-
-                <div class="swiper-slide slide">
-                    <span>Tienes una cita a las 8:30</span>
-                    <a href="" class="a">Detalles</a>
-                </div>
-                <div class="swiper-slide slide">
-                    <span>Tienes una cita a las 8:30</span>
-                    <a href="" class="a">Detalles</a>
-                </div>
-                <div class="swiper-slide slide">
-                    <span>Tienes una cita a las 8:30</span>
-                    <a href="" class="a">Detalles</a>
-                </div>
-                <div class="swiper-slide">
-
-                </div>
-                <div class="swiper-slide">
-                    <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
-                        <div class="icon"><i class="bi">1</i></div>
-                    </div>
-                    <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
-                        <div class="icon"><i class="bi">1</i></div>
-                    </div>
-                    <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
-                        <div class="icon"><i class="bi">1</i></div>
-                    </div>
-                    <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="400">
-                        <div class="icon"><i class="bi">1</i></div>
-                    </div>
-                    <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
-                        <div class="icon"><i class="bi">1</i></div>
-                    </div>
-                    <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="600">
-                        <div class="icon"><i class="bi">1</i></div>
-                    </div>
-                </div>
-                </div>
-
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
+        
 
 
 
@@ -193,23 +150,26 @@
             <div class="row justify-content-center mx-5 px-5">
                 
 
-                {% for ballot in object_list %}
-
-                <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-                    <div class="icon">
-                        <input class="balota-input" type="checkbox" name='id' id="{{ ballot }}" value="{{ ballot }}" onclick="modifyPrice()">
-                        <label class="balota-label icon" for={{ ballot }}>
-                            <i class="bi">{{ ballot }}</i>
-                        </label>
+                <!-- Swiper -->
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        {% for group in package %}
+                        <div class="swiper-slide slide">
+                            {% for ballot in group %}
+                            <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                                <div class="icon">
+                                    <input class="balota-input" type="checkbox" name='id' id="{{ ballot }}" value="{{ ballot }}" onclick="modifyPrice()">
+                                    <label class="balota-label icon" for={{ ballot }}>
+                                        <i class="bi">{{ ballot }}</i>
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
                     </div>
+                    {% comment %} <div class="swiper-pagination"></div> {% endcomment %}
                 </div>
-
-                {% comment %} <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
-                    <div class="icon"><i class="bi">{{ ballot }}</i></div>
-                </div> {% endcomment %}
-
-
-                {% endfor %}
 
                 
                 
