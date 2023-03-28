@@ -43,12 +43,12 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 # EPAYCO RESPONSE LINKS
 
 # Production
-# confirmation_url = "https://web-production-31f8.up.railway.app/epayco_confirmation"
-# response_base_url = "https://web-production-31f8.up.railway.app"
+confirmation_url = "https://web-production-31f8.up.railway.app/epayco_confirmation"
+response_base_url = "https://web-production-31f8.up.railway.app"
 
 # Localhost
-confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-response_base_url = "http://127.0.0.1:8000"
+# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+# response_base_url = "http://127.0.0.1:8000"
 
 
 # VARIABLES AND FUNCTIONS
@@ -414,6 +414,7 @@ def test_view(request):
 
     package = []
 
+    
     count = 0
     for i in range(n_slides):
         slide = []
@@ -423,9 +424,9 @@ def test_view(request):
             if count == len(object_list):
                 break
         package.append(slide)
-        
+    print(package)
         
         
             
-    context = {'packaga': package}
+    context = {'package': package}
     return render(request, 'store/test.html', context)
