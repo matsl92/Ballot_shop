@@ -1,5 +1,6 @@
 import json
 import requests
+import math
 from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
@@ -402,14 +403,33 @@ def epayco_confirmation(request):
     print('Doneee!')
     return response
 
-def test_view(request):
-    js_variables = {
-        'transaction_status': 'aceptada', 
-        'link': 'https://railway.com', 
-    }
-    context = { 
-        'ballots': 'all_ballots', 
-        'follower_count': 30, 
-        'js_variables': js_variables
-    }
+# def test_view(request):
+#     object_list = []
+#     for i in range(100):
+#         object_list.append(i)
+    
+    
+#     package = []
+#     n_slides = a = math.ceil(21/5)
+    
+    
+#     count = 0
+#     for i in range(n_slides):
+#         slide = []
+#         for j in range(32):
+#             slide.append(object_list[count])
+#             count += 1
+#             if count == len(object_list):
+#                 break
+#         package.append(slide)
+        
+        
+    
+#     for i in range(len(object_list)):
+#         sub.append(object_list[i])
+        
+        
+        
+            
+    context = {'object_list': object_list}
     return render(request, 'store/test.html', context)

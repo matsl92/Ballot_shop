@@ -10,7 +10,7 @@ const toastLiveExample = document.getElementById('notification');
 const toast = new bootstrap.Toast(toastLiveExample,{
     delay: 10000
 });
-const link = "{{ link|safe }}"
+// const link = "{{ link|safe }}"
 
 if (toastTrigger == 'suc') {
   toastLiveExample.classList.remove("bg-danger");
