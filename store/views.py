@@ -272,7 +272,7 @@ def home(request):
     
     unbind_ballots(lottery)
     
-    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:30]
+    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:40]
     
     try:
         js_variables['ballot_price'] = ballot_list[0].price
@@ -281,7 +281,7 @@ def home(request):
     
     context = {'ballots': ballot_list, 'js_variables': js_variables}
     
-    return render(request, 'store/index.html', context)
+    return render(request, 'store/index_search.html', context)
     
 def datos_personales(request):
     if request.method == 'POST':

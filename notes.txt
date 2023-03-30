@@ -137,6 +137,12 @@ Rechazada http://127.0.0.1:8000/?tr_pk=13&ref_payco=6d9028e82b53981c22948190
 Fallida http://127.0.0.1:8000/?tr_pk=14&ref_payco=c7641fcc1d5344baee7b5513
 Pendiente http://127.0.0.1:8000/?tr_pk=15&ref_payco=d31423fff84bdcef327a26ec
 
+matching = []
+
+ballots = []
+
+notMathing = []
+
 Format from response.text
 2023-07-05 00:00:00
 
