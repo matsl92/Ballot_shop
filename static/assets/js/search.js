@@ -28,7 +28,7 @@ function appearBallots(ballots) {
 }
 
 function myFunction() {
-    if (Number(searchInput.value) || searchInput.value == '') {
+    if (Number(searchInput.value) || searchInput.value == '' || 1) {
         var filter, items, ballots, i, j, txtValue, matching, notMatching, orderedBallots;
         filter = searchInput.value;
         items = document.getElementById("items");
@@ -45,12 +45,13 @@ function myFunction() {
                 notMatching.push(ballots[j]);
             }
         }
-        orderedBallots = matching.concat(notMatching);
+        // orderedBallots = matching.concat(notMatching);
+        orderedBallots = matching;
         for (j = 0; j < Math.min(orderedBallots.length, nBallots); j++) {
             orderedBallots[j].style.display = ''; 
             orderedBallots[j].style.order = j;
         }
-        appearBallots(orderedBallots);
+        // appearBallots(orderedBallots);
     };
 }
 
