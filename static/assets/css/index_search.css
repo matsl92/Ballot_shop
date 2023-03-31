@@ -1,16 +1,7 @@
-h2 {
-    color: blueviolet;
-}
-
 #items {
-    background-color: rgb(190, 233, 233);
     height: 40vh;
 }
 
 #items .ballot-wrapper {
     margin: auto 12px;
 }
-
-
-/* desktop height: 40vh */
-

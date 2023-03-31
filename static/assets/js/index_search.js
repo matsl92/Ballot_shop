@@ -4,60 +4,52 @@ var nBallots;
 if (window.innerWidth < 600) {
     nBallots = 12;
 } else {
-    nBallots = 8;
+    nBallots = 40;
 }
 
-// function myFunction() {
-//     var input, filter, items, ballots, i, j, txtValue;
-//     input = document.getElementById("myInput");
-//     filter = input.value;
-//     items = document.getElementById("items");
-//     ballots = items.getElementsByClassName("ballot-wrapper");
-//     for (j = 0; j < ballots.length; j++) {
-//         i = ballots[j].getElementsByTagName("i")[0];
-//         txtValue = i.textContent || i.innerText;
-//         if (txtValue.indexOf(filter) > -1) {
-//             ballots[j].style.display = "";
-//         } else {
-//             ballots[j].style.display = "none";
-//         }
-//     }
-// }
-
-
+function appearBallots(ballots) {
+    let i;
+    for (i = 0; i < ballots.length; i++) {
+        ballots[i].animate(
+            [
+                { transform: "translateY(100px)", opacity: 0},
+                { opacity: 1}, 
+            ], 
+            {
+                duration: 1000,
+                iterations: 1,
+                delay: i * 100
+            }
+        );
+        ballots[i].style.opacity = 1;
+    }
+}
 
 function myFunction() {
-    var filter, items, ballots, i, j, txtValue, matching, notMatching, orderedBallots;
-    // input = document.getElementById("ballot-search");
-    filter = searchInput.value;
-    items = document.getElementById("items");
-    ballots = items.getElementsByClassName("ballot-wrapper");
-    matching = [];
-    notMatching = []; 
-    for (j = 0; j < ballots.length; j++) {
-        // ballots[j].style.color = 'white';
-        ballots[j].style.display = 'none';
-        i = ballots[j].getElementsByTagName("i")[0];
-        txtValue = i.textContent || i.innerText;
-        if (txtValue.indexOf(filter) > -1) {
-            matching.push(ballots[j]);
-        } else {
-            notMatching.push(ballots[j]);
+    if (Number(searchInput.value) || searchInput.value == '') {
+        var filter, items, ballots, i, j, txtValue, matching, notMatching, orderedBallots;
+        filter = searchInput.value;
+        items = document.getElementById("items");
+        ballots = items.getElementsByClassName("ballot-wrapper");
+        matching = [];
+        notMatching = []; 
+        for (j = 0; j < ballots.length; j++) {
+            ballots[j].style.display = 'none';
+            i = ballots[j].getElementsByTagName("i")[0];
+            txtValue = i.textContent || i.innerText;
+            if (txtValue.indexOf(filter) > -1) {
+                matching.push(ballots[j]);
+            } else {
+                notMatching.push(ballots[j]);
+            }
         }
-    }
-    orderedBallots = matching.concat(notMatching);
-    for (j = 0; j < Math.min(orderedBallots.length, nBallots); j++) {
-        orderedBallots[j].style.display = 'flex'; 
-        orderedBallots[j].style.order = j;
-    }
+        orderedBallots = matching.concat(notMatching);
+        for (j = 0; j < Math.min(orderedBallots.length, nBallots); j++) {
+            orderedBallots[j].style.display = ''; 
+            orderedBallots[j].style.order = j;
+        }
+        appearBallots(orderedBallots);
+    };
 }
 
 searchInput.addEventListener('keyup', myFunction, false);
-searchInput.addEventListener('keyup', () => {
-    AOS.init({
-        duration: 1000,
-        easing: 'ease-in-out',
-        once: true,
-        mirror: false
-    })
-});
