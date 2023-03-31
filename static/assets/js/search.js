@@ -4,8 +4,10 @@ var nBallots;
 if (window.innerWidth < 600) {
     nBallots = 12;
 } else {
-    nBallots = 40;
+    nBallots = 30;
 }
+
+console.log(nBallots);
 
 function appearBallots(ballots) {
     let i;
@@ -53,3 +55,19 @@ function myFunction() {
 }
 
 searchInput.addEventListener('keyup', myFunction, false);
+
+function hideBallotExcess() {
+    var ballots = document.querySelectorAll('.ballot-wrapper');
+    console.log('hideballotexcess');
+    console.log(ballots);
+    console.log(nBallots);
+    if (ballots.length > nBallots) {
+        console.log('excess!');
+        for (var i = nBallots; i < ballots.length; i++) {
+            console.log('there');
+            ballots[i].style.display = 'none';
+        }
+    }
+}
+
+window.addEventListener('load', hideBallotExcess);

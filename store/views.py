@@ -281,7 +281,7 @@ def home(request):
     
     context = {'ballots': ballot_list, 'js_variables': js_variables}
     
-    return render(request, 'store/index_search.html', context)
+    return render(request, 'store/index.html', context)
     
 def datos_personales(request):
     if request.method == 'POST':

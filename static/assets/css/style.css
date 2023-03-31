@@ -585,6 +585,15 @@ section {
 /*--------------------------------------------------------------
 # Services
 --------------------------------------------------------------*/
+#items {
+  height: 50vh;
+  margin: 12px 0px;
+}
+
+#items .ballot-wrapper {
+  margin: auto 12px;
+}
+
 .services .icon-box {
   margin-bottom: 30px;
   margin-right: 30px;
