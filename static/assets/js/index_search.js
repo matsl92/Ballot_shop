@@ -1,5 +1,4 @@
-console.log('This is search!');
-
+const searchInput = document.getElementById('search-input');
 var nBallots;
 
 if (window.innerWidth < 600) {
@@ -28,9 +27,9 @@ if (window.innerWidth < 600) {
 
 
 function myFunction() {
-    var input, filter, items, ballots, i, j, txtValue, matching, notMatching, orderedBallots;
-    input = document.getElementById("myInput");
-    filter = input.value;
+    var filter, items, ballots, i, j, txtValue, matching, notMatching, orderedBallots;
+    // input = document.getElementById("ballot-search");
+    filter = searchInput.value;
     items = document.getElementById("items");
     ballots = items.getElementsByClassName("ballot-wrapper");
     matching = [];
@@ -52,3 +51,13 @@ function myFunction() {
         orderedBallots[j].style.order = j;
     }
 }
+
+searchInput.addEventListener('keyup', myFunction, false);
+searchInput.addEventListener('keyup', () => {
+    AOS.init({
+        duration: 1000,
+        easing: 'ease-in-out',
+        once: true,
+        mirror: false
+    })
+});
