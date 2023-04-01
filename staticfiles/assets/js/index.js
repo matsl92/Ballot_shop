@@ -2,8 +2,6 @@ const data = JSON.parse(
     document.getElementById('context-variables').textContent
 );
 
-console.log(data);
-
 const toastTrigger = data.msg[0];
 
 const toastLiveExample = document.getElementById('notification');

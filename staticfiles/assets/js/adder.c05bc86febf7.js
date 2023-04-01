@@ -2,8 +2,6 @@ const data2 = JSON.parse(
     document.getElementById('context-variables').textContent
 );
 
-console.log(data2);
-
 const bP = data2.ballot_price;
 
 function modifyPrice() {
@@ -48,12 +46,10 @@ document.querySelectorAll('#personal-data-form').forEach(form => {
 		// Prevent if already submitting
 		if (form.classList.contains('is-submitting')) {
 			e.preventDefault();
-            console.log('Prevented default');
 		}
 		
 		// Add class to hook our visual indicator on
 		form.classList.add('is-submitting');
-        console.log('added class is-submitting');
 	});
 });
 
@@ -70,9 +66,6 @@ function getNumberOutOfString(string) {
 
 const bId = data2;
 function validateCode() {
-    console.log(data2);
-    console.log(bId);
-    console.log('hey there');
     let messageDiv = document.querySelector('#discount-code-message');
     let discountCode = document.querySelector('#discount_code').value;
     let billSubtotal = parseInt(getNumberOutOfString(document.querySelector('#bill-subtotal').innerText));
