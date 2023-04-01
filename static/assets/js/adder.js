@@ -95,16 +95,12 @@ function validateCode() {
         
         validationRequest.then(response => response.json())
         .then(data =>{
-            // console.log('after validation request');
-            // console.log(data);
             if (data.percentage) {
                 let discountValue = billSubtotal * (data.percentage/100);
                 let billTotal = billSubtotal - discountValue;
                 messageDiv.innerText = `${data.percentage}% = $ ${discountValue}`;
-                // document.querySelector('#discount-values').innerText = `${data.percentage}% - $ ${discountValue}`;
                 document.querySelector('#bill-total').innerText = billTotal; 
             } else if (data.error) {
-                // console.log(data);
                 messageDiv.setAttribute('class', 'incorrect-message');
                 messageDiv.innerText = `${data.error}`;
                 document.querySelector('#discount-values').innerText = '';

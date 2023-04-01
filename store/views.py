@@ -219,7 +219,22 @@ def handle_transaction_response(data):
     transaction.save()
     
     
-# VIEWS  
+# VIEWS 
+
+def get_ballots(request):
+    body_string = request.body.decode('utf8').replace("'", '"')
+    body = json.loads(body_string)
+    lottery_id = int(body['lottery_id'])
+    lottery = Rifa.objects.get(id=lottery_id)
+    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))
+    ballots= []
+    for ballot in ballot_list:
+        ballots.append({'number': ballot.number, 'id': ballot.id})
+    response = JsonResponse({
+        'ballots': ballots
+    })
+    
+    return response
 
 def home(request):
     
@@ -281,7 +296,7 @@ def home(request):
     
     context = {'ballots': ballot_list, 'js_variables': js_variables}
     
-    return render(request, 'store/index.html', context)
+    return render(request, 'store/index copy.html', context)
     
 def datos_personales(request):
     if request.method == 'POST':
@@ -317,7 +332,6 @@ def code_validation(request):
 
 def fetch_api(request):
     if request.method=='POST':
-        print(request.POST)
         body = {
             'first_name': request.POST['first_name'], 
             'last_name': request.POST['last_name'], 

@@ -1,5 +1,9 @@
 PRIMARY
 
+lottery_id in javascript fetch
+
+Define lottery id from Sociedad active rifa
+
 Environment varibales
 
 Add pagination and display ballots in several columns for mobile
