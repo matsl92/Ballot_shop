@@ -58,6 +58,8 @@ use .env in production
 
 DONE
 
+Make some facts dynamic (years on dutty and days left to play)
+
 Add pagination and display ballots in several columns for mobile
 
 display error notification when a ballot is no longer available

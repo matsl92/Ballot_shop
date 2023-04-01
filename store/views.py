@@ -1,7 +1,7 @@
 import json
 import requests
 import math
-from datetime import timedelta
+from datetime import timedelta, datetime, date
 from django.utils import timezone
 from django.conf import settings
 from django.shortcuts import render
@@ -57,6 +57,8 @@ response_base_url = "http://127.0.0.1:8000"
 
 
 # VARIABLES AND FUNCTIONS
+
+society_creation_date = date(2018, 2, 6)
 
 try:
     society = Sociedad.objects.get(id=society_id)
@@ -302,16 +304,15 @@ def home(request):
     
     unbind_ballots(lottery)
     
-    # ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:40]
-    
     try:
         js_variables['ballot_price'] = Balota.objects.filter(lottery=lottery).first().price
     except:
         js_variables['ballot_price'] = 1000000
     
     context = {
-        # 'ballots': ballot_list, 
-        'js_variables': js_variables
+        'js_variables': js_variables, 
+        'years_on_dutty': (datetime.now().date() - society_creation_date).days // 365, 
+        'days_left_to_play': (lottery.lottery_date - datetime.today().date()).days
     }
     
     return render(request, 'store/index.html', context)

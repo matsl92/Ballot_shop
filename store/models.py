@@ -6,8 +6,6 @@ from datetime import timedelta
 
 class Sociedad(models.Model):
     name = models.CharField('Nombre', max_length=100)
-    # lottery_options = [(obj.id, obj.name) for obj in self.rifa_set.filter()]
-    # active_lottery = models.IntegerField('Rifa activa', choices=lottery_options, default=None, null=True, blank=True)
     
     def __str__(self):
         return self.name
@@ -18,7 +16,7 @@ class Rifa(models.Model):
     name = models.CharField('Nombre de la rifa', max_length=100)
     prize = models.CharField('Premio', max_length=200)
     description = models.TextField('Descripción', max_length=1000, blank=True, null=True)
-    Lottery_date = models.DateField('Fecha de sorteo')
+    lottery_date = models.DateField('Fecha de sorteo')
     ballot_price = models.PositiveIntegerField('Precio de las balotas', default=10000)    
     min_number = models.IntegerField('Número mínimo', validators=[MinValueValidator(0)])
     max_number = models.IntegerField('Número máximo', validators=[MinValueValidator(0)])

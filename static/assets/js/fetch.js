@@ -152,6 +152,4 @@ function filterAndAppendBallots() {
 
 searchInput.addEventListener('keyup', filterAndAppendBallots);
 
-// console.log(ballots.slice(0, nBallots));
-
 window.addEventListener('load', appendBallots(ballots.slice(0, nBallots)));
