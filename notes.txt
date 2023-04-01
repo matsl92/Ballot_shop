@@ -6,7 +6,8 @@ Define lottery id from Sociedad active rifa
 
 Environment varibales
 
-Add pagination and display ballots in several columns for mobile
+debug = false
+
 
 
 
@@ -56,6 +57,8 @@ use .env in production
 
 
 DONE
+
+Add pagination and display ballots in several columns for mobile
 
 display error notification when a ballot is no longer available
 
@@ -134,6 +137,15 @@ input type submit will be inside the form using prevetDefault
 
 
 OTHER
+
+
+files with urls
+
+fetch.js
+
+adder.js
+
+views.py
 
 
 Aceptada  http://127.0.0.1:8000/?tr_pk=12&ref_payco=c02c25388e4e331cda1c67d8#facts

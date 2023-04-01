@@ -43,12 +43,12 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 # EPAYCO RESPONSE LINKS
 
 # Production
-confirmation_url = "https://web-production-31f8.up.railway.app/epayco_confirmation"
-response_base_url = "https://web-production-31f8.up.railway.app"
+# confirmation_url = "https://web-production-31f8.up.railway.app/epayco_confirmation"
+# response_base_url = "https://web-production-31f8.up.railway.app"
 
 # Localhost
-# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-# response_base_url = "http://127.0.0.1:8000"
+confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+response_base_url = "http://127.0.0.1:8000"
 
 
 # VARIABLES AND FUNCTIONS
@@ -294,7 +294,7 @@ def home(request):
     
     context = {'ballots': ballot_list, 'js_variables': js_variables}
     
-    return render(request, 'store/index copy.html', context)
+    return render(request, 'store/index.html', context)
     
 def datos_personales(request):
     if request.method == 'POST':

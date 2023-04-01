@@ -135,7 +135,7 @@
             <div id="items" class="row text-center d-flex justify-content-center gx-0">
                 
 
-                {% for ballot in ballots %}
+                {% comment %} {% for ballot in ballots %}
 
                 <div class="ballot-wrapper col-auto icon-box" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
                     <div class="icon">
@@ -146,16 +146,12 @@
                     </div>
                 </div>
 
-                {% comment %} <div class="col-lg-1 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
-                    <div class="icon"><i class="bi">{{ ballot }}</i></div>
-                </div> {% endcomment %}
+                {% endfor %} {% endcomment %}
 
 
-                {% endfor %}
 
-                
-                
-                
+
+
                 <!-- <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
                     <div class="icon"><i class="bi bi-calendar4-week"></i></div>
                     <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
@@ -184,7 +180,7 @@
             </div>
 
             <div class="col-lg-6 col-md-6">
-              <button type="submit" class="final-button" form="ballot-form">
+              <button type="submit" class="final-button" form="ballot-form" onclick="submitForm();">
                 Comprar
               </button>
             </div>
@@ -240,7 +236,7 @@
   {{ js_variables|json_script:'context-variables' }}
   <script src={% static 'assets/js/index.js' %}></script>
   <script src={% static 'assets/js/adder.js' %}></script>
-  <script src={% static 'assets/js/search.js' %}></script>
+  <script src={% static 'assets/js/fetch.js' %}></script>
 
 </body>
 
