@@ -16,12 +16,12 @@ if (window.innerWidth > 600) {
 
 // PRODUCTION
 
-// const ballotFetchURL = 'https://web-production-31f8.up.railway.app/fetch_ballots/';
+const ballotFetchURL = 'https://web-production-31f8.up.railway.app/fetch_ballots/';
 
 
 // LOCALHOST
 
-const ballotFetchURL = 'http://127.0.0.1:8000/fetch_ballots/';
+// const ballotFetchURL = 'http://127.0.0.1:8000/fetch_ballots/';
 
 
 
