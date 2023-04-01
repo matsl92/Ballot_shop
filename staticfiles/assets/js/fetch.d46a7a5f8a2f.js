@@ -1,6 +1,8 @@
 // const searchInput = document.getElementById('search-input');
 // const ballotId = document.
-const lotteryId = 2;
+// const lotteryId = 2;
+const lotteryId = data2.lottery_id;
+
 
 const searchInput = document.getElementById('search-input');
 
@@ -149,7 +151,5 @@ function filterAndAppendBallots() {
 }
 
 searchInput.addEventListener('keyup', filterAndAppendBallots);
-
-// console.log(ballots.slice(0, nBallots));
 
 window.addEventListener('load', appendBallots(ballots.slice(0, nBallots)));
