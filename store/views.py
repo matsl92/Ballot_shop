@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic import ListView
 from .forms import ClienteForm
-from .models import Cliente, Balota, Transaccion, Descuento, EpaycoLateConfirmation, Rifa
+from .models import Cliente, Balota, Transaccion, Descuento, EpaycoLateConfirmation, Rifa, Sociedad
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .strings import message_mapper 
@@ -48,15 +48,20 @@ epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
 # EPAYCO RESPONSE LINKS
 
 # Production
-confirmation_url = "https://web-production-31f8.up.railway.app/epayco_confirmation"
-response_base_url = "https://web-production-31f8.up.railway.app"
+# confirmation_url = "https://web-production-31f8.up.railway.app/epayco_confirmation"
+# response_base_url = "https://web-production-31f8.up.railway.app"
 
 # Localhost
-# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-# response_base_url = "http://127.0.0.1:8000"
+confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
+response_base_url = "http://127.0.0.1:8000"
 
 
 # VARIABLES AND FUNCTIONS
+
+try:
+    society = Sociedad.objects.get(id=society_id)
+except:
+    society = None
 
 url_base = '//'.join([confirmation_url.split('/')[0], confirmation_url.split('/')[2]])
 
@@ -285,19 +290,29 @@ def home(request):
         print('Not msg in GET')
         pass
     
+    try:
+        lottery = society.rifa_set.filter(is_active=True).first()
+    except:
+        lottery = None
     
-    lottery = Rifa.objects.first()
+    print('society', society)
+    print('rifa', lottery)
+    
+    js_variables['lottery_id'] = lottery.id
     
     unbind_ballots(lottery)
     
-    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:40]
+    # ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))[0:40]
     
     try:
-        js_variables['ballot_price'] = ballot_list[0].price
+        js_variables['ballot_price'] = Balota.objects.filter(lottery=lottery).first().price
     except:
         js_variables['ballot_price'] = 1000000
     
-    context = {'ballots': ballot_list, 'js_variables': js_variables}
+    context = {
+        # 'ballots': ballot_list, 
+        'js_variables': js_variables
+    }
     
     return render(request, 'store/index.html', context)
     

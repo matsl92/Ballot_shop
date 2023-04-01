@@ -6,11 +6,14 @@ from datetime import timedelta
 
 class Sociedad(models.Model):
     name = models.CharField('Nombre', max_length=100)
+    # lottery_options = [(obj.id, obj.name) for obj in self.rifa_set.filter()]
+    # active_lottery = models.IntegerField('Rifa activa', choices=lottery_options, default=None, null=True, blank=True)
     
     def __str__(self):
         return self.name
 
 class Rifa(models.Model):
+    is_active = models.BooleanField('Está activa', default=False)
     society = models.ForeignKey(Sociedad, on_delete=models.CASCADE, verbose_name='Sociedad')
     name = models.CharField('Nombre de la rifa', max_length=100)
     prize = models.CharField('Premio', max_length=200)
@@ -23,22 +26,28 @@ class Rifa(models.Model):
     ballot_unavailable_time = models.DurationField('Tiempo de inhabilidad de las balotas', default=timedelta(minutes=10))
     
     def save(self):
+            
         n = (self.max_number+1 - self.min_number) // self.step   
         if self.min_number <= self.max_number and n > 0:
             super().save()
             for i in range((self.max_number+1-self.min_number)//self.step):
                 if not self.min_number + self.step*i in [
                     ballot.number for ballot in Balota.objects.filter(lottery=self)
-                ]:
-                    
+                ]:  
                     ballot = Balota(
                         number=self.min_number+self.step*i, 
                         price = self.ballot_price, 
                         unavailable_time = self.ballot_unavailable_time, 
                         lottery = self
                     )
-                
                     ballot.save()
+                    
+        if self.is_active:
+                for lottery in self.society.rifa_set.all():
+                    if lottery != self and lottery.is_active:
+                        lottery.is_active = False
+                        lottery.save()
+    
     def __str__(self):
         return self.name
         
