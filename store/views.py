@@ -23,17 +23,6 @@ load_dotenv()
 
 # ENVIRONMENT VARIABLES
 
-# society_id = 1
-
-# token = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
-
-# epayco_login_url = 'https://apify.epayco.co/login/mail'
-
-# epayco_create_link_url = 'https://apify.epayco.co/collection/link/create'
-
-# epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
-
-
 society_id = int(os.getenv('SOCIETY_ID'))
 
 token = os.getenv('TOKEN')
@@ -47,13 +36,8 @@ epayco_transaction_detail_url = os.getenv('EPAYCO_TRANSACTION_DETAIL_URL')
 
 # EPAYCO RESPONSE LINKS
 
-# Production
-confirmation_url = "https://web-production-31f8.up.railway.app/epayco_confirmation"
-response_base_url = "https://web-production-31f8.up.railway.app"
-
-# Localhost
-# confirmation_url = "http://127.0.0.1:8000/epayco_confirmation"
-# response_base_url = "http://127.0.0.1:8000"
+confirmation_url = os.getenv('CONFIRMATION_URL')
+response_base_url = os.getenv('RESPONSE_BASE_URL')
 
 
 # VARIABLES AND FUNCTIONS
@@ -258,7 +242,6 @@ def home(request):
             if transaction.status == 1:
                 js_variables['msg'] = message_mapper['Aceptada']
                 
-                print('100% discount')
             
         else:
             encoded_ref_payco = request.GET.dict()['ref_payco']
@@ -274,14 +257,9 @@ def home(request):
             if data['x_response'] == 'Rechazada' or data['x_response'] == 'Fallida':
                 js_variables['link'] = transaction.payment_link
                 
-                print('includes link')
             
-            print("not 100% discount")
             
     except:
-        
-        print('Not and epayco response')
-        
         pass
     
     try:
@@ -289,16 +267,12 @@ def home(request):
         js_variables['msg'] = message_mapper[key]
         
     except:
-        print('Not msg in GET')
         pass
     
     try:
         lottery = society.rifa_set.filter(is_active=True).first()
     except:
         lottery = None
-    
-    print('society', society)
-    print('rifa', lottery)
     
     js_variables['lottery_id'] = lottery.id
     
@@ -319,7 +293,6 @@ def home(request):
     
 def datos_personales(request):
     if request.method == 'POST':
-        print(request.POST)
         try:
             balota_ids = dict(request.POST).get('id')
             ballots = [Balota.objects.get(id=id) for id in balota_ids]
@@ -387,7 +360,6 @@ def fetch_api(request):
         
         for ballot in ballots:
             if ballot.transaction != None:
-                print('4, not all ballots were available')
                 messages.error(request, 'Lo sentimos. Alguna de las balotas ya fue vendida, por favor haz tu selección nuevamente.')
                 link = reverse('store:home')
                 link += '?msg=unavailable'
@@ -458,7 +430,6 @@ def test_view(request):
             if count == len(object_list):
                 break
         package.append(slide)
-    print(package)
         
         
             

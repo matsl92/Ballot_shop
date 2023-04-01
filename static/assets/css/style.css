@@ -586,12 +586,23 @@ section {
 # Services
 --------------------------------------------------------------*/
 #items {
-  height: 50vh;
+  /* max-height: 50vh; */
   margin: 12px 0px;
 }
 
 #items .ballot-wrapper {
-  margin: auto 12px;
+  margin: top 12px;
+}
+
+@media only screen and (max-width: 600px) {
+  #items {
+    height: 50vh;
+    margin: 12px 0px;
+  }
+
+  #items .ballot-wrapper {
+    margin: auto 12px;
+  }
 }
 
 .services .icon-box {

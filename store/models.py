@@ -94,7 +94,7 @@ class Balota(models.Model):
     selected = models.BooleanField('Seleccionada', default=False)
     transaction = models.ForeignKey(Transaccion, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True, verbose_name='Transacción')
     unavailable_time = models.DurationField('Tiempo de inhabilidad', default=(timedelta(minutes=15)))
-    lottery = models.ForeignKey(Rifa, on_delete=models.CASCADE, verbose_name='Sorteo')
+    lottery = models.ForeignKey(Rifa, on_delete=models.CASCADE, verbose_name='Rifa')
     
     def __str__(self):
         return str(self.number)

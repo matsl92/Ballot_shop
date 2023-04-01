@@ -1,5 +1,7 @@
 PRIMARY
 
+Remove print statements
+
 lottery_id in javascript fetch
 
 Define lottery id from Sociedad active rifa

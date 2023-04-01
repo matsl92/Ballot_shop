@@ -9,5 +9,5 @@ admin.site.register([
     Balota, 
     EpaycoLateConfirmation, 
     Rifa, 
-    # Sociedad
+    Sociedad
 ])

@@ -25,13 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-0!!kblwag^i$z&%@a#3u5zkz59582t^e-1$44003)0r%w3*mns'
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'web-production-aea2.up.railway.app', 'web-production-31f8.up.railway.app']
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOST_1')]
 
 
 # Application definition
@@ -139,14 +138,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ePayco settings
-
-# BASIC_AUTH_TOKEN = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
-
-# Authorization = ' '.join(['Basic', BASIC_AUTH_TOKEN])
-
-# PUBLIC_KEY = 'NzgyMTkz'
-
 # Django PhoneNumber field settings
 
 PHONENUMBER_DB_FORMAT = 'NATIONAL'
@@ -155,7 +146,7 @@ PHONENUMBER_DEFAULT_REGION = 'CO'
 
 # CSRF trusted origins
 
-CSRF_TRUSTED_ORIGINS = ['https://web-production-aea2.up.railway.app', 'https://web-production-31f8.up.railway.app']
+CSRF_TRUSTED_ORIGINS = [os.getenv('CSRF_TRUSTED_ORIGIN_1')]
 
 CSRF_COOKIE_SECURE = True
 

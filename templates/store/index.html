@@ -130,35 +130,31 @@
 
         
         <form action={% url 'store:datos_personales' %} method="post" id="ballot-form">
+          <div class="container">
+            <div class="row mb-4">
+              <div class="col-md-4">
+                <div class="input-group flex-nowrap">
+                  <span class="input-group-text" id="addon-wrapping"><i class="bi bi-search"></i></span>
+                  <input type="number" id="search-input" class="form-control" placeholder="Buscar número" aria-label="Buscar número" aria-describedby="Buscar número">
+                </div>
+              </div>
+            </div>
+              {% csrf_token %}
+            <div class="row d-flex justify-content-center">
+              <div class="col-md-10">
+                <div id="items" class="row text-center d-flex justify-content-center gx-0"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+
+        {% comment %} <form action={% url 'store:datos_personales' %} method="post" id="ballot-form">
           <input type="number" id="search-input" class="form-control" placeholder="Buscar balotas" aria-label="Buscar balotas" aria-describedby="Buscar balotas">
             {% csrf_token %}
-            <div id="items" class="row text-center d-flex justify-content-center gx-0">
-                
-
-                {% comment %} {% for ballot in ballots %}
-
-                <div class="ballot-wrapper col-auto icon-box" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-                    <div class="icon">
-                        <input class="balota-input" type="checkbox" name='id' id="{{ ballot.id }}" value="{{ ballot.id }}" onclick="modifyPrice()">
-                        <label class="balota-label icon" for={{ ballot.id }}>
-                            <i class="bi">{{ ballot }}</i>
-                        </label>
-                    </div>
-                </div>
-
-                {% endfor %} {% endcomment %}
-
-
-
-
-
-                <!-- <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
-                    <div class="icon"><i class="bi bi-calendar4-week"></i></div>
-                    <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
-                    <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
-                </div> -->
+            <div id="items" class="row text-center d-flex justify-content-center gx-0">    
             </div>
-        </form>
+        </form> {% endcomment %}
 
           <hr style="margin: auto; color: rgb(202,47,42); width:60%;">
 

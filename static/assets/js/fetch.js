@@ -9,7 +9,7 @@ const searchInput = document.getElementById('search-input');
 let nBallots;
 
 if (window.innerWidth > 600) {
-    nBallots = 30;
+    nBallots = 27;
 } else {
     nBallots = 12;
 }
@@ -75,7 +75,7 @@ function appendBallots(ballots) {
             input.checked = true;
         }
 
-        ballotWrapper.setAttribute("data-aos-delay", String(i*100));
+        ballotWrapper.setAttribute("data-aos-delay", String(i*50));
 
         // Append elements
 
@@ -105,10 +105,7 @@ function getBallotsFromBackend() {
             'name': 'mateo'
         })
     })
-    // console.log(request);
     request.then(response => response.json())
-    // request.then(response => JSON.parse(response))
-
     .then(data => {
         for (let i = 0; i < data.length; i++) {
             ballots.push(data[i]);

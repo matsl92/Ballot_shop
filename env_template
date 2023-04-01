@@ -1,0 +1,17 @@
+TOKEN = epayco_account_email:epayco_account_password base64 encoded
+EPAYCO_LOGIN_URL = https://apify.epayco.co/login/mail
+EPAYCO_CREATE_LINK_URL = https://apify.epayco.co/collection/link/create
+EPAYCO_TRANSACTION_DETAIL_URL = https://apify.epayco.co/transaction/detail
+SECRET_KEY = django secret key
+SOCIETY_ID = Society_id
+
+ALLOWED_HOST_1 = yourdomain.com
+CSRF_TRUSTED_ORIGIN_1 = https://yourdomain.com
+
+CONFIRMATION_URL = https://yourdomain.com/epayco_confirmation
+RESPONSE_BASE_URL = https://yourdomain.com
+
+CODE_VALIDATION_URL = https://yourdomain.com/code_validation/
+LINK_CREATION_URL = https://yourdomain.com/bill/
+
+BALLOT_FETCH_URL = https://yourdomain.com/fetch_ballots/
