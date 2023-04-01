@@ -23,6 +23,8 @@ load_dotenv()
 
 # ENVIRONMENT VARIABLES
 
+society_id = 1
+
 token = 'bWF0ZW9zYWxhemFyOTdAaG90bWFpbC5jb206TG1tY21zYjkyXw=='
 
 epayco_login_url = 'https://apify.epayco.co/login/mail'
@@ -30,6 +32,9 @@ epayco_login_url = 'https://apify.epayco.co/login/mail'
 epayco_create_link_url = 'https://apify.epayco.co/collection/link/create'
 
 epayco_transaction_detail_url = 'https://apify.epayco.co/transaction/detail'
+
+
+# society_id = int(os.getenv('SOCIETY_ID'))
 
 # token = os.getenv('TOKEN')
 
