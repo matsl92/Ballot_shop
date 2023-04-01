@@ -229,12 +229,10 @@ def get_ballots(request):
     ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))
     ballots= []
     for ballot in ballot_list:
-        ballots.append({'number': ballot.number, 'id': ballot.id})
-    response = JsonResponse({
-        'ballots': ballots
-    })
+        ballots.append({'number': ballot.number, 'id': ballot.id, 'checked': False})
+    response = json.dumps(ballots)
     
-    return response
+    return JsonResponse(ballots, safe=False)
 
 def home(request):
     
@@ -300,6 +298,7 @@ def home(request):
     
 def datos_personales(request):
     if request.method == 'POST':
+        print(request.POST)
         try:
             balota_ids = dict(request.POST).get('id')
             ballots = [Balota.objects.get(id=id) for id in balota_ids]

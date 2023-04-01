@@ -23,8 +23,19 @@ const ballotFetchURL = 'http://127.0.0.1:8000/fetch_ballots/';
 
 
 
-var ballots = [];
+const ballots = [];
 
+function modifyPriceAndSwitchCheckedState(inputId) {
+    ballots.forEach(ballot => {
+        if (ballot.id == inputId) {
+            ballot.checked = !ballot.checked;
+        }
+    })
+
+    let total = document.getElementById('total');
+    let price = ballots.filter(ballot => ballot.checked).length * data2.ballot_price;
+    total.innerText = price;
+}
 
 function appendBallots(ballots) {
     var items, ballotWrapper, iconDiv, input, label, I;
@@ -42,7 +53,7 @@ function appendBallots(ballots) {
         input.classList.add('balota-input');
         input.setAttribute("type", "checkbox");
         input.setAttribute("name", "id");
-        input.setAttribute("onclick", "modifyPrice()");  // set value and id attributes with a for loop
+        input.setAttribute("onclick", `modifyPriceAndSwitchCheckedState(${ballots[i].id})`);  // set value and id attributes with a for loop
 
         label = document.createElement('label');
         label.classList.add("balota-label", "icon")  // set attribute for with a for loop
@@ -58,6 +69,9 @@ function appendBallots(ballots) {
 
         input.setAttribute("value", String(ballots[i].id));
         input.setAttribute("id", String(ballots[i].id));
+        if (ballots[i].checked) {
+            input.checked = true;
+        }
 
         ballotWrapper.setAttribute("data-aos-delay", String(i*100));
 
@@ -89,11 +103,13 @@ function getBallotsFromBackend() {
             'name': 'mateo'
         })
     })
+    // console.log(request);
     request.then(response => response.json())
-    .then(data => {
+    // request.then(response => JSON.parse(response))
 
-        for (let i = 0; i < data.ballots.length; i++) {
-            ballots.push(data.ballots[i]);
+    .then(data => {
+        for (let i = 0; i < data.length; i++) {
+            ballots.push(data[i]);
         }
 
         appendBallots(ballots.slice(0, nBallots));
@@ -104,6 +120,12 @@ function getBallotsFromBackend() {
 
 
 window.addEventListener('load', getBallotsFromBackend);
+
+function submitForm() {
+    removeBallotWrappers();
+    appendBallots(ballots.filter(ballot => ballot.checked == true));
+    document.getElementById('ballot-form').submit();
+}
 
 
 function filterBallots(string, ballots) {
@@ -127,3 +149,7 @@ function filterAndAppendBallots() {
 }
 
 searchInput.addEventListener('keyup', filterAndAppendBallots);
+
+// console.log(ballots.slice(0, nBallots));
+
+window.addEventListener('load', appendBallots(ballots.slice(0, nBallots)));
