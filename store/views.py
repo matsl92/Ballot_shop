@@ -285,6 +285,8 @@ def home(request):
     
     js_variables['ballot_fetch_url'] = os.getenv('BALLOT_FETCH_URL')
     print(js_variables)
+    print(os.getenv('HTTP_SAFE'))
+    print(os.getenv('SECRET_KEY'))
     
     context = {
         'js_variables': js_variables, 
