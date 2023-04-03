@@ -283,6 +283,9 @@ def home(request):
     except:
         js_variables['ballot_price'] = 1000000
     
+    js_variables['ballot_fetch_url'] = os.getenv('BALLOT_FETCH_URL')
+    print(js_variables)
+    
     context = {
         'js_variables': js_variables, 
         'years_on_dutty': (datetime.now().date() - society_creation_date).days // 365, 
@@ -299,7 +302,12 @@ def datos_personales(request):
             subtotal = 0
             for ballot in ballots:
                 subtotal += ballot.price
-            context = {'bId': balota_ids, 'ballots': ballots, 'subtotal': subtotal}
+            js_variables = {
+                'bId': balota_ids, 
+                'code_validation_url': os.getenv('CODE_VALIDATION_URL'), 
+                'link_creation_url': os.getenv('LINK_CREATION_URL')
+            }
+            context = {'js_variables': js_variables, 'ballots': ballots, 'subtotal': subtotal}
             return render(request, 'store/form.html', context)
         except:
             url = reverse('store:home')

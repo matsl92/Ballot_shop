@@ -152,14 +152,6 @@
           </div>
         </form>
 
-
-        {% comment %} <form action={% url 'store:datos_personales' %} method="post" id="ballot-form">
-          <input type="number" id="search-input" class="form-control" placeholder="Buscar balotas" aria-label="Buscar balotas" aria-describedby="Buscar balotas">
-            {% csrf_token %}
-            <div id="items" class="row text-center d-flex justify-content-center gx-0">    
-            </div>
-        </form> {% endcomment %}
-
           <hr style="margin: auto; color: rgb(202,47,42); width:60%;">
 
           <div class="row text-center align-items-center justify-content-center mt-5">
@@ -230,13 +222,11 @@
   <script src={% static "assets/vendor/php-email-form/validate.js" %}></script>
 
   <!-- Template Main JS File -->
-  <script src={% static "assets/js/main.js" %}></script>
+  <script type="text/javascript" src={% static "assets/js/main.js" %}></script>
 
-  
-  {{ js_variables|json_script:'context-variables' }}
-  <script src={% static 'assets/js/index.js' %}></script>
-  <script src={% static 'assets/js/adder.js' %}></script>
-  <script src={% static 'assets/js/fetch.js' %}></script>
+  <!-- Page specific JS File -->
+  {{ js_variables|json_script:'js-variables' }}
+  <script type="text/javascript" src={% static 'assets/js/index.js' %}></script>
 
 </body>
 

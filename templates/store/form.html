@@ -117,7 +117,6 @@
                         <p id="discount-code-message"></p> 
                       </div>
                     </div>
-                    {% comment %} <p id="discount-values">$ {{ subtotal }}</p> {% endcomment %}
                   </div>
     
                   <div class="phone">
@@ -196,10 +195,11 @@
   <script src={% static "assets/vendor/php-email-form/validate.js" %}></script>
 
   <!-- Template Main JS File -->
-  {{ bId|json_script:'context-variables' }}
-  <script src={% static "assets/js/main.js" %}></script>
-  <script src={% static "assets/js/adder.js" %}></script>
-
+  <script type="text/javascript" src={% static 'assets/js/main.js' %}></script>
+  
+  <!-- Page specific JS File -->
+  {{ js_variables|json_script:'js-variables' }}
+  <script type="text/javascript" src={% static "assets/js/form.js" %}></script>
 </body>
 
 </html>
