@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOST_1')]
+ALLOWED_HOSTS = [os.getenv('DOMAIN')]
 
 
 # Application definition
@@ -146,7 +146,7 @@ PHONENUMBER_DEFAULT_REGION = 'CO'
 
 # CSRF trusted origins
 
-CSRF_TRUSTED_ORIGINS = [os.getenv('CSRF_TRUSTED_ORIGIN_1')]
+CSRF_TRUSTED_ORIGINS = [f"http{os.getenv('HTTP_SAFE')}://{os.getenv('DOMAIN_1')}{os.getenv('PORT')}"]
 
 CSRF_COOKIE_SECURE = True
 

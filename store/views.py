@@ -36,8 +36,11 @@ epayco_transaction_detail_url = os.getenv('EPAYCO_TRANSACTION_DETAIL_URL')
 
 # EPAYCO RESPONSE LINKS
 
-confirmation_url = os.getenv('CONFIRMATION_URL')
-response_base_url = os.getenv('RESPONSE_BASE_URL')
+base_url = f"http{os.getenv('HTTP_SAFE')}://{os.getenv('DOMAIN')}{os.getenv('PORT')}"
+
+confirmation_url = f"{base_url}/epayco_confirmation"
+
+response_base_url = f"{base_url}"
 
 
 # VARIABLES AND FUNCTIONS
@@ -283,10 +286,10 @@ def home(request):
     except:
         js_variables['ballot_price'] = 1000000
     
-    js_variables['ballot_fetch_url'] = os.getenv('BALLOT_FETCH_URL')
-    print(js_variables)
-    print(os.getenv('HTTP_SAFE'))
-    print(os.getenv('SECRET_KEY'))
+    js_variables['ballot_fetch_url'] = f"{base_url}/fetch_ballots/"
+    # print(js_variables)
+    # print(os.getenv('HTTP_SAFE'))
+    # print(os.getenv('SECRET_KEY'))
     
     context = {
         'js_variables': js_variables, 
@@ -306,8 +309,8 @@ def datos_personales(request):
                 subtotal += ballot.price
             js_variables = {
                 'bId': balota_ids, 
-                'code_validation_url': os.getenv('CODE_VALIDATION_URL'), 
-                'link_creation_url': os.getenv('LINK_CREATION_URL')
+                'code_validation_url': f"{base_url}/code_validation/", 
+                'link_creation_url': f"{base_url}/bill/"
             }
             context = {'js_variables': js_variables, 'ballots': ballots, 'subtotal': subtotal}
             return render(request, 'store/form.html', context)
