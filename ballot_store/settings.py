@@ -146,7 +146,7 @@ PHONENUMBER_DEFAULT_REGION = 'CO'
 
 # CSRF trusted origins
 
-CSRF_TRUSTED_ORIGINS = [f"http{os.getenv('HTTP_SAFE')}://{os.getenv('DOMAIN_1')}{os.getenv('LOCAL_PORT')}"]
+CSRF_TRUSTED_ORIGINS = [f"http{os.getenv('HTTP_SAFE')}://{os.getenv('DOMAIN')}{os.getenv('LOCAL_PORT')}"]
 
 CSRF_COOKIE_SECURE = True
 
