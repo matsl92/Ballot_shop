@@ -1,3 +1,8 @@
+from math import ceil
+
+def get_percentage_to_display(percentage):
+    return ceil(percentage/5) * 5
+
 def make_transaction_description(ballots, transaction):
     
     separators = ['Za', 'AZ', 'pP', 'Vz', 'vh', 'pH']

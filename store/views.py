@@ -56,7 +56,8 @@ url_base = '//'.join([confirmation_url.split('/')[0], confirmation_url.split('/'
 
 from .tools import (
     make_transaction_description, 
-    get_values_from_transaction_description
+    get_values_from_transaction_description, 
+    get_percentage_to_display
 )
      
 ePayco_confirmation_time = timedelta(hours=3, minutes=30)
@@ -286,15 +287,26 @@ def home(request):
         js_variables['ballot_price'] = 1000000
     
     js_variables['ballot_fetch_url'] = f"{base_url}/fetch_ballots/"
-    # print(js_variables)
-    # print(os.getenv('HTTP_SAFE'))
-    # print(os.getenv('SECRET_KEY'))
+    
+    
+        
     
     context = {
         'js_variables': js_variables, 
         'years_on_dutty': (datetime.now().date() - society_creation_date).days // 365, 
         'days_left_to_play': (lottery.lottery_date - datetime.today().date()).days
     }
+    
+    if lottery.display_percentage:
+        percentage = len(Balota.objects.filter(
+                lottery=lottery
+            ).filter(transaction__status=1))/len(Balota.objects.filter(
+                lottery=lottery
+            ))*100
+        
+        # context['sold_ballot_percentage'] = get_percentage_to_display(percentage)
+        
+        context['sold_ballot_percentage'] = int(percentage)
     
     return render(request, 'store/index.html', context)
     

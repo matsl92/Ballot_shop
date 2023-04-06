@@ -107,6 +107,15 @@
             </div>
           </div>
 
+          {% if sold_ballot_percentage %}
+          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="400">
+            <div class="count-box">
+              <i class="bi bi-clock-history"></i>
+              <span data-purecounter-start="0" data-purecounter-end={{ sold_ballot_percentage }} data-purecounter-duration="1" class="purecounter"></span>
+              <p><strong>%</strong><br>De las balotas vendidas</p>
+            </div>
+          </div>
+          {% else %}
           <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="400">
             <div class="count-box">
               <i class="bi bi-clock-history"></i>
@@ -114,7 +123,8 @@
               <p><strong>Años</strong><br>Haciendo los mejores tacos de Medellín</p>
             </div>
           </div>
-
+          {% endif %}
+          
         </div>
     </section><!-- End Facts Section -->
     <hr style="margin: auto; color: rgb(202,47,42); width:60%;">

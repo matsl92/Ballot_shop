@@ -11,6 +11,7 @@ class Sociedad(models.Model):
         return self.name
 
 class Rifa(models.Model):
+    display_percentage = models.BooleanField('Mostrar porcentaje de balotas vendidas', default=False)
     is_active = models.BooleanField('Está activa', default=False)
     society = models.ForeignKey(Sociedad, on_delete=models.CASCADE, verbose_name='Sociedad')
     name = models.CharField('Nombre de la rifa', max_length=100)
@@ -56,7 +57,7 @@ class Cliente(models.Model):
     phone_number = models.PositiveIntegerField('Número de celular')
     
     def __str__(self):
-        return self.first_name
+        return f"({self.id}) {self.first_name} {self.phone_number}"
     
 class Descuento(models.Model):
     lottery= models.ForeignKey(Rifa, on_delete=models.CASCADE, verbose_name='Sorteo')
