@@ -57,7 +57,7 @@ class Cliente(models.Model):
     phone_number = models.PositiveIntegerField('Número de celular')
     
     def __str__(self):
-        return f"({self.id}) {self.first_name} {self.phone_number}"
+        return f"{self.first_name} / cel: {self.phone_number} / id: {self.id}"
     
 class Descuento(models.Model):
     lottery= models.ForeignKey(Rifa, on_delete=models.CASCADE, verbose_name='Sorteo')

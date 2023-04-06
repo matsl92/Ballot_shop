@@ -234,10 +234,10 @@ def get_ballots(request):
     return JsonResponse(ballots, safe=False)
 
 def home(request):
-    
     js_variables = {'msg':['', '']}
     
-    try:
+    if 'tr_pk' in request.GET.dict().keys():
+        
         """" Epeyco response """
         transaction = Transaccion.objects.get(id=int(request.GET.dict()['tr_pk']))
 
@@ -245,7 +245,6 @@ def home(request):
             if transaction.status == 1:
                 js_variables['msg'] = message_mapper['Aceptada']
                 
-            
         else:
             encoded_ref_payco = request.GET.dict()['ref_payco']
             url = 'https://secure.epayco.co/validation/v1/reference/' + encoded_ref_payco
@@ -259,19 +258,11 @@ def home(request):
             
             if data['x_response'] == 'Rechazada' or data['x_response'] == 'Fallida':
                 js_variables['link'] = transaction.payment_link
-                
-            
-            
-    except:
-        pass
     
-    try:
+    if 'msg' in request.GET.dict().keys():
         key = request.GET.dict()['msg']
         js_variables['msg'] = message_mapper[key]
         
-    except:
-        pass
-    
     try:
         lottery = society.rifa_set.filter(is_active=True).first()
     except:

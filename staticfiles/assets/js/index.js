@@ -128,8 +128,9 @@ function addOrRemoveReplacingButton() {
 
 function modifyPrice() {
   let total = document.getElementById('total');
-  total.innerText = ballots.filter(ballot => ballot.checked)
+  let price = ballots.filter(ballot => ballot.checked)
   .length * data.ballot_price;
+  total.innerText = `$ ${price}`;
 }
 
 function switchCheckedState(ballot) {
