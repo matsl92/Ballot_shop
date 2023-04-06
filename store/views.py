@@ -229,7 +229,6 @@ def get_ballots(request):
     ballots= []
     for ballot in ballot_list:
         ballots.append({'number': ballot.number, 'id': ballot.id, 'checked': False})
-    response = json.dumps(ballots)
     
     return JsonResponse(ballots, safe=False)
 

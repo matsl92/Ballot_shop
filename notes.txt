@@ -1,64 +1,33 @@
 PRIMARY
 
-Remove print statements
-
-lottery_id in javascript fetch
-
-Define lottery id from Sociedad active rifa
-
-Environment varibales
-
 debug = false
-
-search-input type numeric
-
-
-
 
 https://github.com/matsl92/Ballot_shop.git
 
 
 
 
-
-
-
-
-
-
-
 SECONDARY
 
-Imagen de epayco en botón
-
-Simplify client form so that its form will reject almost nothing
-
 Must hendle fetch_api's redirections when the process is not absolutely completed
-
-
-
-
-Prove environment variables in railway git removing .env from .gitignore
-
-Paginate with twenty to therty ballots per page
-
-Define whether passing ids or numbers in x_description issues branch
-
-Keep users from sending a form without ballots
 
 transaction.valid_until according to the latest ballot
 
 Add alert field in Transaccion which will be trigered by a different amount or a 
 late confirmation with unavailable ballots
 
-Add personal data to bill
-
-use .env in production
-
 
 
 
 DONE
+
+Define lottery id from Sociedad active rifa
+
+Simplify client form so that its form will reject almost nothing
+
+Define whether passing ids or numbers in x_description issues branch
+
+Prove environment variables in railway git removing .env from .gitignore
 
 Make some facts dynamic (years on dutty and days left to play)
 
@@ -139,29 +108,7 @@ input type submit will be inside the form using prevetDefault
 
 
 
-
 OTHER
-
-
-files with urls
-
-fetch.js
-
-adder.js
-
-views.py
-
-
-Aceptada  http://127.0.0.1:8000/?tr_pk=12&ref_payco=c02c25388e4e331cda1c67d8#facts
-Rechazada http://127.0.0.1:8000/?tr_pk=13&ref_payco=6d9028e82b53981c22948190
-Fallida http://127.0.0.1:8000/?tr_pk=14&ref_payco=c7641fcc1d5344baee7b5513
-Pendiente http://127.0.0.1:8000/?tr_pk=15&ref_payco=d31423fff84bdcef327a26ec
-
-matching = []
-
-ballots = []
-
-notMathing = []
 
 Format from response.text
 2023-07-05 00:00:00
@@ -216,3 +163,27 @@ request.GET.dict() {'x_cust_id_cliente': '782193', 'x_ref_payco': '131251607',
 'x_signature': '2586b063944ae8dc5962d4d7a3efe850ab02e6abfeddf29f1ab20ff329d37e81', 
 'x_test_request': 'TRUE', 'x_extra1': '', 'x_extra2': '', 'x_extra3': '', 'x_extra4': '', 
 'x_extra5': '', 'x_extra6': '', 'x_extra7': '', 'x_extra8': '', 'x_extra9': '', 'x_extra10': ''}
+
+
+
+añadir aleatoria
+
+if selected.length == 0 add button
+selectRandomBallot
+add to selected ballots 
+reverse selected ballots
+add to ballots to display
+append ballots
+
+
+
+
+cambiar ultima
+
+remove from selected
+reverse selected ballots
+add to ballots to display
+append ballots
+
+
+if selected.length == 0 remove cambiar ultima in modifyprice...

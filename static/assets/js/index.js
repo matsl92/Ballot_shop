@@ -89,15 +89,18 @@ if (toastTrigger == 'suc') {
 
 
 
-// ------ Functionality -------
+// ------ Ballot functionality -------
 
-// The following code fetches and appends ballots returned from the backend
-// when the page loads and when the search input gets modified.
+// The following code defines some basic functions and then some complex ones
+// which include one or more basic functions.
 
 const searchInput = document.getElementById('search-input');
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 const lotteryId = data.lottery_id;
 const ballotFetchURL = data.ballot_fetch_url;
+const randomBallotSelector = document.getElementById('random-ballot-selector');
+const ballots = [];
+let selectedBallots = [];
 let nBallots;
 
 if (window.innerWidth > 600) {
@@ -106,18 +109,35 @@ if (window.innerWidth > 600) {
     nBallots = 12;
 }
 
-const ballots = [];
+// Basic functions
 
-function modifyPriceAndSwitchCheckedState(inputId) {
-    ballots.forEach(ballot => {
-        if (ballot.id == inputId) {
-            ballot.checked = !ballot.checked;
-        }
-    })
+function addOrRemoveReplacingButton() {
+  let checkedBallots = ballots.filter(ballot => ballot.checked);
+  if ((checkedBallots.length > 0) && 
+  (!document.getElementById('replacer'))) {
+    let replaceLast = document.createElement('input');
+    replaceLast.value = 'Cambiar última';
+    replaceLast.setAttribute('id', 'replacer');
+    replaceLast.setAttribute('type', 'button');
+    replaceLast.setAttribute('onclick', 'replaceLastBallot()');
+    randomBallotSelector.parentNode.insertBefore(replaceLast, randomBallotSelector.nextSibling);
+  } else if ((checkedBallots.length == 0) && (document.getElementById('replacer'))) {
+    document.getElementById('replacer').remove();
+  }
+}
 
-    let total = document.getElementById('total');
-    let price = ballots.filter(ballot => ballot.checked).length * data.ballot_price;
-    total.innerText = price;
+function modifyPrice() {
+  let total = document.getElementById('total');
+  total.innerText = ballots.filter(ballot => ballot.checked)
+  .length * data.ballot_price;
+}
+
+function switchCheckedState(ballot) {
+  ballots.forEach(generalBallot => {
+    if (generalBallot.id == ballot.id) {
+        generalBallot.checked = !ballot.checked;
+    }
+})
 }
 
 function appendBallots(ballots) {
@@ -184,8 +204,7 @@ function getBallotsFromBackend() {
             'X-CSRFToken': csrftoken
         }, 
         body: JSON.stringify({
-            'lottery_id': lotteryId, 
-            'name': 'mateo'
+            'lottery_id': lotteryId
         })
     })
     request.then(response => response.json())
@@ -193,24 +212,8 @@ function getBallotsFromBackend() {
         for (let i = 0; i < data.length; i++) {
             ballots.push(data[i]);
         }
-
-        appendBallots(ballots.slice(0, nBallots));
-
-        
+        appendBallots(ballots.slice(0, nBallots));   
     })
-}
-
-window.addEventListener('load', getBallotsFromBackend);
-
-function submitForm() {
-    removeBallotWrappers();
-    appendBallots(ballots.filter(ballot => ballot.checked == true));
-    document.getElementById('ballot-form').submit();
-}
-
-function filterBallots(string, ballots) {
-    var matchingBallots = ballots.filter(ballot => String(ballot.number).includes(string));
-    return matchingBallots;
 }
 
 function removeBallotWrappers() {
@@ -220,16 +223,87 @@ function removeBallotWrappers() {
     })
 }
 
-function filterAndAppendBallots() {
-    removeBallotWrappers();
-    let filter = document.getElementById('search-input').value;
-    let filteredBallots = filterBallots(String(filter), ballots);
+function selectRandomBallot() {
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
-    appendBallots(filteredBallots.slice(0, nBallots));
+  if (ballots.filter(ballot => ballot.checked == false).length > 0) {
+    let ballotIndex = getRandomInt(0, ballots.filter(ballot => ballot.checked == false).length-1);
+    let selectedBallot = ballots.filter(ballot => ballot.checked == false)[ballotIndex];
+    return selectedBallot;
+  }
 }
 
-searchInput.addEventListener('keyup', filterAndAppendBallots);
+
+// Complex functions
+
+function modifyPriceAndSwitchCheckedState(ballotId) {
+  let ballot = ballots.filter(ballot => ballot.id == ballotId)[0];
+  if (ballot.checked) {
+    selectedBallots.shift();
+  } else {
+    selectedBallots.unshift(ballot);
+  }
+  switchCheckedState(ballot);
+  modifyPrice();
+  addOrRemoveReplacingButton();
+}
+
+function addOneRandomly() {
+  let selectedBallot = selectRandomBallot();
+  selectedBallots.unshift(selectedBallot);
+  switchCheckedState(selectedBallot);
+  modifyPrice();
+  let ballotsToDisplay = ballots.filter(ballot => String(ballot.number)
+  .includes(searchInput.value))
+  .filter(ballot => !ballot.checked)
+  .slice(0, nBallots-1);
+  ballotsToDisplay.unshift(selectedBallot);
+  addOrRemoveReplacingButton()
+  removeBallotWrappers();
+  appendBallots(ballotsToDisplay);
+}
+
+function replaceLastBallot() {
+  selectedBallots[0].checked = false;
+  selectedBallots.shift();
+  let selectedBallot = selectRandomBallot();
+  selectedBallots.unshift(selectedBallot);
+  switchCheckedState(selectedBallot);
+  modifyPrice();
+  let ballotsToDisplay = ballots.filter(ballot => String(ballot.number)
+  .includes(searchInput.value))
+  .filter(ballot => !ballot.checked)
+  .slice(0, nBallots-1);
+  ballotsToDisplay.unshift(selectedBallot);
+  addOrRemoveReplacingButton()
+  removeBallotWrappers();
+  appendBallots(ballotsToDisplay);
+}
+
+function submitForm() {
+  removeBallotWrappers();
+  appendBallots(ballots.filter(ballot => ballot.checked == true));
+  document.getElementById('ballot-form').submit();
+}
+
+function filterAndAppendBallots() {
+  removeBallotWrappers();
+  let filteredBallots = ballots.filter(ballot => String(ballot.number)
+  .includes(searchInput.value));
+  appendBallots(filteredBallots.slice(0, nBallots));
+}
+
+
+// Bind functions to events
+
+window.addEventListener('load', getBallotsFromBackend);
 
 window.addEventListener('load', appendBallots(ballots.slice(0, nBallots)));
 
+searchInput.addEventListener('keyup', filterAndAppendBallots);
 
+randomBallotSelector.addEventListener('click', addOneRandomly);
