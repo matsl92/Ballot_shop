@@ -36,7 +36,7 @@ epayco_transaction_detail_url = os.getenv('EPAYCO_TRANSACTION_DETAIL_URL')
 
 # EPAYCO RESPONSE LINKS
 
-base_url = f"http{os.getenv('HTTP_SAFE')}://{os.getenv('DOMAIN')}{os.getenv('PORT')}"
+base_url = f"http{os.getenv('HTTP_SAFE')}://{os.getenv('DOMAIN')}{os.getenv('LOCAL_PORT')}"
 
 confirmation_url = f"{base_url}/epayco_confirmation"
 

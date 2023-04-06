@@ -6,4 +6,4 @@ SECRET_KEY = django secret key
 SOCIETY_ID = Society_id
 DOMAIN = yourdomain.com
 HTTP_SAFE = s   
-PORT = 
+LOCAL_PORT = 
