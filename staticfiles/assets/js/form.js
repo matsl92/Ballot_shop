@@ -1,60 +1,16 @@
-const data2 = JSON.parse(
-    document.getElementById('context-variables').textContent
+// ----- Form functionality ----
+
+const data = JSON.parse(
+    document.getElementById('js-variables').textContent
 );
 
-const bP = data2.ballot_price;
-
-function modifyPrice() {
-    let total = 0;
-    let ballotInputs = document.querySelectorAll('.balota-input');
-    ballotInputs.forEach(input => {
-        if (input.checked == true) {
-            total += bP;
-        }
-    })
-
-    let totalElement = document.querySelector('#total');
-    totalElement.innerText = `$ ${total}`
-}
-
-
-
-const billGenerator = document.querySelector('#bill-generator');
+const bP = data.ballot_price;
+const codeValidationURL = data.code_validation_url;
+const linkCreationURL = data.link_creation_url;
 const codeValidator = document.querySelector('#code-validator');
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 const formSubmitter = document.querySelector('#form-submitter');
-
-
-// PRODUCTION
-
-const codeValidationURL = 'https://web-production-31f8.up.railway.app/code_validation/';
-
-const linkCreationURL = 'https://web-production-31f8.up.railway.app/bill/';
-
-
-// LOCALHOST
-
-// const codeValidationURL = 'http://127.0.0.1:8000/code_validation/';
-
-// const linkCreationURL = 'http://127.0.0.1:8000/bill/';
-
-
-
-// Prevent Double Submits
-document.querySelectorAll('#personal-data-form').forEach(form => {
-	form.addEventListener('submit', (e) => {
-		// Prevent if already submitting
-		if (form.classList.contains('is-submitting')) {
-			e.preventDefault();
-		}
-		
-		// Add class to hook our visual indicator on
-		form.classList.add('is-submitting');
-	});
-});
-
-
-
+const bId = data.bId;
 
 function getNumberOutOfString(string) {
     var numb = string.match(/\d/g);
@@ -63,8 +19,6 @@ function getNumberOutOfString(string) {
 
 }
 
-
-const bId = data2;
 function validateCode() {
     let messageDiv = document.querySelector('#discount-code-message');
     let discountCode = document.querySelector('#discount_code').value;
@@ -96,21 +50,12 @@ function validateCode() {
             } else if (data.error) {
                 messageDiv.setAttribute('class', 'incorrect-message');
                 messageDiv.innerText = `${data.error}`;
-                document.querySelector('#discount-values').innerText = '';
                 document.querySelector('#bill-total').innerText = billSubtotal;
             }
         }
         )
     } 
 }
-
-
-if (codeValidator) {
-
-    codeValidator.addEventListener('click', validateCode, false);
-}
-
-
 
 function addMissingFields() {
 
@@ -140,10 +85,19 @@ function addMissingFields() {
     
 }
 
+codeValidator.addEventListener('click', validateCode, false);
 
-if (formSubmitter) {
-    
-    formSubmitter.addEventListener('click', addMissingFields);
-}
+formSubmitter.addEventListener('click', addMissingFields);
 
-
+// Prevent Double Submits
+document.querySelectorAll('#personal-data-form').forEach(form => {
+	form.addEventListener('submit', (e) => {
+		// Prevent if already submitting
+		if (form.classList.contains('is-submitting')) {
+			e.preventDefault();
+		}
+		
+		// Add class to hook a visual indicator on
+		form.classList.add('is-submitting');
+	});
+});
