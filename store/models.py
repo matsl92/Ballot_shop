@@ -1,8 +1,11 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models.signals import post_save
+from django.contrib import messages
 
 class Sociedad(models.Model):
     name = models.CharField('Nombre', max_length=100)
@@ -19,36 +22,20 @@ class Rifa(models.Model):
     description = models.TextField('Descripción', max_length=1000, blank=True, null=True)
     lottery_date = models.DateField('Fecha de sorteo')
     ballot_price = models.PositiveIntegerField('Precio de las balotas', default=10000)    
-    min_number = models.IntegerField('Número mínimo', validators=[MinValueValidator(0)])
+    min_number = models.IntegerField('Número mínimo', validators=[MinValueValidator(0)], default=0)
     max_number = models.IntegerField('Número máximo', validators=[MinValueValidator(0)])
-    step = models.IntegerField('Paso', validators=[MinValueValidator(1)])
+    step = models.IntegerField('Paso', validators=[MinValueValidator(1)], default=1)
     ballot_unavailable_time = models.DurationField('Tiempo de inhabilidad de las balotas', default=timedelta(minutes=10))
     
-    def save(self):
-            
+    def save(self):  
         n = (self.max_number+1 - self.min_number) // self.step   
         if self.min_number <= self.max_number and n > 0:
             super().save()
-            for i in range((self.max_number+1-self.min_number)//self.step):
-                if not self.min_number + self.step*i in [
-                    ballot.number for ballot in Balota.objects.filter(lottery=self)
-                ]:  
-                    ballot = Balota(
-                        number=self.min_number+self.step*i, 
-                        price = self.ballot_price, 
-                        unavailable_time = self.ballot_unavailable_time, 
-                        lottery = self
-                    )
-                    ballot.save()
-                    
-        if self.is_active:
-                for lottery in self.society.rifa_set.all():
-                    if lottery != self and lottery.is_active:
-                        lottery.is_active = False
-                        lottery.save()
+        else:
+            raise ValidationError('El número máximo no puede ser menor al mínimo.')
     
     def __str__(self):
-        return self.name
+        return self.name 
         
 class Cliente(models.Model):
     first_name = models.CharField('Nombre', max_length=100)
@@ -109,10 +96,4 @@ class EpaycoLateConfirmation(models.Model):
     description = models.TextField('Descripción', default='', null=True, blank=True)
     
     def __str__(self):
-        return 'Para ' + str(self.transaction)
-
-
-                    
-
-                 
-                    
+        return 'Para ' + str(self.transaction)                 
