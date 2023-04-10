@@ -19,42 +19,45 @@ function getNumberOutOfString(string) {
 
 }
 
-function validateCode() {
-    let messageDiv = document.querySelector('#discount-code-message');
-    let discountCode = document.querySelector('#discount_code').value;
-    let billSubtotal = parseInt(getNumberOutOfString(document.querySelector('#bill-subtotal').innerText));
-    if (true) {
-        const validationRequest = fetch(
-            codeValidationURL,  
-            {
-                method: 'POST', 
+async function validateCode() {
+    const messageDiv = document.querySelector('#discount-code-message');
+    const discountCode = document.querySelector('#discount_code').value;
+    const billSubtotal = parseInt(getNumberOutOfString(document.querySelector('#bill-subtotal').innerText));
+
+    try {
+        const response = await fetch(
+            codeValidationURL + `?discount_code=${discountCode}&bId=${bId}`, {
+                method: 'GET', 
                 headers: {
-                    'Content-Type': 'application.json', 
+                    'content-type': 'application/json', 
                     'X-CSRFToken': csrftoken
                 }, 
                 mode: 'same-origin',  
-                body: JSON.stringify({
-                    'discount_code': discountCode, 
-                    'bId': bId
-                })
             }
-        )
-        
-        validationRequest.then(response => response.json())
-        .then(data =>{
-            if (data.percentage) {
-                let discountValue = billSubtotal * (data.percentage/100);
-                let billTotal = billSubtotal - discountValue;
-                messageDiv.innerText = `${data.percentage}% = $ ${discountValue}`;
-                document.querySelector('#bill-total').innerText = billTotal; 
-            } else if (data.error) {
-                messageDiv.setAttribute('class', 'incorrect-message');
-                messageDiv.innerText = `${data.error}`;
-                document.querySelector('#bill-total').innerText = billSubtotal;
-            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
         }
-        )
-    } 
+
+        const data = await response.json();
+
+        if (data.percentage) {
+            const discountValue = billSubtotal * (data.percentage/100);
+            const billTotal = billSubtotal - discountValue;
+            messageDiv.innerText = `${data.percentage}% = $ ${discountValue}`;
+            document.querySelector('#bill-total').innerText = billTotal; 
+        } else if (data.error) {
+            messageDiv.setAttribute('class', 'incorrect-message');
+            messageDiv.innerText = `${data.error}`;
+            document.querySelector('#bill-total').innerText = billSubtotal;
+        }
+
+    } catch (error) {
+        console.log('There was a problem with the fetch operation:', error);
+        messageDiv.innerText = 'Hubo un error con la solicitud, por favor inténtelo más tarde.';
+        document.querySelector('#bill-total').innerText = billSubtotal;
+    }
 }
 
 function addMissingFields() {

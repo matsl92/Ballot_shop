@@ -299,7 +299,7 @@ def datos_personales(request):
                 subtotal += ballot.price
             js_variables = {
                 'bId': balota_ids, 
-                'code_validation_url': f"{base_url}/code_validation/", 
+                'code_validation_url': f"{base_url}/api/code_validation", 
                 'link_creation_url': f"{base_url}/bill/"
             }
             context = {'js_variables': js_variables, 'ballots': ballots, 'subtotal': subtotal}
@@ -307,24 +307,6 @@ def datos_personales(request):
         except:
             url = reverse('store:home')
             return redirect(url + '?msg=empty')
-
-def code_validation(request):
-    discount_code = json.loads(request.body)['discount_code']
-    ballot_ids = json.loads(request.body)['bId']
-    if discount_code in [
-        discount.discount_code for discount in Descuento.objects.filter(
-            status=True
-        ).filter(lottery=Balota.objects.get(id=ballot_ids[0]).lottery)
-    ]:
-        discount = Descuento.objects.get(discount_code=discount_code)
-        return JsonResponse({
-            'percentage': discount.percentage, 
-            'status': discount.status
-        })
-    else:
-        return JsonResponse({
-            'error': 'El código es invalido'
-        })
 
 def fetch_api(request):
     if request.method=='POST':
@@ -411,30 +393,3 @@ def epayco_confirmation(request):
     
     print('Doneee!')
     return response
-
-def test_view(request):
-    
-    object_list = []
-    for i in range(100):
-        object_list.append(i)
-
-    n_ballots = 32
-    n_slides = math.ceil(len(object_list)/n_ballots)
-
-    package = []
-
-    
-    count = 0
-    for i in range(n_slides):
-        slide = []
-        for j in range(n_ballots):
-            slide.append(object_list[count])
-            count += 1
-            if count == len(object_list):
-                break
-        package.append(slide)
-        
-        
-            
-    context = {'package': package}
-    return render(request, 'store/test.html', context)
