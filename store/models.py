@@ -7,6 +7,12 @@ from datetime import timedelta
 from django.db.models.signals import post_save
 from django.contrib import messages
 
+class ComplexClient(models.Model):
+    phone_number = PhoneNumberField()
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    
+
 class Sociedad(models.Model):
     name = models.CharField('Nombre', max_length=100)
     

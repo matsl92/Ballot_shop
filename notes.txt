@@ -1,5 +1,9 @@
 PRIMARY
 
+Rest_api app works as an api, however, we are not getting just data from the database, 
+since we either add more fields to each "object", or end up redirecting the user, or 
+return a json created right there and not something brought from the database.
+
 debug = false
 
 https://github.com/matsl92/Ballot_shop.git
