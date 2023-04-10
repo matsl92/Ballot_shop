@@ -221,18 +221,6 @@ def handle_transaction_response(data):
     
 # VIEWS 
 
-def get_ballots(request):
-    body_string = request.body.decode('utf8').replace("'", '"')
-    body = json.loads(body_string)
-    lottery_id = int(body['lottery_id'])
-    lottery = Rifa.objects.get(id=lottery_id)
-    ballot_list = list(Balota.objects.filter(lottery=lottery).filter(transaction=None))
-    ballots= []
-    for ballot in ballot_list:
-        ballots.append({'number': ballot.number, 'id': ballot.id, 'checked': False})
-    
-    return JsonResponse(ballots, safe=False)
-
 def home(request):
     js_variables = {'msg':['', '']}
     
@@ -277,7 +265,7 @@ def home(request):
     except:
         js_variables['ballot_price'] = 1000000
     
-    js_variables['ballot_fetch_url'] = f"{base_url}/fetch_ballots/"
+    js_variables['ballot_fetch_url'] = f"{base_url}/api/get_ballots"
     
     
         

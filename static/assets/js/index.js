@@ -198,23 +198,32 @@ function appendBallots(ballots) {
 }
 
 function getBallotsFromBackend() {
-    var request = fetch(ballotFetchURL, {
-        method: 'POST', 
-        headers:  {
-            'Content-type':'application/json', 
-            'X-CSRFToken': csrftoken
-        }, 
-        body: JSON.stringify({
-            'lottery_id': lotteryId
-        })
-    })
-    request.then(response => response.json())
-    .then(data => {
-        for (let i = 0; i < data.length; i++) {
-            ballots.push(data[i]);
-        }
-        appendBallots(ballots.slice(0, nBallots));   
-    })
+  const request = fetch(ballotFetchURL + `?lottery_id=${lotteryId}`, {
+    method: 'GET', 
+    headers: {
+      'Content-type': 'application/json', 
+      'X-CSRFToken': csrftoken
+    }
+  });
+  
+  request.then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  })
+  .then(data => {
+    for (let i = 0; i < data.length; i++) {
+      let obj = data[i];
+      obj['checked'] = false
+        ballots.push(obj);
+    }
+    appendBallots(ballots.slice(0, nBallots));
+  })
+  .catch(error => {
+    console.log('There was a problem with the fetch operation:', error);
+  });
 }
 
 function removeBallotWrappers() {
