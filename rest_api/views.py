@@ -11,9 +11,7 @@ def get_data(request):
 
 @api_view(['GET'])
 def get_ballots(request):
-    print(request.GET.dict())
     lottery_id = int(request.GET.dict()['lottery_id'])
-    print(lottery_id)
     ballots = Balota.objects.filter(lottery__id=lottery_id).filter(transaction=None)
     serializer = BalotaSerializer(ballots, many=True)
     return Response(serializer.data)
